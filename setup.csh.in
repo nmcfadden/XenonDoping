@@ -1,11 +1,11 @@
-setenv G4WORKDIR /mnt/mjdDisk1/Majorana/users/nmcfadden/gitBACoN/XenonDoping
+setenv G4WORKDIR @G4WORKDIR@
 # the following line is for G4 version >= 9.6
-source /mnt/mjdDisk1/Majorana/soft/geant4.10.04.p02-build/share/Geant4-10.4.2/geant4make/geant4make.csh /mnt/mjdDisk1/Majorana/soft/geant4.10.04.p02-build/share/Geant4-10.4.2/geant4make 
+source @G4INSTALL@/geant4make.csh @G4INSTALL@ @SILENCEG4ENV@
 # uncomment the following two lines for G4 version < 9.5
-# source /mnt/mjdDisk1/Majorana/soft/geant4.10.04.p02-build/share/Geant4-10.4.2/geant4make/env.csh 
+# source @G4INSTALL@/env.csh @SILENCEG4ENV@
 # uncomment the following two lines for G4 version = 9.5
-# source /mnt/mjdDisk1/Majorana/soft/geant4.10.04.p02-build/share/Geant4-10.4.2/geant4make/../../../bin/geant4.csh 
-# source /mnt/mjdDisk1/Majorana/soft/geant4.10.04.p02-build/share/Geant4-10.4.2/geant4make/geant4make.csh 
+# source @G4INSTALL@/../../../bin/geant4.csh @SILENCEG4ENV@
+# source @G4INSTALL@/geant4make.csh @SILENCEG4ENV@
 # add G4WORKDIR/bin/G4SYSTEM to the front of the path, because stupid G4 adds it
 # to the end, but we want to override the old setting if another G4WORKDIR was
 # being used before MaGe/setup.(c)sh was called
@@ -13,10 +13,10 @@ setenv PATH $G4WORKDIR/bin/${G4SYSTEM}:$PATH
 # G4 doesn't add CLHEP/bin to path; do it for access to clhep-config
 setenv PATH $CLHEP_BASE_DIR/bin:$PATH
 
-if (-e /mnt/mjdDisk1/Majorana/soft/root-6.12.06-build/bin/thisroot.csh) then
-  source /mnt/mjdDisk1/Majorana/soft/root-6.12.06-build/bin/thisroot.csh /mnt/mjdDisk1/Majorana/soft/root-6.12.06-build/bin
+if (-e @ROOTSYS@/bin/thisroot.csh) then
+  source @ROOTSYS@/bin/thisroot.csh @ROOTSYS@/bin
 else 
-  setenv ROOTSYS /mnt/mjdDisk1/Majorana/soft/root-6.12.06-build
+  setenv ROOTSYS @ROOTSYS@
   setenv PATH $ROOTSYS/bin:$PATH
   if ($G4SYSTEM == "Darwin-g++") then
     if ($?DYLD_LIBRARY_PATH) then
@@ -39,7 +39,7 @@ else
 endif
 
 
-setenv MGDODIR /mnt/mjdDisk1/Majorana/soft/MGDO
+setenv MGDODIR @MGDODIR@
 setenv PATH $MGDODIR/bin:$PATH
 if ($G4SYSTEM == "Darwin-g++") then
   setenv DYLD_LIBRARY_PATH $MGDODIR/lib:$DYLD_LIBRARY_PATH
@@ -49,5 +49,5 @@ else
   setenv LD_LIBRARY_PATH $MGDODIR/lib:$LD_LIBRARY_PATH
 endif
 
-setenv MAGEDIR /mnt/mjdDisk1/Majorana/users/nmcfadden/gitBACoN/XenonDoping
+setenv MAGEDIR @MAGEDIR@
 setenv MGGENERATORDATA $MAGEDIR/generators/data

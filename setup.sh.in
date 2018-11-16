@@ -1,13 +1,13 @@
-export G4WORKDIR=/mnt/mjdDisk1/Majorana/users/nmcfadden/gitBACoN/XenonDoping
+export G4WORKDIR=@G4WORKDIR@
 # the following line is for G4 version >= 9.6
-source /mnt/mjdDisk1/Majorana/soft/geant4.10.04.p02-build/share/Geant4-10.4.2/geant4make/geant4make.sh 
-# /mnt/mjdDisk1/Majorana/soft/geant4.10.04.p02-build/share/Geant4-10.4.2/geant4make 
-# 
+source @G4INSTALL@/geant4make.sh 
+# @G4INSTALL@ 
+# @SILENCEG4ENV@
 # uncomment the following two lines for G4 version < 9.5
-# source /mnt/mjdDisk1/Majorana/soft/geant4.10.04.p02-build/share/Geant4-10.4.2/geant4make/env.sh 
+# source @G4INSTALL@/env.sh @SILENCEG4ENV@
 # uncomment the following two lines for G4 version = 9.5
-# source /mnt/mjdDisk1/Majorana/soft/geant4.10.04.p02-build/share/Geant4-10.4.2/geant4make/../../../bin/geant4.sh 
-# source /mnt/mjdDisk1/Majorana/soft/geant4.10.04.p02-build/share/Geant4-10.4.2/geant4make/geant4make.sh 
+# source @G4INSTALL@/../../../bin/geant4.sh @SILENCEG4ENV@
+# source @G4INSTALL@/geant4make.sh @SILENCEG4ENV@
 # add G4WORKDIR/bin/G4SYSTEM to the front of the path, because stupid G4 adds it
 # to the end, but we want to override the old setting if another G4WORKDIR was
 # being used before MaGe/setup.(c)sh was called
@@ -15,10 +15,10 @@ export PATH=$G4WORKDIR/bin/${G4SYSTEM}:$PATH
 # G4 doesn't add CLHEP/bin to path; do it for access to clhep-config
 export PATH=$CLHEP_BASE_DIR/bin:$PATH
 
-if [ -e /mnt/mjdDisk1/Majorana/soft/root-6.12.06-build/bin/thisroot.sh ] ; then
-  source /mnt/mjdDisk1/Majorana/soft/root-6.12.06-build/bin/thisroot.sh 
+if [ -e @ROOTSYS@/bin/thisroot.sh ] ; then
+  source @ROOTSYS@/bin/thisroot.sh 
 else 
-  export ROOTSYS=/mnt/mjdDisk1/Majorana/soft/root-6.12.06-build
+  export ROOTSYS=@ROOTSYS@
   export PATH=$ROOTSYS/bin:$PATH
   if [ $G4SYSTEM = "Darwin-g++" ] ; then
     if [ -n "$DYLD_LIBRARY_PATH" ] ; then
@@ -36,7 +36,7 @@ else
 fi
 
 
-export MGDODIR=/mnt/mjdDisk1/Majorana/soft/MGDO
+export MGDODIR=@MGDODIR@
 export PATH=$MGDODIR/bin:$PATH
 if [ $G4SYSTEM = "Darwin-g++" ] ; then
   export DYLD_LIBRARY_PATH=$MGDODIR/lib:$DYLD_LIBRARY_PATH
@@ -46,6 +46,6 @@ else
   export LD_LIBRARY_PATH=$MGDODIR/lib:$LD_LIBRARY_PATH
 fi
 
-export MAGEDIR=/mnt/mjdDisk1/Majorana/users/nmcfadden/gitBACoN/XenonDoping
+export MAGEDIR=@MAGEDIR@
 export MGGENERATORDATA=$MAGEDIR/generators/data
 
