@@ -1,6 +1,0 @@
-[ libROOT_mjioROOT.so ]
-# List of selected classes
-class MJOutputDetectorEventData
-class MJOutputSegXtal
-header MJOutputDetectorEventData.hh
-header MJOutputSegXtal.hh

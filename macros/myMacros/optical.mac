@@ -21,7 +21,7 @@
 
 /MG/eventaction/rootschema MCOpticalRun
 #/MG/eventaction/rootschema MCRun
-/MG/eventaction/reportingfrequency 1000
+/MG/eventaction/reportingfrequency 100000
 /MG/eventaction/rootfilename SpeedTest.root
 
 #/MG/io/MCRun/SetSensitiveIDLabelScheme askGeom
@@ -38,16 +38,18 @@
 /MG/io/MCOpticalRun/useTimeWindow true
 /MG/io/MCOpticalRun/setTimeWindow 86400 second
 /MG/io/MCOpticalRun/setNSteps 50000
-/MG/io/MCOpticalRun/KillAll
+#/MG/io/MCOpticalRun/KillAll
 #/MG/io/MCOpticalRun/setWriteAllSteps
 #/MG/io/MCOpticalRun/setWriteAllStepsInEventsThatDepositEnergy
-#/MG/io/MCOpticalRun/setWriteAllSensitiveSteps
+/MG/io/MCOpticalRun/setWriteAllSensitiveSteps
 
 
 /MG/generator/select LGNDLiquidArgon
+/MG/generator/LGNDLiquidArgon/SetScintMean 175.  
+/MG/generator/LGNDLiquidArgon/SetScintSigma 8.6 
 #/MG/generator/LGNDLiquidArgon/SetRadius 320. mm
 #/MG/generator/LGNDLiquidArgon/SetHeight 400. mm
 #/MG/generator/LGNDLiquidArgon/SetCenterVector 0.0 0.0 200.0 mm
 
 #/tracking/verbose 2
-/run/beamOn 100000
+/run/beamOn 1000000

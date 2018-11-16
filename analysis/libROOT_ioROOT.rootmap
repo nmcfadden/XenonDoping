@@ -1,4 +1,0 @@
-[ libROOT_ioROOT.so ]
-# List of selected classes
-class MGOutputG4StepsData
-header MGOutputG4StepsData.hh
