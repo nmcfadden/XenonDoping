@@ -1,0 +1,41 @@
+# MJCompileTest.mac
+#
+# This macro excerises several basic areas of the MJ code and spits
+# out lots of debugging info. Users preparing to check-in new code should
+# test that this script runs to completion on PDSF without introducing any
+# unexpected errors or seg-faults.
+# Users can also use this script to test a compile when first setting up
+# MaGe. To use it, go to your MaGe directory and run
+#
+# bin/MaGe macros/MJCompileTest.mac
+
+# Management 
+/MG/manager/mglog debugging
+/MG/manager/seedWithUUID
+
+# Process List
+/MG/processes/realm BBdecay
+/MG/processes/lowenergy true
+
+# Configure Detector.
+/MG/geometry/detector MJDemonstrator
+/MG/geometry/WorldMaterial Vacuum
+
+# ROOT output schema
+/MG/eventaction/rootschema MCRun
+/MG/eventaction/rootfilename compileTest.root
+/MG/io/MCRun/SetSensitiveIDLabelScheme askGeom 
+/MG/io/MCRun/setRunID 1
+/MG/io/MCRun/useTimeWindow true
+/MG/io/MCRun/setTimeWindow 86400 second
+
+/run/initialize
+
+# Run 232Th chain in a crystal using Geant4 RDM generator 
+/MG/generator/select RDMiso
+/gun/energy 0 eV
+/grdm/ion 232 90 0
+/MG/generator/confine volume
+/MG/generator/volume DetectorArray_001_StringAssembly_001_CrystalAssembly_001_ActiveCrystal_001
+
+/run/beamOn 1

@@ -1,0 +1,98 @@
+<chapter id="Database">
+   <title>Database
+   </title>
+  <section><title>Overview</title>
+    <para>
+      This package contains the Majorana database interface and relevant
+      codes and scripts to support database access. Majorana uses the PostgreSQL 
+      database to store the detector, materials, and geometry data for 
+      simulation runs. Users access the database through a single interface,
+      <varname>MJDatabase</varname>. 
+      This is an abstract class that provides access to different
+      objects needed for building the detector. The actual implementation 
+      is done in the subclasses of this abstract class which encapsulate the 
+      specific technology used for storing data. At present only the implementation
+      for PostgreSQL database exists (see <filename>MJDatabasePsqlImpl.hh</filename>). 
+      This design allows for adding new storage technologies, files or other databases, without
+      modifying the user's code.
+    </para>  
+    <section><title>Main interface</title>
+      <para>
+	The <varname>MJDatabase</varname> class has a number of static 
+        functions that return pointers to the
+	requested object in the memory. Each objects provides accessors to the 
+	object's data members, as defined in the transient class for that object.
+	For example, user can request a material object through the following call:
+      </para>
+      <screen>
+  MJDatabaseMaterial* aMat = MJDatabase::GetMaterial("Cadmium");
+      </screen>
+       <para>
+	Once this object is constructed, user can access the material's properties
+	defined in <filename>materials/materials/MJMaterial.hh</filename> class through calls 
+        such as:
+       </para>
+        <screen>      
+   double density = aMat->GetDensity();
+   string name = aMat->GetName();
+	</screen>
+      <para>
+	Therefore, for each object type stored in the database there is a 
+	corresponding class in this package that constructs that object according
+	to the interface specified by the designer of the transient class for that 
+	object. Table 1 lists classes that exist today.
+      </para>
+      
+      <table frame="top"><title> List of transient and persistence classes </title>
+	<tgroup cols="2">
+	  <thead>
+	    <row><entry>Database Class</entry>
+	      <entry>Transient Class</entry> </row>
+	  </thead>
+	  <tbody>
+	    <row><entry>MJDatabaseCloverCrystal</entry>
+	      <entry>geometry/MJGeometryCloverCrystal</entry> </row>
+	    <row><entry>MJDatabaseCloverDetector</entry>
+	      <entry>geometry/MJGeometryCloverDetector</entry> </row>
+	    <row><entry>MJDatabaseSimple800g  </entry>
+	      <entry>geometry/MJGeometry800gCrystal </entry></row>
+	    <row><entry>MJDatabaseElement  </entry>
+	      <entry> materials/MJMaterialElement </entry></row>
+	    <row><entry>MJDatabaseMaterial  </entry>
+	      <entry>materials/MJMaterial </entry></row>
+	    <row><entry> MJDatabaseIsotope </entry>
+	      <entry>materials/MJMaterialIsotope </entry></row>	    
+	  </tbody>
+	</tgroup>
+      </table>
+      
+      <para>
+	The code librarian for the database package is responsible for creating 
+	MJDatabaseXXX classes and the tables in the database. He/she also has to 
+	provide the interface in the base class for users.
+      </para>
+    </section>
+    <section><title>Other classes</title>
+      <para>
+	There are classes in this package that are used internally to provide 
+	support for the interface. <varname>MJDatabasePsqlImpl</varname> 
+        is the class that implements
+	the mechanism for retrieving data from PostgreSQL database. 
+	<varname>MJDatabaseConnection</varname> is responsible for 
+        managing the connection to the PostgreSQL database.
+	Similar classes will be needed to implement other technologies.
+      </para>
+    </section>
+    <section><title>Subdirectories</title>
+      <para>
+	The schema subdirectory contains the scripts for creating and 
+	populating the original tables in the database. Note that there is no
+	one-to-one correspondent between the tables in the database and the 
+	transient classes. Objects might be stored in different tables but 
+	users always get the transient objects. The schema/dump directory 
+	contains the periodic dumps of the database. These files can be used to
+	restore the database in case of data loss.
+      </para>
+    </section>
+  </section>
+</chapter>

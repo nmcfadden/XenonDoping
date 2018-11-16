@@ -1,0 +1,35 @@
+#!/bin/sh
+# script to create a tar file of Majorana software
+# releases
+#
+# Author: Akbar Mokhtarani Oct. 13, 2004, LBNL
+#
+
+if [ -z $1  ]; then
+    echo "Please provide a release number"
+    exit 0
+fi
+
+relName=MJ$1
+
+echo will create $relName.tar.gz
+
+fileList="file.txt"
+if [ -f $fileList ]; then 
+    rm $fileList  
+fi
+
+if [ ! -d $1/MJ ]; then
+   echo "You should run this script from MJHOME/builds directory"
+   exit 0
+fi
+
+# get a list of files to exclude.
+`ls $1/MJ/lib/* $1/MJ/bin/* $1/MJ/obj/* > $fileList`
+
+tar -cvf $relName.tar  $1/  --exclude-from=$fileList 
+gzip $relName.tar  
+
+rm $fileList
+exit
+

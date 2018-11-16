@@ -1,0 +1,73 @@
+# ============================================= #
+# Runs gammas in the HdBeGe detector            #
+# ============================================= # 
+#
+/MG/manager/mglog trace 
+#
+# Geometry setup 
+#
+/MG/geometry/detector HdBEGe
+/MG/geometry/database false
+#
+# Output
+#
+/MG/eventaction/rootschema Dario
+/MG/eventaction/rootfilename Am241.root
+/MG/output/writeHitDetails true
+#
+# Primary gun
+#
+/MG/generator/select G4gun
+#
+# Other setups
+#
+/MG/processes/optical false
+/MG/processes/lowenergy true
+#/MG/processes/realm DarkMatter
+/MG/processes/useNoHadPhysics true
+#
+/run/initialize
+#
+#
+#This generates isotropic gamma radiation
+#
+/MG/generator/g4gun/cone_on true
+/MG/generator/g4gun/coneDirection 0 0 -1
+/MG/generator/g4gun/thetaDelta 180 deg
+#
+# Detector coordinates:
+# z = -8.67 mm --> -39.67 (31 mm)
+# r = -40.1 mm --> 40.1 mm (80.2 mm)
+#
+# Shoot an [isotropic] 60 keV gamma
+# 5 mm above the detector (-8.67+5)mm
+#
+/gun/position 0 0 -3.67 mm
+/gun/particle gamma
+/gun/energy 60 keV
+# 1000 particles
+/run/beamOn 1000
+# now change energy and shoot only in the lower emisphere
+/MG/generator/g4gun/thetaDelta 90 deg
+/gun/energy 662 keV
+/run/beamOn 1000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+

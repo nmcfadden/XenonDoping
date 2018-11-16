@@ -1,0 +1,64 @@
+# Management 
+/MG/manager/mglog routine
+/MG/eventaction/reportingfrequency 1000         
+
+# Process List
+/MG/processes/realm BBdecay
+
+# Configure MSU crystal.
+/MG/geometry/detector idealCoax
+/MG/geometry/idealCoax/setDefaults
+/MG/geometry/idealCoax/deadLayerOn true
+/MG/geometry/idealCoax/outerDeadLayer 1 micrometer
+/MG/geometry/idealCoax/coreDeadLayer 0.06 cm
+/MG/geometry/idealCoax/height 8.0 cm
+/MG/geometry/idealCoax/radius 3.5 cm
+/MG/geometry/idealCoax/cutInHalfOn false
+/MG/geometry/idealCoax/bubbleOn false
+/MG/geometry/idealCoax/coreDepth 7.0 cm
+/MG/geometry/idealCoax/coreRadius 0.5 cm
+/MG/geometry/idealCoax/cornerRadius 0.4 cm
+
+
+# Add simple can and coldplate (holder), as used at MSU
+/MG/geometry/idealCoaxWShield/shieldOn true
+/MG/geometry/idealCoaxWShield/height 10.3 cm
+/MG/geometry/idealCoaxWShield/radius 4.4 cm
+/MG/geometry/idealCoaxWShield/coldplateMaterial Aluminum
+/MG/geometry/idealCoaxWShield/coldplateThickness 2.0 cm
+/MG/geometry/idealCoaxWShield/capMaterial Aluminum
+/MG/geometry/idealCoaxWShield/capThickness 0.1 cm
+
+
+# ROOT output schema
+/MG/eventaction/rootschema MCEvent
+/MG/eventaction/rootfilename /auto/majorana1/users/rhenning/MSU/test.root
+
+# Select Geant 4 RDM generator as a point source
+/MG/generator/select RDMiso
+/MG/generator/confine noconfined
+
+/run/initialize
+/MG/geometry/idealCoax/dump
+/MG/geometry/idealCoaxWShield/dump
+
+# Select ion and position source right outside can.
+/gun/particle
+/grdm/ion 60 27 0
+/gun/position 4.45 0.0 1.45 cm
+
+# Uncomment these to accumulate events in an event display. 
+/vis/open RayTracer
+/vis/drawVolume crystalInCavity
+/vis/viewer/set/viewpointThetaPhi 20 0
+/vis/viewer/set/sectionPlane on 0.0 0.0 0.0 cm 0.0 1.0 0.0
+/tracking/storeTrajectory 1
+/vis/scene/add/trajectories
+/vis/scene/endOfEventAction accumulate
+# Ready, set, GO!
+
+/vis/sectionPlane
+
+/run/beamOn 10
+
+/vis/viewer/set/ on

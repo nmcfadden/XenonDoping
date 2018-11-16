@@ -1,0 +1,20 @@
+To use the new configure script to install MaGe please install
+ROOT, PGSQL, and GEANT4 according to their instruction sets.
+
+Then, in the base directory of MaGe run ./configure
+This will try to find the dependencies of MaGe.  Please
+follow any instructions the configure script gives if an error
+occurs.  Once configure has completed successfully, run
+
+make 
+
+This should compile and install MaGe.
+
+Common options to configure:
+
+  --disable-database      Disable database. Database is enabled by default.  
+  --enable-no-skip        Doesn't skip any of the packages (e.g. waveform)
+
+For the full list of flags and options for configure, do
+
+configure --help

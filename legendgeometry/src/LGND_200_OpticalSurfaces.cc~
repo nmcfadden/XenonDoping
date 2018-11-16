@@ -1,0 +1,230 @@
+//---------------------------------------------------------------------------//
+//bb0nubb0nubb0nubb0nubb0nubb0nubb0nubb0nubb0nubb0nubb0nubb0nubb0nubb0nubb0nu//
+//                                                                           //
+//                                                                           //
+//                         MaGe Simulation                                   //
+//                                                                           //
+//      This code implementation is the intellectual property of the         //
+//      MAJORANA and Gerda Collaborations. It is based on Geant4, an         //
+//      intellectual property of the RD44 GEANT4 collaboration.              //
+//                                                                           //
+//                        *********************                              //
+//                                                                           //
+//    Neither the authors of this software system, nor their employing       //
+//    institutes, nor the agencies providing financial support for this      //
+//    work  make  any representation or  warranty, express or implied,       //
+//    regarding this software system or assume any liability for its use.    //
+//    By copying, distributing or modifying the Program (or any work based   //
+//    on on the Program) you indicate your acceptance of this statement,     //
+//    and all its terms.                                                     //
+//                                                                           //
+//bb0nubb0nubb0nubb0nubb0nubb0nubb0nubb0nubb0nubb0nubb0nubb0nubb0nubb0nubb0nu//
+//---------------------------------------------------------------------------//
+//
+// $Id: MGcodeTemplate.cc,v 1.1 2004-12-09 08:58:35 pandola Exp $
+//
+// CLASS IMPLEMENTATION:  LGND_200_InstFiber.cc
+//
+//---------------------------------------------------------------------------//
+/**
+ * SPECIAL NOTES:
+ */
+//
+//---------------------------------------------------------------------------//
+/**
+ * AUTHOR: Neil McFadden
+ * CONTACT: nmcfadde@unm.edu
+ * FIRST SUBMISSION: 
+ *
+ * REVISION:
+ *
+ */
+//---------------------------------------------------------------------------//
+//
+
+#include "G4LogicalVolume.hh"
+#include "G4Tubs.hh"
+#include "G4Sphere.hh"
+#include "G4Box.hh"
+#include "G4EllipticalTube.hh"
+#include "G4Material.hh"
+#include "G4Element.hh"
+#include "G4PVPlacement.hh"
+#include "G4SubtractionSolid.hh"
+#include "G4UnionSolid.hh"
+#include "globals.hh"
+#include "G4VisAttributes.hh"
+#include "G4OpticalSurface.hh"
+#include "G4LogicalSkinSurface.hh"
+#include "G4LogicalBorderSurface.hh"
+#include "G4Polycone.hh"
+#include "G4NistManager.hh"
+#include "G4RotationMatrix.hh"
+
+// -- ROOT include
+#include "TGraph.h"
+#include "TMath.h"
+
+#include "io/MGLogger.hh"
+#include "legendgeometry/LGND_200_OpticalSurfaces.hh"
+
+using namespace CLHEP;
+
+const G4double LGND_200_OpticalSurfaces::LambdaE = twopi *1.973269602e-16 * m * GeV;
+
+LGND_200_OpticalSurfaces::LGND_200_OpticalSurfaces()
+{
+  BuildOpticalSurfaces();
+}
+
+//Stolen from GEGeometryLArInstHybrid
+void LGND_200_OpticalSurfaces::BuildOpticalSurfaces()
+{
+  
+  G4double roughness;
+  fWLSoptSurf = new G4OpticalSurface("WLS_rough_surf",glisur,ground,dielectric_dielectric,roughness = 0.5);
+  fTefOptSurf = new G4OpticalSurface("Teflon_rough_surface",glisur,ground,dielectric_dielectric/*dielectric_metal*/,roughness = 0.5);
+
+  fFiberCoreOptSurface = new G4OpticalSurface("FiberCoreSurface",glisur,polished,dielectric_dielectric);
+  fFiberCladdingOptSurface = new G4OpticalSurface("FiberCladdingSurface",glisur,polished,dielectric_dielectric);
+  ///
+  /// -- SiPM collecting surface
+  ///
+
+  // SiPM "sensitive" surface.. this will be a border surface between the fibers and the upper fiber shroud
+
+  // Data taken from Jozsef's presentation at TUM collb meeting
+  const G4int npoints_eff = 10;
+  // http://www.mpi-hd.mpg.de/gerda/internal/TUMJUN12/slides/jozsef_Veto_pres_060612.pdf
+  G4double SiPMPhotonEnergy[npoints_eff];
+  G4double SiPMEfficiencyWl[npoints_eff] = {100.,280.,310.,350.,400.,435.,505.,525.,595.,670.};
+  //100 mm wafer reference. 120 um Cell @ dV = 7.5 volts
+  //G4double SiPMEfficiencyTbl[npoints_eff] = {0.0,0.19,0.30,0.32,0.33,0.32,0.27,0.19,0.12,0.07};
+  // 200 mm Wafer reference. 50 um cell @ dV = 5.0 volts
+  //G4double SiPMEfficiencyWl[npoints_eff] = {100.,280.,310.,350.,400.,435.,470.,525.,595.,670.};
+  //G4double SiPMEfficiencyTbl[npoints_eff] = {0.0,0.19,.30,0.34,0.44,0.41,0.40,0.30,0.18,.07};
+  //If the PDE is not know, make it 100% efficient and correct for it off-line
+  G4double SiPMEfficiencyTbl[npoints_eff] =   {0.0,1.00,1.00,1.00,1.00,1.00,1.00,1.00,1.00,1.00};
+  G4double SiPMEfficiency[npoints_eff];
+  G4double SiPMReflectivity[npoints_eff];
+
+  /*
+  ** not sure what this is for, but taked from GEGeometryLArInstHybrid
+  G4double LAr_Fiber_coverage = fDetectorDB->GetLArInstFiberCoverage();
+  MGLog(routine) << "Fiber coverage: " << LAr_Fiber_coverage << endlog;
+
+  //fiber efficiency scaling relative to PMTs
+  G4double SiPM_bonding_scale = 0.7 * LAr_Fiber_coverage;
+  */
+
+  MGLog(debugging) << "Fiber sensitive surface : " << endlog;
+  for (G4int ji=0; ji < npoints_eff; ji++)
+  {
+    // Zero reflectivity and 1.0 efficiency means that the
+    // photons are all "absorbed and identified as hits"
+    SiPMPhotonEnergy[ji] = LambdaE/(SiPMEfficiencyWl[(npoints_eff-1)-ji]*nm);
+    SiPMReflectivity[ji] = 0.0; // Set the reflectivity in the fibers to zero, otherwise 99.999 % is reflected due to index of refraction
+    SiPMEfficiency[ji] = SiPMEfficiencyTbl[(npoints_eff-1)-ji]; // Quantum efficiency of the SiPM. 
+    MGLog(debugging) << "WL " << SiPMEfficiencyWl[(npoints_eff-1)-ji]
+                     << " nm En " << SiPMPhotonEnergy[ji]/MeV << " MeV Refl : "
+                     << SiPMReflectivity[ji] << " Eff " << SiPMEfficiency[ji] << endlog;
+
+  }
+  G4MaterialPropertiesTable *sipmOptTable = new G4MaterialPropertiesTable();
+  sipmOptTable->AddProperty("EFFICIENCY",SiPMPhotonEnergy,SiPMEfficiency,npoints_eff);
+  sipmOptTable->AddProperty("REFLECTIVITY",SiPMPhotonEnergy,SiPMReflectivity,npoints_eff);
+
+  fSipmOptSurface  = new G4OpticalSurface("SiPM surface",glisur,ground,dielectric_metal);
+  fSipmOptSurface->SetMaterialPropertiesTable(sipmOptTable);
+
+  ///
+  /// -- Fiber Reflective end
+  ///
+  // The reflective end will be a reflective surface between the fibers and the lower shroud
+  const G4int num = 4;
+  G4double Wavelength[num] = {100.,200.,301.,650.};
+
+  G4double ReflFiberPhotonEnergy[num];
+  G4double ReflFiberReflectivity[num];
+  G4double ReflFiberEfficiency[num];
+
+  MGLog(debugging) << "Fiber reflective surface : " << endlog;
+  for (G4int ji=0; ji < num; ji++)
+  {
+    ReflFiberPhotonEnergy[ji] = LambdaE/(Wavelength[(num-1)-ji]*nm);
+    ReflFiberReflectivity[ji] = 0.98; 
+    ReflFiberEfficiency[ji] = 0.0;
+    MGLog(debugging) << "WL " << Wavelength[(num-1)-ji]
+                     << " nm En " << ReflFiberPhotonEnergy[ji]/MeV << " MeV Refl : "
+                     << ReflFiberReflectivity[ji] << " Eff " << ReflFiberEfficiency[ji] << endlog;
+  }
+  G4MaterialPropertiesTable *fiberReflOptTable = new G4MaterialPropertiesTable();
+  fiberReflOptTable->AddProperty("REFLECTIVITY",ReflFiberPhotonEnergy,ReflFiberReflectivity,num);
+  fiberReflOptTable->AddProperty("EFFICIENCY",ReflFiberPhotonEnergy,ReflFiberEfficiency,num);
+
+  fFiberReflOptSurface  = new G4OpticalSurface("Fiber reflective surface",glisur,polished,dielectric_metal);
+  fFiberReflOptSurface->SetMaterialPropertiesTable(fiberReflOptTable);
+
+    ///
+  /// Optical properties
+  ///
+  /// Attach a series of optical properties to the detector otherwise the photons will die at the boundary and no registered hit is done
+  /// ---------------------------------------------------***************************-------------------------------------------------------------
+
+  G4int ji = 0;
+  G4double ee=0;
+  // Build table with photon energies
+  const G4int spot = 500;
+
+  G4double PPSCHighE = LambdaE /(115*nanometer);
+  G4double PPSCLowE = LambdaE /(650*nanometer); //598
+  G4double dee = ((PPSCHighE - PPSCLowE) / ((G4double)(spot-1)));
+  G4double LAr_SCPP[spot];
+  for (ji = 0; ji < spot; ji++)
+  {
+    ee=PPSCLowE+ ((G4double)ji) * dee;
+    LAr_SCPP[ji]=ee;
+  }
+
+
+  ///Reflector (VM2000)
+  //From Dario's thesis, reflectivity of VM2000 is ~98% above 370 nm
+  //and ~15% below it (almost a step-function)
+
+  G4double Reflectivity[spot];
+  G4double Efficiency[spot];
+
+  for (ji=0;ji < spot; ji++)
+  {
+    if (LAr_SCPP[ji] < (LambdaE/(370*nanometer)))
+      Reflectivity[ji] = 0.98; //visible
+    else
+      Reflectivity[ji] = 0.15; //UV
+    
+    Efficiency[ji] = 0.0;
+  }
+  G4MaterialPropertiesTable *vmOpTable = new G4MaterialPropertiesTable();
+  vmOpTable->AddProperty("REFLECTIVITY",LAr_SCPP,Reflectivity,spot);
+  vmOpTable->AddProperty("EFFICIENCY",LAr_SCPP,Efficiency,spot);
+
+  fReflOptSurface = new G4OpticalSurface("VM_surface",glisur,polishedfrontpainted,dielectric_metal);
+  fReflOptSurface->SetMaterialPropertiesTable(vmOpTable);
+
+  // Since we don't have a refractive index, this alone is not enough. An optical surface has to be specified
+  // for each part
+  // In this case, what matters is the different parts of the holders. Have to check over all of them
+  fCuOptSurface = new G4OpticalSurface("Cu surface");
+  fCuOptSurface->SetType(dielectric_metal);
+  fCuOptSurface->SetFinish(ground);
+  // Reflection of metallic surfaces has a very small polish
+  fCuOptSurface->SetPolish(0.5);
+
+  fGermOptSurface = new G4OpticalSurface("Germ surface");
+  fGermOptSurface->SetType(dielectric_metal);
+  fGermOptSurface->SetFinish(groundfrontpainted);
+  //,glisur,polished,dielectric_metal);
+  // Polish of the surface (the smaller the value, the more "lambertian-like" the reflection becomes)
+  fGermOptSurface->SetPolish(0.5);
+
+
+}

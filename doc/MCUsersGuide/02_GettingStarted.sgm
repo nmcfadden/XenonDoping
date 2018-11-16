@@ -1,0 +1,128 @@
+<chapter id="GettingStarted">
+   <title>Getting Started
+   </title>
+   <para>  
+   </para>
+   <section><title>Getting started on PDSF (Majorana)</title>
+   <para>
+      This section is for members of the Majorana collaboration that want to 
+      perform simulations or development on PDSF, the default platform for
+      the simulation.
+   </para>
+   <orderedlist numeration="Arabic">
+      <listitem>
+         <para>
+	 Obtain an account on PDSF. Contact Reyco Henning
+	 (<ulink url="mailto:rhenning@lbl.gov">rhenning@lbl.gov</ulink>)
+	 for one.
+	 </para>
+      </listitem>
+      <listitem>
+	 <para>
+	 Obtain an account on the Munich CVS server. Contact Xiang Liu
+	 (<ulink url="mailto:xliu@mppmu.mpg.de">xliu@mppmu.mpg.de</ulink>).
+	 You will have to provide him with a username an encrypted password.
+	 You can generate an encrypted  password by executing the command:
+	 </para>
+	 <screen> perl -e 'print crypt "password", "sa"'</screen>
+	 <para>
+	 where <filename>password</filename> is you desired password.
+	 </para>
+      </listitem>
+      <listitem>
+         <para>
+	 Login to PDSF. Make a file in your home directory named .chos
+	 containing the following line of text:
+	 <screen>/auto/redhat73</screen>
+	 </para>
+      </listitem>
+      <listitem>
+         <para>
+	 If you use <filename>csh</filename> or <filename>tcsh</filename>, 
+	 add the following lines to your <filename>.cshrc</filename> file:
+	 </para>
+	 <screen> setenv USE_G7 1
+ source /auto/common/majorana/bin/setupMajorana.csh
+ setenv CVSROOT :pserver:username@pclg-02.mppmu.mpg.de:/home/pclg-02/cvsroot</screen>
+	 <para>
+	 where <filename>username</filename> is your CVS username. 
+	 </para>
+         <para>
+         If instead you use
+	 <filename>bash</filename>, add the following two lines to your 
+	 <filename>.bash_profile</filename> file:
+	 </para>
+	 <screen> export USE_G7=1
+ . /auto/common/majorana/bin/setupMajorana.sh 
+ export CVSROOT=:pserver:username@pclg-02.mppmu.mpg.de:/home/pclg-02/cvsroot</screen>
+	 <para>
+	 NOTE: The 
+	 <filename>bash</filename> setup script is not well tested. Contact
+	 Akbar Mokhtarani 
+	 (<ulink url="mailto:amokhtarani@lbl.gov">amokhtarani@lbl.gov</ulink>)
+	 if you experience difficulties.
+	 </para>
+      </listitem>
+      <listitem>
+	 <para>
+         Logout of PDSF and log back in. The chos and shell environments
+	 will then be setup correctly for downloading/compiling MaGe.
+	 </para>
+      </listitem>
+      <listitem>
+	 <para>
+	 You can now login to the CVS server at the beginning
+	 of each of your next sessions by issuing:
+	 </para>
+	 <screen> cvs login</screen>
+      </listitem>
+      <listitem>
+         <para>
+	 If you want the latest version of the code, 
+	 check out the <filename>MaGe</filename> package:
+	 </para>
+	 <screen> cvs co MaGe</screen>
+	 <para> You also check out prev ious releases. See
+	 <xref linkend="WorkingWithReleases"/>.
+	 </para>
+      </listitem>
+      <listitem>
+        <para> 
+	You can build the executable by going to the <filename>MaGe</filename>
+	directory and issuing the commands:
+	</para>
+	<screen> gmake lib
+ gmake management.bin </screen>
+        <para>
+	The directory <filename>MaGe/bin</filename> contains the executable.
+	Once you are working on code, you can build the libraries for 
+	only the package you are
+	working on, for example:
+	</para>
+	<screen> gmake geometry.lib</screen>
+	<para>
+	will only build the geometry library. The other libraries are 
+	identified by there directory names, ie. 
+	<filename>io, generators, management</filename> etc.
+	See <xref linkend="HW-Env"/> for more features of the build process.
+	</para>
+      </listitem>
+      <listitem>
+        <para>
+        If you want to use the PNNL generator, you need to add the following
+        symbolic link to your <filename>MaGe</filename> directory:
+        </para>
+<screen>
+ ln -s /auto/majorana1/MJ/database/generators/PNNL/dat dat
+</screen>
+      </listitem>
+      <listitem>
+        <para>
+	You can find some example macros in the 
+	<filename>MaGe/macros</filename> directory.
+	</para>
+      </listitem>
+   </orderedlist>
+   </section>
+</chapter>
+

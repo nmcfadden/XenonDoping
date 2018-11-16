@@ -1,0 +1,75 @@
+#!/bin/ksh
+#-------------------------------------------------------------------------
+# this script runs MaGe 10 times and each time with different input files
+# to run this script you have to
+# 1 have MaGe at ${magepath}
+# 2 have 10 gzipped co60 files at ${sourcepath}/${sourcefilename}
+#         your real file name is ${sourcefilename}.1.gz to 10.gz
+# 3 directory for your ntuples will be at targetpath
+# 4 ntuple name will be ${targetfilename}.1 to 10
+# 5 directory for your kumac file
+# 6 kumac name will be ${kumacfilename}.1 to .10
+#-------------------------------------------------------------------------
+#
+# ---> set up the paths
+#
+mageexec=/mnt/scratch/xliu/geant4/bin/Linux-g++/MaGe
+sourcepath=/home/pclh3-05/xliu/neutrino/event-generator/decay0/co60-1M
+sourcefilename=co60.decay0.100k.txt
+targetpath=/mnt/scratch/xliu/neutrino/ntu-MaGe/co60-ntu
+targetfilename=co60.100k.ntu
+logfilename=co60.100k.log
+kumacpath=/mnt/scratch/xliu/neutrino/ntu-MaGe/co60-ntu
+kumacfilename=co60.MaGe.kumac
+#
+# ---> start looping
+#
+mass=1
+while ((mass<=3))
+do
+#
+# ---> generate kumac file for input to MaGe
+#
+\rm temp.header
+cat > temp.header << 'EOF'
+/MG/manager/mglog trace
+/MG/geometry/detector GerdaArray
+/MG/geometry/database false
+/MG/processes/realm BBdecay
+/MG/eventaction/rootschema GerdaArrayWithTrajectory
+/MG/eventaction/rootfilename testGerda.root
+/MG/eventaction/reportingfrequency 1000
+/run/initialize
+/MG/generator/confine volume
+/MG/generator/volume Ge_det_0
+/MG/generator/select decay0
+EOF
+#
+\rm temp.tailer
+cat > temp.tailer << 'EOF'
+/tracking/verbose 0
+/run/beamOn 100
+EOF
+#
+\rm temp.inputname
+echo /MG/generator/decay0/filename ${sourcefilename}.${mass} > temp.inputname
+#
+\rm ${kumacfilename}.${mass}
+cat temp.header temp.inputname temp.tailer > ${kumacfilename}.${mass}
+#
+# ---> copy the decay0 source file name
+#
+#cp ${sourcepath}/${sourcefilename}.${mass}.gz .
+#gzip -d ${sourcefilename}.${mass}.gz
+#
+# ---> start MaGe
+#
+${mageexec} ${kumacfilename}.${mass} >  ${logfilename}.${mass}
+#
+mv testGerda.root ${targetpath}/${targetfilename}.${mass}
+mv ${logfilename}.${mass} ${targetpath}/.
+mv ${kumacfilename}.${mass} ${targetpath}/.
+# 
+((mass+=1))
+done
+#

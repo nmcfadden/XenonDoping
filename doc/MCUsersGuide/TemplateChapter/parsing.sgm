@@ -1,0 +1,11 @@
+<section id="parsing">
+   <title>Parsing Docbook Files With Openjade
+   </title>
+   <para>In general, openjade commands take the form:
+      <screen>openjade -t FORMAT -d STYLESHEET FILE
+      </screen>
+where <quote>FORMAT</quote> is the format in which you are working (usually <quote>sgml</quote> or <quote>rtf</quote>), <quote>STYLESHEET</quote> is the docbook stylesheet corresponding to FORMAT, and <quote>FILE</quote> is the mail book sgml file, containing the docbook declaration. 
+   </para>
+   <para>If we install some other docbook parser on the pdsf cluster, I'll include some instructions on that so that the developers can check their own docbook files before sending them to me!
+   </para>
+</section>

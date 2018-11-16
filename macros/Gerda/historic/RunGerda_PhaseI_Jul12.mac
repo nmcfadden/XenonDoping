@@ -1,0 +1,113 @@
+# ====================================================== #
+# Runs detector with phase I geometry (coaxial and BEGe) #
+# (blehnert)											 #
+# ====================================================== # 
+
+# 
+# General setup 
+# 
+
+/MG/manager/mglog debugging
+/MG/processes/realm BBdecay
+
+
+#
+# Geometry setup 
+#
+
+/MG/geometry/detector GerdaArray
+/MG/geometry/database false
+/MG/geometry/lock/type CommLock4
+
+### The BEGes are only defined in the geometry_PhaseIBEGes.dat along with all the other detectors
+/MG/geometry/detector/geometryfile geometry_PhaseIBEGes.dat
+
+### matrix_phase_i_Jul12.dat contains the full Phase I array as of July 2012 (does not visualize)
+/MG/geometry/detector/matrixfile matrix_phase_i_Jul12.dat
+
+### matrix_phase_i_BEGeString.dat contains only the BEGe string of Phase I (visualizes)
+#/MG/geometry/detector/matrixfile matrix_phase_i_BEGeString.dat
+
+
+#
+# Geometry modifications 
+#
+
+#/MG/geometry/general/constructsupport false
+/MG/geometry/general/constructcabling false
+#/MG/geometry/general/constructMiniShroud true
+
+
+
+#
+# Output setup 
+#
+
+/MG/eventaction/rootschema GerdaArray
+/MG/eventaction/rootfilename PhaseI.root
+/MG/eventaction/reportingfrequency 1
+
+
+
+#
+# Bypass the (long) loading of hadronic physics tables
+#
+
+/MG/processes/useNoHadPhysics true
+
+
+
+#
+# Initialize run 
+#
+
+/run/initialize
+
+#
+# generator setup 
+#
+
+### Example 1
+### Sample events inside 5 BEGes
+/MG/generator/confine volumelist
+/MG/generator/volumelistfrom 0 
+/MG/generator/volumelistto 4
+/MG/generator/volumelist Crystal_geometry4
+
+
+### Example 2
+### Sample events inside 5 BEGes upper star holder parts
+### NOTE: Phase I holder parts for BEGes start at index 1000 to avoid naming conflict with coaxial Phase I holder parts
+#/MG/generator/confine volumelist
+#/MG/generator/volumelistfrom 1000 
+#/MG/generator/volumelistto 1004
+#/MG/generator/volumelist StarHolder_UpperStar
+
+
+### Example 3
+### Sample events inside 9 coaxials
+/MG/generator/confine volumelist
+/MG/generator/volumelistfrom 0 
+/MG/generator/volumelistto 8
+/MG/generator/volumelist Crystal_geometry1
+
+
+### Example 4
+### Sample events inside coaxial upper star holder parts
+#/MG/generator/confine volumelist
+#/MG/generator/volumelistfrom 0 
+#/MG/generator/volumelistto 8
+#/MG/generator/volumelist StarHolder_UpperStar
+
+
+
+
+
+/MG/generator/select G4gun
+/gun/particle ion
+/gun/ion 27 60 0
+/gun/energy 0.0 keV
+
+/tracking/verbose 0
+/run/beamOn 10
+

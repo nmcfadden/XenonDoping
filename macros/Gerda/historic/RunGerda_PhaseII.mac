@@ -1,0 +1,51 @@
+# ==================================== #
+# Runs detector with phase II geometry #
+# ==================================== # 
+
+# 
+# General setup 
+# 
+
+/MG/manager/mglog trace
+/MG/processes/realm BBdecay
+/MG/eventaction/rootschema GerdaArrayWithTrajectory 
+/MG/eventaction/rootfilename PhaseII.root
+/MG/eventaction/reportingfrequency 10000
+
+#
+# Geometry setup 
+#
+
+/MG/geometry/detector GerdaArray
+/MG/geometry/database false
+
+/MG/geometry/detector/geometryfile geometry.dat
+/MG/geometry/detector/matrixfile matrix_phase_ii.dat
+
+#
+# Geometry modifications 
+#
+
+#
+# Initialize run 
+#
+
+/run/initialize
+
+#
+# generator setup 
+#
+
+/MG/generator/confine volumelist
+/MG/generator/volumelistfrom 0 
+/MG/generator/volumelistto 278
+/MG/generator/volumelist Segment
+
+/MG/generator/select G4gun
+/gun/particle ion
+/gun/ion 27 60 0
+/gun/energy 0.0 keV
+
+/tracking/verbose 0
+/run/beamOn 10000  
+

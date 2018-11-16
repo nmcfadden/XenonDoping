@@ -1,0 +1,23 @@
+
+MaGe-00-01-00
+-------------
+Author: R. Henning
+
+- First global CVS tag to be documented. 
+
+Date	     Tag	      By	    G4	     Root     CLHEP      gcc     OS   Neutron lib
+-------------------------------------------------------------------------------------------------
+Nov-18-05 MaGe-Nov1805   Akbar Mokhtarani   4.7.0    2.24/05  1.8.1.0   3.2.3   sl302
+Dec-03-05 MaGe-Dec0305	 Akbar Mokhtarani   4.7.0    2.24/05  1.8.1.0   3.2.3   sl302
+Dec-19-05 MaGe-Dec1905	 Akbar Mokhtarani   4.8.0    4.04.02g 1.9.2.2   3.2.3   sl302
+Dec-21-05 MaGe-Dec2105	 Akbar Mokhtarani   4.8.0    4.04.02g 1.9.2.2   3.2.3   sl302
+Dec-30-05 MaGe-01-00-00  Reyco Henning      4.8.0    5.06     1.9.2.2   3.2.3   sl302
+Jan-03-06 MaGe-01-01-00  Reyco Henning      4.8.0    5.06     1.9.2.2   3.2.3   sl302
+Jan-04-06 MaGe-Jan0406	 Akbar Mokhtarani   4.8.0    5.06     1.9.2.2   3.2.3   sl302
+Jan-05-06 MaGe-01-05-00  Reyco Henning      4.8.0    5.06     1.9.2.2   3.2.3   sl302
+Aug-21-06 MaGe-01-05-90  Reyco Henning      4.8.0.p1 5.06     1.9.2.2   3.2.3   sl302
+Mar-07-07 MaGe-01-06-00  Luciano Pandola    4.8.2    5.06     1.9.2.2   3.2.3   sl302  G4NDL3.10 
+Jan-03-08 MaGe-01-07-00  Reyco Henning      4.9.0.p1 5.06     2.0.3.1   3.2.3   sl302  G4NDL3.11
+Aug-03-10 MaGe-01-08-00  Luciano Pandola    4.9.2    5.20     2.0.4.2   4.1.2   sl4    G4NDL3.13
+Nov-22-13 MaGe-01-14-00  Luciano Pandola    4.9.4    5.26     2.1.0.0   4.1.2   sl5    G4NDL3.14
+

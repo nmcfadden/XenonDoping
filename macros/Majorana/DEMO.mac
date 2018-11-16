@@ -1,0 +1,77 @@
+#
+# Template macro to run jobs for MJ Demonstrator
+# R. Henning
+# 2-16-2009
+#
+
+# Management 
+/MG/manager/mglog routine
+/MG/eventaction/reportingfrequency 10000
+/MG/manager/seedWithDevRandom
+
+# Process List
+/MG/processes/realm BBdecay
+
+# Configure Detector to use Demonstrator
+/MG/geometry/detector MJRDBasicShield
+/MG/geometry/RDCryostat/DEMO true
+
+# Define template crystal, based on BeGe for Demonstrator. 
+/MG/geometry/idealCoax/setDefaults
+/MG/geometry/idealCoax/deadLayerOn true
+/MG/geometry/idealCoax/cutInHalfOn false
+/MG/geometry/idealCoax/outerDeadLayer 500 micrometer
+/MG/geometry/idealCoax/coreDeadLayer 1 micrometer
+/MG/geometry/idealCoax/coreRadius 0.01 cm
+/MG/geometry/idealCoax/coreDepth 0.01 cm
+/MG/geometry/idealCoax/height 3.0 cm
+/MG/geometry/idealCoax/radius 3.5 cm
+/MG/geometry/idealCoax/bubbleOn false
+/MG/geometry/idealCoaxWShield/shieldOn false
+
+# ROOT output schema
+/MG/eventaction/rootschema MCEvent
+/MG/eventaction/rootfilename Tl208_inShield.root
+/MG/io/G4Steps/setWriteSensitiveOnly true
+/MG/io/G4Steps/killAlphas true
+/MG/io/G4Steps/killBetas false
+/MG/io/G4Steps/stopNuclei true
+
+
+# Select Geant 4 RDM generator as a point source
+/MG/generator/select RDMiso
+
+/run/initialize
+
+# Run Co-60 inside the top, middle crystal.
+/MG/generator/confine volume
+/MG/generator/volume InnerCuShieldPhysical
+
+# Select ion and position source right outside can.
+/gun/particle
+/grdm/ion 208 81 0
+
+/run/beamOn 200000
+
+
+# Run the following macro to generate visualizations. 
+#/vis/open RayTracer
+#/vis/viewer/set/viewpointThetaPhi 70 20
+#/vis/viewer/zoom 1.2
+#/vis/geometry/set/visibility RockLogical 0 0
+#/vis/geometry/set/visibility RoomLogical 0 0
+#/vis/geometry/set/visibility MuonVetoLogical 0 0
+#/vis/geometry/set/visibility NeutronShieldLogical 0 0 
+#/vis/geometry/set/visibility OuterPbShieldLogical 0 0
+#/vis/geometry/set/visibility InnerPbShieldLogical 0 0 
+#/vis/geometry/set/visibility OuterCuShieldLogical 0 0
+#/vis/geometry/set/visibility InnerCuShieldLogical 0 0
+#/vis/geometry/set/visibility InternalVolumeLogical 0 0 
+#/vis/drawVolume CryostatPhysical     
+#/vis/viewer/add/trajectories
+#/vis/viewer/flush
+#/vis/viewer/set/viewpointThetaPhi 90 00
+#/vis/viewer/flush
+
+
+

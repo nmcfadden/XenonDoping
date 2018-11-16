@@ -1,0 +1,50 @@
+# ============================================================= #
+# Runs detector with standard geometry and calibration sources	#
+# ============================================================= # 
+
+# 
+# General setup 
+# 
+
+/MG/manager/mglog trace
+/MG/processes/realm BBdecay
+/MG/eventaction/rootschema GerdaArrayCalibration
+/MG/eventaction/rootfilename Calibration.root
+/MG/eventaction/reportingfrequency 1000 
+
+#
+# Geometry setup 
+#
+
+/MG/geometry/detector GerdaArray
+/MG/geometry/database false
+
+#
+# Geometry modifications 
+#
+
+/MG/geometry/general/constructcalibration true
+
+#
+# Initialize run 
+#
+
+/run/initialize
+
+#
+# generator setup 
+#
+
+/MG/generator/confine volumelist
+/MG/generator/volumelist calibration_source_inner
+/MG/generator/volumelistfrom 0
+/MG/generator/volumelistto 2
+
+/MG/generator/select G4gun
+/gun/particle ion
+/gun/ion 27 60 0
+/gun/energy 0.0 keV
+
+/tracking/verbose 0
+/run/beamOn 10000
+

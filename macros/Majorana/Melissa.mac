@@ -1,0 +1,43 @@
+/MG/manager/mglog routine
+/MG/processes/realm BBdecay
+/MG/geometry/detector Melissa-KURF	#VT1-KURF		 
+/MG/geometry/WorldMaterial Air
+/MG/geometry/MelissaDetector/useSample true
+
+#Candidates Are:
+#RockBucket RockBag Steel SuperInsulation Teflon AlRings
+#
+/MG/geometry/MelissaDetector/chooseSample SuperInsulation
+
+#/MG/geometry/MelissaDetector/placeSample OnTop 
+#Candidates Are: Default OnTop InCorner
+#(Dummy Code)Not neccessary for simulation to run.
+#Sample is automatically default position on top of cryostat
+#can be useful for runs with different sample placements
+
+/MG/eventaction/reportingfrequency 500000
+/MG/eventaction/rootschema MCEvent
+/MG/eventaction/rootfilename <filename>
+/MG/io/G4Steps/killAlphas true
+/MG/io/G4Steps/stopNuclei true
+/MG/io/MCEvent/setG4StepsOutput false
+/run/initialize
+/MG/generator/select SPS
+/MG/generator/confine volume
+/MG/generator/volume SuperInsulation #should be same as /choosSample 
+/gps/particle ion
+
+
+#Select Isotopes
+
+#/gps/ion 19 40 0 0     # K-40
+#/gps/ion 81 208  0 0   # Tl-208
+#/gps/ion 83 214 0 0    # Bi 214
+#/gps/ion 91 234 0 0    # Pa234
+#/gps/ion  89 228 0 0   # Ac228
+#/gps/ion 92 235 0 0    # U235
+#/gps/ion 55 137 0 0    # Cs137
+#/gps/ion 82 212 0 0    # Pb212
+#/gps/ion 82 214 0 0    # Pb214
+
+/run/beamOn 3000000

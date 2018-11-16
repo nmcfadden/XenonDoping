@@ -1,0 +1,6 @@
+<section id="sect4">
+   <title>Breaking a Section Off Into Another File
+   </title>
+   <para>You might want a particularly lengthy section for your UDG chapter to be in its own separate file.  This would be particularly helpful to your friendly neighborhood editor as he is trying to keep this Guide as modular as possible.  Doesn't this just look like another section?  The most important part is to declare the separate section in your main book header, and identify which section is contained in which file at the beginning of all section sgml files (kind of like I did here).
+   </para>
+</section>

@@ -1,0 +1,65 @@
+# ======================================================= #
+# Draws detector with phase 0 geometry and either one of  #
+# the encapsulations or both of them at the same time     #
+# ======================================================= # 
+# Verbosity setup
+
+/MG/manager/mglog trace
+#
+# Geometry setup 
+#
+
+/MG/geometry/detector GerdaArray
+/MG/geometry/database false
+/MG/geometry/cherenkov -1
+#
+/MG/geometry/detector/geometryfile geometry.dat
+/MG/geometry/detector/matrixfile matrix_phase_0.dat
+
+#
+# Geometry modifications 
+#
+
+# Use this command to turn on construction of only copper encapsulation
+# == encapsulation of bottom detector: 
+#/MG/geometry/general/constructCopperEncapsulation true 
+
+
+# Use this command to turn on construction of only teflon encapsulation
+# == encapsulation of upper detector:
+#/MG/geometry/general/constructTeflonEncapsulation true 
+
+# Use this command to turn on construction of both encapsulations 
+# contemporaneously: 
+/MG/geometry/general/constructEncapsulations true 
+
+
+
+#Avoid loading neutron cross-sections: useless for visualization
+/MG/processes/useNoHadPhysics true
+
+#
+# Initialize run 
+#
+
+/run/initialize
+#/MG/geometry/CheckOverlaps
+
+#
+# visualization 
+#
+
+
+
+/vis/scene/create
+#/vis/open VRML2FILE
+#/vis/open OGLSX
+#/vis/open DAWNFILE
+/vis/open HepRepFile
+#/vis/viewer/set/viewpointThetaPhi 50 270 deg
+/vis/viewer/zoom 10.0
+
+/vis/drawVolume 
+
+/vis/viewer/flush 
+ 

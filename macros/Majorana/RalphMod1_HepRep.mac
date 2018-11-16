@@ -1,0 +1,211 @@
+# Management 
+/MG/manager/mglog debugging
+/MG/manager/seedWithUUID
+
+# Process List
+/MG/processes/realm BBdecay
+/MG/processes/lowenergy true
+/MG/processes/GetStepLimit
+
+# Configure Detector
+/MG/geometry/detector MJDemonstrator
+/MG/geometry/WorldMaterial Vacuum 
+
+/MG/demonstrator/cavernOn true
+/MG/demonstrator/muonVetoOn true
+/MG/demonstrator/radShieldOn true
+/MG/demonstrator/setPolyShield DS6
+
+# Initialize Geant4 and geometry
+/run/initialize
+
+/MG/generator/select DoubleBeta0
+/MG/generator/confine volume
+/MG/generator/volume CryostatAssembly_001_7StrAssembly_001_StringAssembly_002_CrystalAssembly_001_ActiveCrystal_001
+
+/MG/eventaction/rootschema MCRun
+/MG/eventaction/rootfilename PC_test.root
+
+#/vis/open ATree
+#/vis/ASCIITree/verbose 10
+#/vis/drawTree 
+
+#/vis/open OGLIX
+
+
+/vis/open HepRepFile
+#/vis/verbose 6
+
+
+/vis/scene/create
+
+/vis/scene/add/volume RadShieldAssembly_001_RadShieldCuInner_001
+/vis/scene/add/volume RadShieldAssembly_001_RadShieldCuOuter_001
+/vis/scene/add/volume RadShieldAssembly_001_RadShieldPb_001
+/vis/scene/add/volume RadShieldAssembly_001_RadShieldN2East_001
+/vis/scene/add/volume RadShieldAssembly_001_RadShieldN2West_001
+/vis/scene/add/volume RadShieldAssembly_001_RadShieldRnBox_001
+/vis/scene/add/volume PolyAssembly_001_OverFloorPanel_001
+/vis/scene/add/volume PolyAssembly_001_OverFloorPanel_002
+/vis/scene/add/volume PolyAssembly_001_OverFloorPanel_003
+/vis/scene/add/volume PolyAssembly_001_OverFloorPanel_004
+/vis/scene/add/volume PolyAssembly_001_OverFloorPanel_005
+/vis/scene/add/volume PolyAssembly_001_OverFloorPanel_006
+/vis/scene/add/volume PolyAssembly_001_OverFloorPanel_007
+/vis/scene/add/volume PolyAssembly_001_OverFloorPanel_008
+/vis/scene/add/volume PolyAssembly_001_OverFloorPanel_009
+/vis/scene/add/volume PolyAssembly_001_OverFloorPanel_010
+/vis/scene/add/volume PolyAssembly_001_OverFloorPanel_011
+/vis/scene/add/volume PolyAssembly_001_OverFloorPanel_012
+
+/vis/scene/add/volume PolyAssembly_001_MainRoof_001
+/vis/scene/add/volume PolyAssembly_001_MainRoof_002
+/vis/scene/add/volume PolyAssembly_001_MainRoof_003
+/vis/scene/add/volume PolyAssembly_001_MainRoof_004
+/vis/scene/add/volume PolyAssembly_001_MainRoof_005
+/vis/scene/add/volume PolyAssembly_001_MainRoof_006
+
+/vis/scene/add/volume PolyAssembly_001_M1Roof_001
+/vis/scene/add/volume PolyAssembly_001_M1Roof_002
+/vis/scene/add/volume PolyAssembly_001_M1Roof_003
+
+/vis/scene/add/volume PolyAssembly_001_M2Roof_001
+/vis/scene/add/volume PolyAssembly_001_M2Roof_002
+/vis/scene/add/volume PolyAssembly_001_M2Roof_003
+
+/vis/scene/add/volume PolyAssembly_001_WestWallBig_001
+/vis/scene/add/volume PolyAssembly_001_WestWallBig_002
+/vis/scene/add/volume PolyAssembly_001_WestWallBig_003
+/vis/scene/add/volume PolyAssembly_001_WestWallBig_004
+/vis/scene/add/volume PolyAssembly_001_WestWallBig_005
+/vis/scene/add/volume PolyAssembly_001_WestWallBig_006
+
+/vis/scene/add/volume PolyAssembly_001_NorthWallBig_001
+/vis/scene/add/volume PolyAssembly_001_NorthWallBig_002
+/vis/scene/add/volume PolyAssembly_001_NorthWallBig_003
+/vis/scene/add/volume PolyAssembly_001_NorthWallBig_004
+/vis/scene/add/volume PolyAssembly_001_NorthWallBig_005
+/vis/scene/add/volume PolyAssembly_001_NorthWallBig_006
+
+/vis/scene/add/volume PolyAssembly_001_NorthWallSmallInnerLower_001
+/vis/scene/add/volume PolyAssembly_001_NorthWallSmallInnerLower_002
+/vis/scene/add/volume PolyAssembly_001_NorthWallSmallInnerLower_003
+
+/vis/scene/add/volume PolyAssembly_001_NorthWallSmallInnerUpper_001
+/vis/scene/add/volume PolyAssembly_001_NorthWallSmallInnerUpper_002
+/vis/scene/add/volume PolyAssembly_001_NorthWallSmallInnerUpper_003
+
+/vis/scene/add/volume PolyAssembly_001_NorthWallSmallOuterLower_001
+/vis/scene/add/volume PolyAssembly_001_NorthWallSmallOuterLower_002
+/vis/scene/add/volume PolyAssembly_001_NorthWallSmallOuterLower_003
+
+/vis/scene/add/volume PolyAssembly_001_NorthWallSmallOuterUpper_001
+/vis/scene/add/volume PolyAssembly_001_NorthWallSmallOuterUpper_002
+/vis/scene/add/volume PolyAssembly_001_NorthWallSmallOuterUpper_003
+
+/vis/scene/add/volume PolyAssembly_001_WestWallSmallInnerLower_001
+/vis/scene/add/volume PolyAssembly_001_WestWallSmallInnerLower_002
+/vis/scene/add/volume PolyAssembly_001_WestWallSmallInnerLower_003
+
+/vis/scene/add/volume PolyAssembly_001_WestWallSmallInnerUpper_001
+/vis/scene/add/volume PolyAssembly_001_WestWallSmallInnerUpper_002
+/vis/scene/add/volume PolyAssembly_001_WestWallSmallInnerUpper_003
+ 
+/vis/scene/add/volume PolyAssembly_001_WestWallSmallOuterLower_001
+/vis/scene/add/volume PolyAssembly_001_WestWallSmallOuterLower_002
+/vis/scene/add/volume PolyAssembly_001_WestWallSmallOuterLower_003
+
+/vis/scene/add/volume PolyAssembly_001_WestWallSmallOuterUpper_001
+/vis/scene/add/volume PolyAssembly_001_WestWallSmallOuterUpper_002
+/vis/scene/add/volume PolyAssembly_001_WestWallSmallOuterUpper_003
+
+/vis/scene/add/volume PolyAssembly_001_SouthWallModuleInnerLower_001
+/vis/scene/add/volume PolyAssembly_001_SouthWallModuleInnerLower_002
+/vis/scene/add/volume PolyAssembly_001_SouthWallModuleInnerLower_003
+
+/vis/scene/add/volume PolyAssembly_001_SouthWallModuleInnerUpper_001
+/vis/scene/add/volume PolyAssembly_001_SouthWallModuleInnerUpper_002
+/vis/scene/add/volume PolyAssembly_001_SouthWallModuleInnerUpper_003
+
+/vis/scene/add/volume PolyAssembly_001_SouthWallModuleOuter_001
+/vis/scene/add/volume PolyAssembly_001_SouthWallModuleOuter_002
+/vis/scene/add/volume PolyAssembly_001_SouthWallModuleOuter_003
+
+/vis/scene/add/volume PolyAssembly_001_EastWallChillerInner_001
+/vis/scene/add/volume PolyAssembly_001_EastWallChillerInner_002
+/vis/scene/add/volume PolyAssembly_001_EastWallChillerInner_003
+
+/vis/scene/add/volume PolyAssembly_001_EastWallChillerOuter_001
+/vis/scene/add/volume PolyAssembly_001_EastWallChillerOuter_002
+/vis/scene/add/volume PolyAssembly_001_EastWallChillerOuter_003
+
+/vis/scene/add/volume PolyAssembly_001_SouthWallChillerInner_001
+/vis/scene/add/volume PolyAssembly_001_SouthWallChillerInner_002
+/vis/scene/add/volume PolyAssembly_001_SouthWallChillerInner_003
+
+/vis/scene/add/volume PolyAssembly_001_SouthWallChillerOuter_001
+/vis/scene/add/volume PolyAssembly_001_SouthWallChillerOuter_002
+/vis/scene/add/volume PolyAssembly_001_SouthWallChillerOuter_003
+
+/vis/scene/add/volume PolyAssembly_001_EastWallModuleInnerLower_001
+/vis/scene/add/volume PolyAssembly_001_EastWallModuleInnerLower_002
+/vis/scene/add/volume PolyAssembly_001_EastWallModuleInnerLower_003
+
+/vis/scene/add/volume PolyAssembly_001_EastWallModuleInnerUpper_001
+/vis/scene/add/volume PolyAssembly_001_EastWallModuleInnerUpper_002
+/vis/scene/add/volume PolyAssembly_001_EastWallModuleInnerUpper_003
+
+/vis/scene/add/volume PolyAssembly_001_EastWallModuleOuter_001
+/vis/scene/add/volume PolyAssembly_001_EastWallModuleOuter_002
+/vis/scene/add/volume PolyAssembly_001_EastWallModuleOuter_003
+
+
+/vis/scene/add/volume MuonVetoAssembly_001_ActiveMuonVetoThroughPanel_001
+/vis/scene/add/volume MuonVetoAssembly_001_ActiveMuonVetoThroughPanel_001
+/vis/scene/add/volume MuonVetoAssembly_001_ActiveMuonVetoThroughPanel_002
+/vis/scene/add/volume MuonVetoAssembly_001_ActiveMuonVetoThroughPanel_003
+/vis/scene/add/volume MuonVetoAssembly_001_ActiveMuonVetoThroughPanel_004
+/vis/scene/add/volume MuonVetoAssembly_001_ActiveMuonVetoThroughPanel_005
+/vis/scene/add/volume MuonVetoAssembly_001_ActiveMuonVetoThroughPanel_006
+/vis/scene/add/volume MuonVetoAssembly_001_ActiveMuonVetoThroughPanel_007
+/vis/scene/add/volume MuonVetoAssembly_001_ActiveMuonVetoThroughPanel_008
+/vis/scene/add/volume MuonVetoAssembly_001_ActiveMuonVetoSolidPanel_001
+/vis/scene/add/volume MuonVetoAssembly_001_ActiveMuonVetoSolidPanel_002
+/vis/scene/add/volume MuonVetoAssembly_001_ActiveMuonVetoSolidPanel_003
+/vis/scene/add/volume MuonVetoAssembly_001_ActiveMuonVetoSolidPanel_004
+/vis/scene/add/volume MuonVetoAssembly_001_ActiveMuonVetoSolidPanel_005
+/vis/scene/add/volume MuonVetoAssembly_001_ActiveMuonVetoSolidPanel_006
+/vis/scene/add/volume MuonVetoAssembly_001_ActiveMuonVetoSolidPanel_007
+/vis/scene/add/volume MuonVetoAssembly_001_ActiveMuonVetoSolidPanel_008
+/vis/scene/add/volume MuonVetoAssembly_001_ActiveMuonVetoSolidPanel_009
+/vis/scene/add/volume MuonVetoAssembly_001_ActiveMuonVetoSolidPanel_010
+/vis/scene/add/volume MuonVetoAssembly_001_ActiveMuonVetoSolidPanel_011
+/vis/scene/add/volume MuonVetoAssembly_001_ActiveMuonVetoSolidPanel_012
+/vis/scene/add/volume MuonVetoAssembly_001_MuonVetoOverFloorAssm_001_ActiveMuonVetoOverFloorPanel_001
+/vis/scene/add/volume MuonVetoAssembly_001_MuonVetoOverFloorAssm_001_ActiveMuonVetoOverFloorPanel_002
+/vis/scene/add/volume MuonVetoAssembly_001_MuonVetoOverFloorAssm_001_ActiveMuonVetoOverFloorPanel_003
+/vis/scene/add/volume MuonVetoAssembly_001_MuonVetoOverFloorAssm_001_ActiveMuonVetoOverFloorPanel_004
+/vis/scene/add/volume MuonVetoAssembly_001_MuonVetoOverFloorAssm_001_ActiveMuonVetoOverFloorPanel_005
+/vis/scene/add/volume MuonVetoAssembly_001_MuonVetoOverFloorAssm_001_ActiveMuonVetoOverFloorPanel_006
+/vis/scene/add/volume MuonVetoAssembly_001_MuonVetoOverFloorAssm_002_ActiveMuonVetoOverFloorPanel_001
+/vis/scene/add/volume MuonVetoAssembly_001_MuonVetoOverFloorAssm_002_ActiveMuonVetoOverFloorPanel_002
+/vis/scene/add/volume MuonVetoAssembly_001_MuonVetoOverFloorAssm_002_ActiveMuonVetoOverFloorPanel_003
+/vis/scene/add/volume MuonVetoAssembly_001_MuonVetoOverFloorAssm_002_ActiveMuonVetoOverFloorPanel_004
+/vis/scene/add/volume MuonVetoAssembly_001_MuonVetoOverFloorAssm_002_ActiveMuonVetoOverFloorPanel_005
+/vis/scene/add/volume MuonVetoAssembly_001_MuonVetoOverFloorAssm_002_ActiveMuonVetoOverFloorPanel_006
+/vis/scene/add/volume CryostatAssembly_001_CalAssembly_001_Track_001
+/vis/scene/add/volume CryostatAssembly_002_CalAssembly_001_Track_001
+/vis/sceneHandler/attach
+/vis/scene/add/trajectories
+/vis/scene/add/hits
+/vis/viewer/flush
+#/vis/viewer/update
+
+
+#/vis/viewer/set/style surface
+#/vis/viewer/set/projection perspective 45 deg
+#/vis/viewer/set/lightsMove cam
+
+#/control/alias theta 60
+#/control/loop movie.loop phi 0 360 5
+

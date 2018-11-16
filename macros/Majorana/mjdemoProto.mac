@@ -1,0 +1,53 @@
+# Management 
+/MG/manager/mglog routine
+/MG/manager/seedWithUUID
+
+# Process List
+#/MG/processes/realm BBdecay
+#/MG/processes/lowenergy true
+
+# Configure Detector
+/MG/geometry/detector MJPrototype
+/MG/geometry/WorldMaterial Vacuum 
+
+/MG/prototype/cavernOn true
+/MG/prototype/PCposition inShield #atGlovebox
+/MG/prototype/DRshellOn true
+/MG/prototype/DRwallsOn true
+/MG/prototype/muonVetoOn true
+/MG/prototype/vetoConfig 111010
+/MG/prototype/radShieldOn true
+/MG/prototype/radConfig 0110001
+/MG/prototype/monoCuPlateOn false #true
+/MG/prototype/calOn true
+/MG/prototype/cryoOn true
+/MG/prototype/thermosiphonOn true
+/MG/prototype/stringOn true
+/MG/prototype/thermalShieldOn true
+
+#/MG/prototype/cablesOn true
+
+# Initialize Geant4 and geometry
+/run/initialize
+
+# Uncomment to run overlap check
+#/MG/geometry/CheckOverlaps
+#/MG/geometry/OverlapVerbosity true
+
+/MG/generator/select RDMiso
+/gun/energy 0 eV
+/grdm/ion 40 19 0    # K-40
+/MG/generator/confine volume
+/MG/generator/volume ConstrRadShieldAssembly_001_RadShieldCuOuter_001
+
+/MG/eventaction/rootschema MCRun
+/MG/eventaction/rootfilename PC_test.root
+/MG/io/MCRun/SetSensitiveIDLabelScheme askGeom 
+/MG/io/MCRun/setRunID 1
+/MG/io/MCRun/useTimeWindow true
+/MG/io/MCRun/setTimeWindow 86400 second
+/MG/io/MCRun/killAlphas true
+/MG/io/MCRun/stopNuclei true
+
+/MG/eventaction/reportingfrequency 1
+/run/beamOn 3

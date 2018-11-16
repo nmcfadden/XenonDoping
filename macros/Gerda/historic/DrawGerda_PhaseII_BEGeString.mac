@@ -1,0 +1,76 @@
+# The first line sets the verbosity level
+/control/verbose 1
+/MG/manager/mglog trace
+
+# The default GerdaArray geometry is defined
+/MG/geometry/database false
+/MG/geometry/detector GerdaArray
+# use the new PhaseII lock (CommLock4 with the DN160 replaced by DN250)
+#/MG/geometry/lock/type CommLock4
+/MG/geometry/lock/type PhaseIILock
+#
+# Geometry file with dummy BEGe's
+/MG/geometry/detector/geometryfile geometry.dat
+# Matrix file with phase II simplified lock design 
+/MG/geometry/detector/matrixfile   matrix_phase_ii_bege.dat
+#
+#
+# Don't construct neither support of cabling
+# Not yet implemented for the new detector types
+/MG/geometry/general/constructsupport false
+/MG/geometry/general/constructcabling false
+
+# This macro is just to visualize. 
+# Therefore disable the processes 
+# Bypass the (long) loading of hadronic physics tables
+/MG/processes/useNoHadPhysics true
+#
+# Build up the geometry
+#
+/run/initialize
+#
+#
+# visualization
+#
+/vis/scene/create
+#
+# Dumps a list of logical volumes. 
+# Some of them we actually don't want to see
+#
+#/vis/geometry/list all
+#
+# Disabling some uninsteresting volumes
+#
+/vis/geometry/set/visibility CuLayerLogical -1 1
+/vis/geometry/set/visibility CryostatOuterWallLogical -1 1
+/vis/geometry/set/daughtersInvisible CryostatOuterWallLogical -1 0
+/vis/geometry/set/visibility CryostatOuterWallLogical 1 1
+
+# List geometry as a ascii tree of volume names
+#/vis/drawTree 
+#
+# Initialize the apropriate driver
+#
+#/vis/open DAWNFILE
+#/vis/open OGLSXm
+#/vis/open VRML2FILE
+#/vis/drawTree
+#/vis/open HepRepFile
+/vis/open OIX
+# Don't draw anything 'above' the LAr. 
+# This is to have a look at the crystal geometry after all. 
+/vis/drawVolume CryoLiquidPhysical
+# Disable a few more volumes
+/vis/geometry/set/visibility HeatExchangerLogical 0 0
+/vis/geometry/set/visibility CuLayerSupportRingLogical 0 0
+/vis/geometry/set/visibility CuLayerLogical 0 0 
+/vis/geometry/set/visibility CryoGasInNeckLogical 0 0
+# Reflush the volume database
+/vis/viewer/rebuild
+/vis/viewer/flush
+#
+#maybe more stuff
+#
+ 
+
+

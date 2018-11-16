@@ -1,0 +1,32 @@
+# $Id: gdml2g4.mac,v 1.4 2007-10-30 12:59:54 jliu Exp $
+# example showing how to use GDML file in Geant4 simulation
+
+# disable database so that Gerda users can also play around
+#/MG/geometry/database false
+
+# specify the gdml file you want to use
+/MG/geometry/GDML/sourceFile Crystal_log.gdml
+#/MG/geometry/GDML/setupName Default
+#/MG/geometry/GDML/setupVersion 1.0
+
+# disable hadronic processes to speed up initialization 
+/MG/processes/useNoHadPhysics true
+
+/run/initialize
+
+# draw the geometry
+/vis/open OGLSX
+/vis/viewer/set/viewpointVector 0 1 1
+/vis/drawVolume
+
+# a simple simulation
+/MG/generator/select SPS
+/gps/particle e-
+/gps/energy 100 MeV
+/gps/position 1 1 1
+/gps/direction 0 1 1
+
+# show the simulation
+/vis/scene/add/trajectories
+/run/beamOn 10
+

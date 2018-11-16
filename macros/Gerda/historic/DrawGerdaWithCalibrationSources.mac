@@ -1,0 +1,40 @@
+# ============================================================= #
+# Draws detector with standard geometry and calibration sources	#
+# ============================================================= # 
+
+#
+# Geometry setup 
+#
+
+/MG/geometry/detector GerdaArray
+/MG/geometry/database false
+
+#
+# Geometry modifications 
+#
+
+/MG/geometry/general/constructcalibration true
+
+#
+# Initialize run 
+#
+
+/run/initialize
+
+#
+# visualization
+#
+
+
+/vis/scene/create
+#/vis/open OGLSX
+/vis/open DAWNFILE
+/vis/viewer/set/viewpointThetaPhi 40 50 deg
+/vis/viewer/zoom 3.0
+
+/vis/drawVolume 
+
+/vis/viewer/flush 
+ 
+
+

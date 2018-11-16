@@ -1,0 +1,13 @@
+
+
+/MG/manager/mglog routine
+/MG/geometry/detector clover
+/MG/eventaction/rootschema LANLCloverNoPS
+/MG/eventaction/rootfilename test.root
+/MG/generator/select PNNLiso
+/MG/management/heprandomseed @SEED@
+/MG/generator/PNNL/init /auto/majorana1/MJ/database/generators/PNNL/Co60_Source.dat
+/MG/generator/PNNL/setsourceage 0.0
+/MG/generator/PNNL/reportingfrequency 50
+/run/initialize
+/run/beamOn 20

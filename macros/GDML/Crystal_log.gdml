@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd" >
+ <define>
+  <position name="ContactSpringPart1inVacuumInCrystalHole_logp" unit="mm" x="0" y="0" z="-18.75" />
+  <position name="VacuumInCrystalHoleinDeadLayerAroundHole_logp" unit="mm" x="0" y="0" z="-0.00015" />
+  <position name="DeadLayerAroundHoleinCrystal_logp" unit="mm" x="0" y="0" z="-7.4" />
+  <position name="HoleBetweenPart1And2inCrystal_logp" unit="mm" x="0" y="0" z="-26.9" />
+  <position name="DeadLayerEndside2inCrystal_logp" unit="mm" x="0" y="0" z="-28.89985" />
+  <position name="DeadLayerEndside1inCrystal_logp" unit="mm" x="0" y="0" z="-28.55" />
+  <position name="DeadLayerFrontsideinCrystal_logp" unit="mm" x="0" y="0" z="28.55" />
+ </define>
+ <materials>
+  <material Z="32" formula=" " name="NaturalGe" >
+   <D value="5.32" />
+   <atom value="72.6503" />
+  </material>
+  <element Z="32" formula="GeNat" name="naturalGermanium" >
+   <atom value="72.6503" />
+  </element>
+  <element Z="3" formula="Li" name="Lithium" >
+   <atom value="6.941" />
+  </element>
+  <material formula=" " name="GermaniumLithium" >
+   <D value="5.323" />
+   <fraction n="0.99" ref="naturalGermanium" />
+   <fraction n="0.01" ref="Lithium" />
+  </material>
+  <element Z="5" formula="B" name="Boron" >
+   <atom value="10.811" />
+  </element>
+  <material formula=" " name="GermaniumBoron" >
+   <D value="5.18" />
+   <fraction n="0.99" ref="naturalGermanium" />
+   <fraction n="0.01" ref="Boron" />
+  </material>
+  <material Z="7" formula=" " name="Vacuum" >
+   <D value="1e-10" />
+   <atom value="14.0007" />
+  </material>
+  <element Z="29" formula="Cu" name="Copper" >
+   <atom value="63.55" />
+  </element>
+  <element Z="50" formula="Sn" name="Tin" >
+   <atom value="118.71" />
+  </element>
+  <material formula=" " name="Bronze" >
+   <D value="8.8" />
+   <fraction n="0.599831" ref="Copper" />
+   <fraction n="0.400169" ref="Tin" />
+  </material>
+ </materials>
+ <solids>
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="Crystal_tubs" rmax="32.2" rmin="0" startphi="0" z="57.8" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="DeadLayerAroundCrystal_tubs" rmax="32.2" rmin="31.5" startphi="0" z="57.8" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="DeadLayerFrontside_tubs" rmax="31.5" rmin="0" startphi="0" z="0.7" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="DeadLayerEndside1_tubs" rmax="31.5" rmin="10" startphi="0" z="0.7" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="DeadLayerEndside2_tubs" rmax="6.75" rmin="5.5" startphi="0" z="0.0003" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="HoleBetweenPart1And2_tubs" rmax="10" rmin="6.75" startphi="0" z="4" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="DeadLayerAroundHole_tubs" rmax="5.5" rmin="0" startphi="0" z="43" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="VacuumInCrystalHole_tubs" rmax="5.49985" rmin="0" startphi="0" z="42.9997" />
+  <cone aunit="degree" deltaphi="360" lunit="mm" name="ContactSpringPart1_cons" rmax1="5" rmax2="1" rmin1="4" rmin2="0.1" startphi="0" z="5" />
+ </solids>
+ <structure>
+  <volume name="DeadLayerAroundCrystal_log" >
+   <materialref ref="GermaniumLithium" />
+   <solidref ref="DeadLayerAroundCrystal_tubs" />
+  </volume>
+  <volume name="DeadLayerFrontside_log" >
+   <materialref ref="GermaniumLithium" />
+   <solidref ref="DeadLayerFrontside_tubs" />
+  </volume>
+  <volume name="DeadLayerEndside1_log" >
+   <materialref ref="GermaniumLithium" />
+   <solidref ref="DeadLayerEndside1_tubs" />
+  </volume>
+  <volume name="DeadLayerEndside2_log" >
+   <materialref ref="GermaniumBoron" />
+   <solidref ref="DeadLayerEndside2_tubs" />
+  </volume>
+  <volume name="HoleBetweenPart1And2_log" >
+   <materialref ref="Vacuum" />
+   <solidref ref="HoleBetweenPart1And2_tubs" />
+  </volume>
+  <volume name="ContactSpringPart1" >
+   <materialref ref="Bronze" />
+   <solidref ref="ContactSpringPart1_cons" />
+  </volume>
+  <volume name="VacuumInCrystalHole_log" >
+   <materialref ref="Vacuum" />
+   <solidref ref="VacuumInCrystalHole_tubs" />
+   <physvol>
+    <volumeref ref="ContactSpringPart1" />
+    <positionref ref="ContactSpringPart1inVacuumInCrystalHole_logp" />
+   </physvol>
+  </volume>
+  <volume name="DeadLayerAroundHole_log" >
+   <materialref ref="GermaniumBoron" />
+   <solidref ref="DeadLayerAroundHole_tubs" />
+   <physvol>
+    <volumeref ref="VacuumInCrystalHole_log" />
+    <positionref ref="VacuumInCrystalHoleinDeadLayerAroundHole_logp" />
+   </physvol>
+  </volume>
+  <volume name="Crystal_log" >
+   <materialref ref="NaturalGe" />
+   <solidref ref="Crystal_tubs" />
+   <physvol>
+    <volumeref ref="DeadLayerAroundHole_log" />
+    <positionref ref="DeadLayerAroundHoleinCrystal_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="HoleBetweenPart1And2_log" />
+    <positionref ref="HoleBetweenPart1And2inCrystal_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="DeadLayerEndside2_log" />
+    <positionref ref="DeadLayerEndside2inCrystal_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="DeadLayerEndside1_log" />
+    <positionref ref="DeadLayerEndside1inCrystal_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="DeadLayerFrontside_log" />
+    <positionref ref="DeadLayerFrontsideinCrystal_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="DeadLayerAroundCrystal_log" />
+   </physvol>
+  </volume>
+ </structure>
+ <setup name="Default" version="1.0" >
+  <world ref="Crystal_log" />
+ </setup>
+</gdml>

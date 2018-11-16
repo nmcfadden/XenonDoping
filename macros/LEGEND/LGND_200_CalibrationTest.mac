@@ -1,0 +1,29 @@
+# Management 
+/MG/manager/mglog routine
+/MG/manager/seedWithUUID
+
+# Process List
+/MG/processes/realm BBdecay
+/MG/processes/lowenergy true
+
+# Configure Detector
+/MG/geometry/detector LGND_200_Baseline
+/MG/L200/CalibrationOn true
+/MG/L200/CalibrationSetSourceNumber 6
+/MG/L200/CalibrationSetSourceHeight -500 mm
+/MG/L200/CalibrationSetAbsorber false
+
+/MG/geometry/WorldMaterial Vacuum 
+
+# Initialize Geant4 and geometry
+/run/initialize
+
+/MG/eventaction/rootschema MCRun
+/MG/eventaction/rootfilename CalibrationTest.root
+
+
+/MG/generator/select LGND200Calibration
+/MG/generator/LGND200Calibration/setZ 90
+/MG/generator/LGND200Calibration/setA 228
+/run/beamOn 2000
+

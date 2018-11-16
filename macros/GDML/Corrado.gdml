@@ -1,0 +1,884 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd" >
+ <define>
+  <position name="InsideFeedthroughPart2inTeflonFeedthroughPart1_logp" unit="mm" x="0" y="0" z="0.8" />
+  <position name="InsideFeedthroughPart2BinTeflonFeedthroughPart2_logp" unit="mm" x="0" y="0" z="2" />
+  <position name="InsideFeedthroughPart2AinTeflonFeedthroughPart2_logp" unit="mm" x="0" y="0" z="-0.5" />
+  <position name="VacuumInTeflonCrystalCupinTeflonCrystalCup_logp" unit="mm" x="0" y="0" z="-28.9" />
+  <position name="CrystalinTeflonCrystalCup_logp" unit="mm" x="0" y="0" z="0.5" />
+  <position name="TeflonCrystalCupinDetInnerHousing_logp" unit="mm" x="0" y="0" z="12.5" />
+  <position name="TeflonFeedthroughPart2inDetInnerHousing_logp" unit="mm" x="0" y="0" z="-19.4" />
+  <position name="TeflonFeedthroughPart1inDetInnerHousing_logp" unit="mm" x="0" y="0" z="-28.9" />
+  <position name="DetInnerHousinginVacuum_logp" unit="mm" x="0" y="0" z="17.75" />
+  <position name="SpiderScrew3inVacuum_logp" unit="mm" x="0" y="-34.5" z="-49.75" />
+  <position name="SpiderScrew2inVacuum_logp" unit="mm" x="-29.9" y="17.25" z="-49.75" />
+  <position name="SpiderScrew1inVacuum_logp" unit="mm" x="29.9" y="17.25" z="-49.75" />
+  <position name="SpiderinVacuum_logp" unit="mm" x="0" y="0" z="-36.05" />
+  <position name="ColdTransfer1inVacuum_logp" unit="mm" x="0" y="0" z="-62.7" />
+  <position name="CooledSmallScrewinVacuum_logp" unit="mm" x="0" y="0" z="-56.65" />
+  <position name="CooledMiddleScrewinVacuum_logp" unit="mm" x="0" y="-2.1" z="-51.65" />
+  <position name="CooledBigScrewinVacuum_logp" unit="mm" x="0" y="0" z="-36.65" />
+  <position name="FetHolderPart3inVacuum_logp" unit="mm" x="0" y="26.5" z="-12.35" />
+  <position name="FetHolderPart2inVacuum_logp" unit="mm" x="0" y="19" z="-20.35" />
+  <position name="FetHolderPart1inVacuum_logp" unit="mm" x="0" y="1" z="-28.35" />
+  <position name="FetinVacuum_logp" unit="mm" x="0" y="26.5" z="-21.35" />
+  <position name="ScrewInnerHousing2binVacuum_logp" unit="mm" x="36.7" y="0" z="37.65" />
+  <position name="ScrewInnerHousing2ainVacuum_logp" unit="mm" x="36.7" y="0" z="12.65" />
+  <position name="ScrewInnerHousing1binVacuum_logp" unit="mm" x="0" y="-36.7" z="37.65" />
+  <position name="ScrewInnerHousing1ainVacuum_logp" unit="mm" x="0" y="-36.7" z="12.65" />
+  <position name="VespelClosingPartinVacuum_logp" unit="mm" x="0" y="0" z="54.65" />
+  <position name="VespelFrontCoverinVacuum_logp" unit="mm" x="0" y="0" z="61.15" />
+  <position name="CopperRinginVacuum_logp" unit="mm" x="0" y="0" z="-61.5" />
+  <position name="DetOuterClosePart2inVacuum_logp" unit="mm" x="0" y="0" z="-49" />
+  <position name="DetOuterClosePart1inVacuum_logp" unit="mm" x="0" y="0" z="-61.5" />
+  <position name="FeScrew8IninDetOuterHousing_logp" unit="mm" x="29.168" y="-29.168" z="-58" />
+  <position name="FeScrew7IninDetOuterHousing_logp" unit="mm" x="0" y="-41.25" z="-58" />
+  <position name="FeScrew6IninDetOuterHousing_logp" unit="mm" x="-29.168" y="-29.168" z="-58" />
+  <position name="FeScrew5IninDetOuterHousing_logp" unit="mm" x="-41.25" y="0" z="-58" />
+  <position name="FeScrew4IninDetOuterHousing_logp" unit="mm" x="-29.168" y="29.168" z="-58" />
+  <position name="FeScrew3IninDetOuterHousing_logp" unit="mm" x="0" y="41.25" z="-58" />
+  <position name="FeScrew2IninDetOuterHousing_logp" unit="mm" x="29.168" y="29.168" z="-58" />
+  <position name="FeScrew1IninDetOuterHousing_logp" unit="mm" x="41.25" y="0" z="-58" />
+  <position name="VacuuminDetOuterHousing_logp" unit="mm" x="0" y="0" z="-1.75" />
+  <position name="FeScrew4OutinN2Chamber_logp" unit="mm" x="29.168" y="-29.168" z="-83" />
+  <position name="FeScrew3OutinN2Chamber_logp" unit="mm" x="0" y="-41.25" z="-83" />
+  <position name="FeScrew2OutinN2Chamber_logp" unit="mm" x="-29.168" y="-29.168" z="-83" />
+  <position name="FeScrew1IninN2Chamber_logp" unit="mm" x="-41.25" y="0" z="-83" />
+  <position name="FeScrew1OutinN2Chamber_logp" unit="mm" x="41.25" y="0" z="-83" />
+  <position name="DetOuterHousinginN2Chamber_logp" unit="mm" x="0" y="0" z="-12" />
+  <position name="ColdTransfer3inN2Chamber_logp" unit="mm" x="0" y="-39.5" z="-205" />
+  <rotation name="ColdTransfer3inN2Chamber_logr" unit="degree" x="-90" y="-0" z="0" />
+  <position name="CoolingFingerVerticalinN2Chamber_logp" unit="mm" x="0" y="-39.5" z="-205" />
+  <rotation name="CoolingFingerVerticalinN2Chamber_logr" unit="degree" x="-90" y="-0" z="0" />
+  <position name="ColdTransfer2inN2Chamber_logp" unit="mm" x="0" y="0" z="-153" />
+  <position name="CoolingFingerHorizontalinN2Chamber_logp" unit="mm" x="0" y="0" z="-153" />
+  <position name="CopperPiece2inN2Chamber_logp" unit="mm" x="-91.4" y="0" z="-205" />
+  <position name="CopperPiece1inN2Chamber_logp" unit="mm" x="91.4" y="0" z="-205" />
+  <position name="CopperWallinN2Chamber_logp" unit="mm" x="0" y="-2.5" z="-135" />
+  <position name="CFCopperShieldinCuShield_logp" unit="mm" x="0" y="-125" z="-205" />
+  <rotation name="CFCopperShieldinCuShield_logr" unit="degree" x="-90" y="-0" z="0" />
+  <position name="CFCopperSheetinCuSheetBeneath_logp" unit="mm" x="0" y="0" z="-205" />
+  <rotation name="CFCopperSheetinCuSheetBeneath_logr" unit="degree" x="-90" y="-0" z="0" />
+  <position name="CuSheetLateralRightinPbShield_logp" unit="mm" x="-151" y="0" z="0" />
+  <position name="CuSheetLateralLeftinPbShield_logp" unit="mm" x="151" y="0" z="0" />
+  <position name="CuSheetBeneathinPbShield_logp" unit="mm" x="0" y="-151" z="0" />
+  <position name="CuSheetAboveinPbShield_logp" unit="mm" x="0" y="151" z="0" />
+  <position name="CuPlaneEnddoor3inPbShield_logp" unit="mm" x="0" y="0" z="-304" />
+  <position name="CuPlaneEnddoor2inPbShield_logp" unit="mm" x="0" y="0" z="-334" />
+  <position name="CuPlaneEnddoor1inPbShield_logp" unit="mm" x="0" y="0" z="-384" />
+  <position name="CuPlaneFrontdoor3inPbShield_logp" unit="mm" x="0" y="0" z="304" />
+  <position name="CuPlaneFrontdoor2inPbShield_logp" unit="mm" x="0" y="0" z="334" />
+  <position name="CuPlaneFrontdoor1inPbShield_logp" unit="mm" x="0" y="0" z="384" />
+  <position name="CFLeadShieldinPbShield_logp" unit="mm" x="0" y="-253.5" z="-205" />
+  <rotation name="CFLeadShieldinPbShield_logr" unit="degree" x="-90" y="-0" z="0" />
+  <position name="PbShieldinexpHall_logp" unit="mm" x="0" y="0" z="-56" />
+  <position name="MuonVetoSideBinexpHall_logp" unit="mm" x="-375" y="63.5" z="-91" />
+  <position name="MuonVetoSideAinexpHall_logp" unit="mm" x="375" y="63.5" z="-91" />
+  <position name="MuonVetoEndSideinexpHall_logp" unit="mm" x="0" y="-7.15" z="-516" />
+  <position name="MuonVetoTopSideinexpHall_logp" unit="mm" x="0" y="380" z="-201" />
+  <position name="MuonVetoFrontSideinexpHall_logp" unit="mm" x="0" y="100" z="404" />
+ </define>
+ <materials>
+  <element Z="7" formula="N" name="Nitrogen" >
+   <atom value="14.01" />
+  </element>
+  <element Z="8" formula="O" name="Oxygen" >
+   <atom value="16" />
+  </element>
+  <material formula=" " name="Air" >
+   <D value="0.00129" />
+   <fraction n="0.8" ref="Nitrogen" />
+   <fraction n="0.2" ref="Oxygen" />
+  </material>
+  <material Z="7" formula=" " name="NitrogenGas" >
+   <D value="0.0011467" />
+   <atom value="14.01" />
+  </material>
+  <element Z="29" formula="Cu" name="Copper" >
+   <atom value="63.55" />
+  </element>
+  <element Z="30" formula="Zn" name="Zinc" >
+   <atom value="65.38" />
+  </element>
+  <element Z="82" formula="Pb" name="Lead" >
+   <atom value="207.2" />
+  </element>
+  <material formula=" " name="Brass" >
+   <D value="8.5" />
+   <fraction n="0.61" ref="Copper" />
+   <fraction n="0.37" ref="Zinc" />
+   <fraction n="0.02" ref="Lead" />
+  </material>
+  <element Z="18" formula="Ar" name="Argon" >
+   <atom value="39.95" />
+  </element>
+  <element Z="6" formula="C" name="Carbon" >
+   <atom value="12.011" />
+  </element>
+  <element Z="1" formula="H" name="Hydrogen" >
+   <atom value="1.00794" />
+  </element>
+  <material formula=" " name="ProportionalGas" >
+   <D value="0.001563" />
+   <fraction n="0.9" ref="Argon" />
+   <fraction n="0.0748694" ref="Carbon" />
+   <fraction n="0.0251306" ref="Hydrogen" />
+  </material>
+  <material Z="82" formula=" " name="MetalLead" >
+   <D value="11.34" />
+   <atom value="207.2" />
+  </material>
+  <material Z="29" formula=" " name="MetalCopper" >
+   <D value="8.96" />
+   <atom value="63.55" />
+  </material>
+  <material Z="13" formula=" " name="MetalAluminium" >
+   <D value="2.702" />
+   <atom value="26.98" />
+  </material>
+  <material Z="7" formula=" " name="Vacuum" >
+   <D value="1e-10" />
+   <atom value="14.0007" />
+  </material>
+  <material formula=" " name="Vespel" >
+   <D value="1.43" />
+   <fraction n="0.067" ref="Hydrogen" />
+   <fraction n="0.933" ref="Nitrogen" />
+  </material>
+  <element Z="9" formula="F" name="Fluorine" >
+   <atom value="19" />
+  </element>
+  <material formula=" " name="Teflon" >
+   <D value="2.165" />
+   <fraction n="0.76" ref="Fluorine" />
+   <fraction n="0.24" ref="Carbon" />
+  </material>
+  <element Z="50" formula="Sn" name="Tin" >
+   <atom value="118.71" />
+  </element>
+  <material formula=" " name="Bronze" >
+   <D value="8.8" />
+   <fraction n="0.599831" ref="Copper" />
+   <fraction n="0.400169" ref="Tin" />
+  </material>
+  <material Z="26" formula=" " name="MetalIron" >
+   <D value="7.874" />
+   <atom value="55.845" />
+  </material>
+ </materials>
+ <solids>
+  <box aunit="radian" lunit="mm" name="solidWorld" x="50000" y="50000" z="50000" />
+  <box aunit="radian" lunit="mm" name="expHall_box" x="4000" y="4000" z="4000" />
+  <box aunit="radian" lunit="mm" name="MuonVetoFrontSide_box" x="853" y="700" z="50" />
+  <box aunit="radian" lunit="mm" name="P10FrontSide_box" x="823" y="670" z="40" />
+  <box aunit="radian" lunit="mm" name="MuonVetoTopSide_box" x="850" y="50" z="1140" />
+  <box aunit="radian" lunit="mm" name="P10TopSide_box" x="820" y="40" z="1110" />
+  <box aunit="radian" lunit="mm" name="MuonVetoEndSide_box" x="700" y="853" z="50" />
+  <box aunit="radian" lunit="mm" name="P10EndSide_box" x="670" y="823" z="40" />
+  <box aunit="radian" lunit="mm" name="MuonVetoSide_box" x="50" y="583" z="940" />
+  <box aunit="radian" lunit="mm" name="P10Side_box" x="40" y="553" z="910" />
+  <box aunit="radian" lunit="mm" name="PbShield_box" x="670" y="710" z="870" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="CFLeadShield_tubs" rmax="21" rmin="0" startphi="0" z="203" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="CFLeadShieldGas_tubs" rmax="19.5" rmin="0" startphi="0" z="203" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="ColdTransfer6_tubs" rmax="5" rmin="0" startphi="0" z="203" />
+  <box aunit="radian" lunit="mm" name="CuPlane_box" x="300" y="300" z="2" />
+  <box aunit="radian" lunit="mm" name="CuShield_box" x="300" y="300" z="600" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="CFCopperShield_tubs" rmax="19.5" rmin="0" startphi="0" z="50" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="ColdTransfer4_tubs" rmax="5" rmin="0" startphi="0" z="50" />
+  <box aunit="radian" lunit="mm" name="N2Chamber_box" x="200" y="200" z="500" />
+  <box aunit="radian" lunit="mm" name="CopperWall_Full" x="200" y="195" z="50" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="CopperWall_Hole" rmax="21" rmin="0" startphi="0" z="60" />
+  <subtraction name="CopperWall_Solid" >
+   <first ref="CopperWall_Full" />
+   <second ref="CopperWall_Hole" />
+   <position name="CopperWall_Solidpos36" unit="mm" x="0" y="2.5" z="0" />
+  </subtraction>
+  <box aunit="radian" lunit="mm" name="CopperPiece_box" x="17.2" y="200" z="90" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="CoolingFingerHorizontal_tubs" rmax="21" rmin="19.5" startphi="0" z="146" />
+  <trd aunit="radian" lunit="mm" name="CoolingFingerHorizontalCutOff" x1="60" x2="60" y1="134" y2="10" z="62" />
+  <subtraction name="CoolingFingerHorizontal_Solid" >
+   <first ref="CoolingFingerHorizontal_tubs" />
+   <second ref="CoolingFingerHorizontalCutOff" />
+   <position name="CoolingFingerHorizontal_Solidpos41" unit="mm" x="0" y="-36" z="-52" />
+  </subtraction>
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="ColdTransfer2_tubs" rmax="5" rmin="0" startphi="0" z="146" />
+  <trd aunit="radian" lunit="mm" name="ColdTransfer2CutOff" x1="60" x2="60" y1="134" y2="10" z="62" />
+  <subtraction name="ColdTransfer2_solid" >
+   <first ref="ColdTransfer2_tubs" />
+   <second ref="ColdTransfer2CutOff" />
+   <position name="ColdTransfer2_solidpos45" unit="mm" x="0" y="-36" z="-52" />
+  </subtraction>
+  <subtraction name="CoolingFingerVertical_solid" >
+   <first ref="CoolingFingerHorizontal_tubs" />
+   <second ref="CoolingFingerHorizontalCutOff" />
+   <position name="CoolingFingerVertical_solidpos47" unit="mm" x="0" y="36" z="-39.5" />
+  </subtraction>
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="ColdTransfer3_tubs" rmax="5" rmin="0" startphi="0" z="121" />
+  <trd aunit="radian" lunit="mm" name="ColdTransfer3CutOff" x1="60" x2="60" y1="134" y2="10" z="62" />
+  <subtraction name="ColdTransfer3_solid" >
+   <first ref="ColdTransfer3_tubs" />
+   <second ref="ColdTransfer3CutOff" />
+   <position name="ColdTransfer3_solidpos51" unit="mm" x="0" y="36" z="-39.5" />
+  </subtraction>
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="DetOuterHousing_body" rmax="46" rmin="0" startphi="0" z="136" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="DetOuterHousins_hole" rmax="50" rmin="42.5" startphi="0" z="136" />
+  <subtraction name="DetOuterHousing_solid" >
+   <first ref="DetOuterHousing_body" />
+   <second ref="DetOuterHousins_hole" />
+   <position name="DetOuterHousing_solidpos55" unit="mm" x="0" y="0" z="25" />
+  </subtraction>
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="Vacuum_tubs" rmax="40" rmin="0" startphi="0" z="132.5" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="DetOuterClosePart1_tubs" rmax="40" rmin="21" startphi="0" z="9.5" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="DetOuterClosePart2" rmax="40" rmin="36.5" startphi="0" z="15.5" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="CopperRing_tubs" rmax="21" rmin="19.5" startphi="0" z="9.5" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="VespelFrontCover_tubs" rmax="37" rmin="0" startphi="0" z="3" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="VespelClosingPart_tubs" rmax="37" rmin="34.7" startphi="0" z="10" />
+  <box aunit="radian" lunit="mm" name="ScrewInnerHousing_box" x="4" y="4" z="4" />
+  <box aunit="radian" lunit="mm" name="Fet_box" x="32" y="15" z="16" />
+  <box aunit="radian" lunit="mm" name="Fet_cavity" x="28" y="11" z="12" />
+  <subtraction name="Fet_solid" >
+   <first ref="Fet_box" />
+   <second ref="Fet_cavity" />
+  </subtraction>
+  <box aunit="radian" lunit="mm" name="FetHolderPart1_body" x="32" y="34" z="2" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="FetHolderPart1_hole" rmax="12.5" rmin="0" startphi="0" z="4" />
+  <subtraction name="FetHolderPart1_solid" >
+   <first ref="FetHolderPart1_body" />
+   <second ref="FetHolderPart1_hole" />
+   <position name="FetHolderPart1_solidpos72" unit="mm" x="0" y="-1" z="0" />
+  </subtraction>
+  <box aunit="radian" lunit="mm" name="FetHolderPart2_body" x="32" y="2" z="18" />
+  <box aunit="radian" lunit="mm" name="FetHolderPart3_body" x="32" y="15" z="2" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="CooledBigScrew_tubs" rmax="12.5" rmin="0" startphi="0" z="25" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="CooledMiddleScrew_tubs" rmax="9.8" rmin="0" startphi="0" z="5" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="CooledSmallScrew_tubs" rmax="6.2" rmin="0" startphi="0" z="5" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="ColdTransfer1_tubs" rmax="5" rmin="0" startphi="0" z="7.1" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="SpiderScrew_tubs" rmax="3" rmin="0" startphi="0" z="14" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="DetInnerHousing_tubs" rmax="34.7" rmin="0" startphi="0" z="83.8" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="DetInnerHousing_hole1" rmax="50" rmin="14" startphi="0" z="36" />
+  <subtraction name="DetInnerHousing_solid1" >
+   <first ref="DetInnerHousing_tubs" />
+   <second ref="DetInnerHousing_hole1" />
+   <position name="DetInnerHousing_solid1pos83" unit="mm" x="0" y="0" z="-41.9" />
+  </subtraction>
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="DetInnerHousing_hole2" rmax="50" rmin="24.35" startphi="0" z="46" />
+  <subtraction name="DetInnerHousing_solid2" >
+   <first ref="DetInnerHousing_solid1" />
+   <second ref="DetInnerHousing_hole2" />
+   <position name="DetInnerHousing_solid2pos86" unit="mm" x="0" y="0" z="-41.9" />
+  </subtraction>
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="TeflonFeedthroughPart1_tubs" rmax="5.05" rmin="0" startphi="0" z="14" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="InsideFeedthroughPart1_tubs" rmax="3.05" rmin="0" startphi="0" z="12.4" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="ContactRodPart1_tubs" rmax="1.5" rmin="0" startphi="0" z="12.4" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="TeflonFeedthroughPart2_tubs" rmax="22.35" rmin="0" startphi="0" z="5" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="InsideFeedthroughPart2A_tubs" rmax="3.05" rmin="0" startphi="0" z="4" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="ContactRodPart2_tubs" rmax="1.5" rmin="0" startphi="0" z="4" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="InsideFeedthroughPart2B_tubs" rmax="21.35" rmin="0" startphi="0" z="1" />
+  <cone aunit="degree" deltaphi="360" lunit="mm" name="ContactSpringPart3_cons" rmax1="9" rmax2="6" rmin1="8" rmin2="5" startphi="0" z="1" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="TeflonCrystalCup_tubs" rmax="32.7" rmin="0" startphi="0" z="58.8" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="VacuumInTeflonCrystalCu_tubs" rmax="19.7" rmin="0" startphi="0" z="1" />
+  <cone aunit="degree" deltaphi="360" lunit="mm" name="ContactSpringPart2_cons" rmax1="6" rmax2="5" rmin1="5" rmin2="4" startphi="0" z="1" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="FeScrewIn" rmax="1.25" rmin="0" startphi="0" z="20" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="FeScrewOut" rmax="3.75" rmin="0" startphi="0" z="6" />
+  <box aunit="radian" lunit="mm" name="CuSheetAbove" x="500" y="2" z="870" />
+  <box aunit="radian" lunit="mm" name="CuSheetBeneath" x="304" y="2" z="870" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="CFCopperSheet_tubs" rmax="19.5" rmin="0" startphi="0" z="2" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="ColdTransfer5_tubs" rmax="5" rmin="0" startphi="0" z="2" />
+  <box aunit="radian" lunit="mm" name="CuSheetLateral" x="2" y="300" z="870" />
+ </solids>
+ <structure>
+  <volume name="P10FrontSide_log" >
+   <materialref ref="ProportionalGas" />
+   <solidref ref="P10FrontSide_box" />
+  </volume>
+  <volume name="MuonVetoFrontSide_log" >
+   <materialref ref="Brass" />
+   <solidref ref="MuonVetoFrontSide_box" />
+   <physvol>
+    <volumeref ref="P10FrontSide_log" />
+   </physvol>
+  </volume>
+  <volume name="P10TopSide_log" >
+   <materialref ref="ProportionalGas" />
+   <solidref ref="P10TopSide_box" />
+  </volume>
+  <volume name="MuonVetoTopSide_log" >
+   <materialref ref="Brass" />
+   <solidref ref="MuonVetoTopSide_box" />
+   <physvol>
+    <volumeref ref="P10TopSide_log" />
+   </physvol>
+  </volume>
+  <volume name="P10EndSide_log" >
+   <materialref ref="ProportionalGas" />
+   <solidref ref="P10EndSide_box" />
+  </volume>
+  <volume name="MuonVetoEndSide_log" >
+   <materialref ref="Brass" />
+   <solidref ref="MuonVetoEndSide_box" />
+   <physvol>
+    <volumeref ref="P10EndSide_log" />
+   </physvol>
+  </volume>
+  <volume name="P10Side_log" >
+   <materialref ref="ProportionalGas" />
+   <solidref ref="P10Side_box" />
+  </volume>
+  <volume name="MuonVetoSide_log" >
+   <materialref ref="Brass" />
+   <solidref ref="MuonVetoSide_box" />
+   <physvol>
+    <volumeref ref="P10Side_log" />
+   </physvol>
+  </volume>
+  <volume name="ColdTransfer5_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="ColdTransfer6_tubs" />
+  </volume>
+  <volume name="CFLeadShieldGas_log" >
+   <materialref ref="NitrogenGas" />
+   <solidref ref="CFLeadShieldGas_tubs" />
+   <physvol>
+    <volumeref ref="ColdTransfer5_log" />
+   </physvol>
+  </volume>
+  <volume name="CFLeadShield_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="CFLeadShield_tubs" />
+   <physvol>
+    <volumeref ref="CFLeadShieldGas_log" />
+   </physvol>
+  </volume>
+  <volume name="CuPlane_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="CuPlane_box" />
+  </volume>
+  <volume name="ColdTransfer4_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="ColdTransfer4_tubs" />
+  </volume>
+  <volume name="CFCopperShield_log" >
+   <materialref ref="NitrogenGas" />
+   <solidref ref="CFCopperShield_tubs" />
+   <physvol>
+    <volumeref ref="ColdTransfer4_log" />
+   </physvol>
+  </volume>
+  <volume name="CopperWall_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="CopperWall_Solid" />
+  </volume>
+  <volume name="CopperPiece_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="CopperPiece_box" />
+  </volume>
+  <volume name="CoolingFingerHorizontal_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="CoolingFingerHorizontal_Solid" />
+  </volume>
+  <volume name="ColdTransfer2_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="ColdTransfer2_solid" />
+  </volume>
+  <volume name="CoolingFingerVertical_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="CoolingFingerVertical_solid" />
+  </volume>
+  <volume name="ColdTransfer3_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="ColdTransfer3_solid" />
+  </volume>
+  <volume name="DetOuterClosePart1_log" >
+   <materialref ref="MetalAluminium" />
+   <solidref ref="DetOuterClosePart1_tubs" />
+  </volume>
+  <volume name="DetOuterClosePart2_log" >
+   <materialref ref="MetalAluminium" />
+   <solidref ref="DetOuterClosePart2" />
+  </volume>
+  <volume name="CopperRing_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="CopperRing_tubs" />
+  </volume>
+  <volume name="VespelFrontCover_log" >
+   <materialref ref="Vespel" />
+   <solidref ref="VespelFrontCover_tubs" />
+  </volume>
+  <volume name="VespelClosingPart_log" >
+   <materialref ref="Vespel" />
+   <solidref ref="VespelClosingPart_tubs" />
+  </volume>
+  <volume name="ScrewInnerHousing_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="ScrewInnerHousing_box" />
+  </volume>
+  <volume name="Fet_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="Fet_solid" />
+  </volume>
+  <volume name="FetHolderPart1_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="FetHolderPart1_solid" />
+  </volume>
+  <volume name="FetHolderPart2_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="FetHolderPart2_body" />
+  </volume>
+  <volume name="FetHolderPart3_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="FetHolderPart3_body" />
+  </volume>
+  <volume name="CooledBigScrew_log" >
+   <materialref ref="MetalAluminium" />
+   <solidref ref="CooledBigScrew_tubs" />
+  </volume>
+  <volume name="CooledMiddleScrew_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="CooledMiddleScrew_tubs" />
+  </volume>
+  <volume name="CooledSmallScrew_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="CooledSmallScrew_tubs" />
+  </volume>
+  <volume name="ColdTransfer1_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="ColdTransfer1_tubs" />
+  </volume>
+  <volume name="SpiderScrew_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="SpiderScrew_tubs" />
+  </volume>
+  <volume name="ContactRodPart1_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="ContactRodPart1_tubs" />
+  </volume>
+  <volume name="InsideFeedthroughPart1_log" >
+   <materialref ref="Vacuum" />
+   <solidref ref="InsideFeedthroughPart1_tubs" />
+   <physvol>
+    <volumeref ref="ContactRodPart1_log" />
+   </physvol>
+  </volume>
+  <volume name="TeflonFeedthroughPart1_log" >
+   <materialref ref="Teflon" />
+   <solidref ref="TeflonFeedthroughPart1_tubs" />
+   <physvol>
+    <volumeref ref="InsideFeedthroughPart1_log" />
+    <positionref ref="InsideFeedthroughPart2inTeflonFeedthroughPart1_logp" />
+   </physvol>
+  </volume>
+  <volume name="ContactRodPart2_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="ContactRodPart2_tubs" />
+  </volume>
+  <volume name="InsideFeedthroughPart2A_log" >
+   <materialref ref="Vacuum" />
+   <solidref ref="InsideFeedthroughPart2A_tubs" />
+   <physvol>
+    <volumeref ref="ContactRodPart2_log" />
+   </physvol>
+  </volume>
+  <volume name="ContactSpringPart3" >
+   <materialref ref="Bronze" />
+   <solidref ref="ContactSpringPart3_cons" />
+  </volume>
+  <volume name="InsideFeedthroughPart2B_log" >
+   <materialref ref="Vacuum" />
+   <solidref ref="InsideFeedthroughPart2B_tubs" />
+   <physvol>
+    <volumeref ref="ContactSpringPart3" />
+   </physvol>
+  </volume>
+  <volume name="TeflonFeedthroughPart2_log" >
+   <materialref ref="Teflon" />
+   <solidref ref="TeflonFeedthroughPart2_tubs" />
+   <physvol>
+    <volumeref ref="InsideFeedthroughPart2B_log" />
+    <positionref ref="InsideFeedthroughPart2BinTeflonFeedthroughPart2_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="InsideFeedthroughPart2A_log" />
+    <positionref ref="InsideFeedthroughPart2AinTeflonFeedthroughPart2_logp" />
+   </physvol>
+  </volume>
+  <volume name="ContactSpringPart2" >
+   <materialref ref="Bronze" />
+   <solidref ref="ContactSpringPart2_cons" />
+  </volume>
+  <volume name="VacuumInTeflonCrystalCup_log" >
+   <materialref ref="Vacuum" />
+   <solidref ref="VacuumInTeflonCrystalCu_tubs" />
+   <physvol>
+    <volumeref ref="ContactSpringPart2" />
+   </physvol>
+  </volume>
+  <volume name="TeflonCrystalCup_log" >
+   <materialref ref="Teflon" />
+   <solidref ref="TeflonCrystalCup_tubs" />
+   <physvol>
+    <volumeref ref="VacuumInTeflonCrystalCup_log" />
+    <positionref ref="VacuumInTeflonCrystalCupinTeflonCrystalCup_logp" />
+   </physvol>
+   <physvol>
+    <file name="Crystal_log.gdml" />
+    <positionref ref="CrystalinTeflonCrystalCup_logp" />
+   </physvol>
+  </volume>
+  <volume name="DetInnerHousing_log" >
+   <materialref ref="MetalAluminium" />
+   <solidref ref="DetInnerHousing_solid2" />
+   <physvol>
+    <volumeref ref="TeflonCrystalCup_log" />
+    <positionref ref="TeflonCrystalCupinDetInnerHousing_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="TeflonFeedthroughPart2_log" />
+    <positionref ref="TeflonFeedthroughPart2inDetInnerHousing_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="TeflonFeedthroughPart1_log" />
+    <positionref ref="TeflonFeedthroughPart1inDetInnerHousing_logp" />
+   </physvol>
+  </volume>
+  <volume name="Vacuum_log" >
+   <materialref ref="Vacuum" />
+   <solidref ref="Vacuum_tubs" />
+   <physvol>
+    <volumeref ref="DetInnerHousing_log" />
+    <positionref ref="DetInnerHousinginVacuum_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="SpiderScrew_log" />
+    <positionref ref="SpiderScrew3inVacuum_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="SpiderScrew_log" />
+    <positionref ref="SpiderScrew2inVacuum_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="SpiderScrew_log" />
+    <positionref ref="SpiderScrew1inVacuum_logp" />
+   </physvol>
+   <physvol>
+    <file name="Spider_log.gdml" />
+    <positionref ref="SpiderinVacuum_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="ColdTransfer1_log" />
+    <positionref ref="ColdTransfer1inVacuum_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="CooledSmallScrew_log" />
+    <positionref ref="CooledSmallScrewinVacuum_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="CooledMiddleScrew_log" />
+    <positionref ref="CooledMiddleScrewinVacuum_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="CooledBigScrew_log" />
+    <positionref ref="CooledBigScrewinVacuum_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="FetHolderPart3_log" />
+    <positionref ref="FetHolderPart3inVacuum_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="FetHolderPart2_log" />
+    <positionref ref="FetHolderPart2inVacuum_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="FetHolderPart1_log" />
+    <positionref ref="FetHolderPart1inVacuum_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="Fet_log" />
+    <positionref ref="FetinVacuum_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="ScrewInnerHousing_log" />
+    <positionref ref="ScrewInnerHousing2binVacuum_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="ScrewInnerHousing_log" />
+    <positionref ref="ScrewInnerHousing2ainVacuum_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="ScrewInnerHousing_log" />
+    <positionref ref="ScrewInnerHousing1binVacuum_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="ScrewInnerHousing_log" />
+    <positionref ref="ScrewInnerHousing1ainVacuum_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="VespelClosingPart_log" />
+    <positionref ref="VespelClosingPartinVacuum_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="VespelFrontCover_log" />
+    <positionref ref="VespelFrontCoverinVacuum_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="CopperRing_log" />
+    <positionref ref="CopperRinginVacuum_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="DetOuterClosePart2_log" />
+    <positionref ref="DetOuterClosePart2inVacuum_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="DetOuterClosePart1_log" />
+    <positionref ref="DetOuterClosePart1inVacuum_logp" />
+   </physvol>
+  </volume>
+  <volume name="FeScrewIn_log" >
+   <materialref ref="MetalIron" />
+   <solidref ref="FeScrewIn" />
+  </volume>
+  <volume name="DetOuterHousing_log" >
+   <materialref ref="MetalAluminium" />
+   <solidref ref="DetOuterHousing_solid" />
+   <physvol>
+    <volumeref ref="FeScrewIn_log" />
+    <positionref ref="FeScrew8IninDetOuterHousing_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="FeScrewIn_log" />
+    <positionref ref="FeScrew7IninDetOuterHousing_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="FeScrewIn_log" />
+    <positionref ref="FeScrew6IninDetOuterHousing_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="FeScrewIn_log" />
+    <positionref ref="FeScrew5IninDetOuterHousing_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="FeScrewIn_log" />
+    <positionref ref="FeScrew4IninDetOuterHousing_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="FeScrewIn_log" />
+    <positionref ref="FeScrew3IninDetOuterHousing_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="FeScrewIn_log" />
+    <positionref ref="FeScrew2IninDetOuterHousing_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="FeScrewIn_log" />
+    <positionref ref="FeScrew1IninDetOuterHousing_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="Vacuum_log" />
+    <positionref ref="VacuuminDetOuterHousing_logp" />
+   </physvol>
+  </volume>
+  <volume name="FeScrewOut_log" >
+   <materialref ref="MetalIron" />
+   <solidref ref="FeScrewOut" />
+  </volume>
+  <volume name="N2Chamber_log" >
+   <materialref ref="NitrogenGas" />
+   <solidref ref="N2Chamber_box" />
+   <physvol>
+    <volumeref ref="FeScrewOut_log" />
+    <positionref ref="FeScrew4OutinN2Chamber_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="FeScrewOut_log" />
+    <positionref ref="FeScrew3OutinN2Chamber_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="FeScrewOut_log" />
+    <positionref ref="FeScrew2OutinN2Chamber_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="FeScrewOut_log" />
+    <positionref ref="FeScrew1IninN2Chamber_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="FeScrewOut_log" />
+    <positionref ref="FeScrew4OutinN2Chamber_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="FeScrewOut_log" />
+    <positionref ref="FeScrew3OutinN2Chamber_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="FeScrewIn_log" />
+    <positionref ref="FeScrew2OutinN2Chamber_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="FeScrewOut_log" />
+    <positionref ref="FeScrew1OutinN2Chamber_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="DetOuterHousing_log" />
+    <positionref ref="DetOuterHousinginN2Chamber_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="ColdTransfer3_log" />
+    <positionref ref="ColdTransfer3inN2Chamber_logp" />
+    <rotationref ref="ColdTransfer3inN2Chamber_logr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="CoolingFingerVertical_log" />
+    <positionref ref="CoolingFingerVerticalinN2Chamber_logp" />
+    <rotationref ref="CoolingFingerVerticalinN2Chamber_logr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="ColdTransfer2_log" />
+    <positionref ref="ColdTransfer2inN2Chamber_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="CoolingFingerHorizontal_log" />
+    <positionref ref="CoolingFingerHorizontalinN2Chamber_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="CopperPiece_log" />
+    <positionref ref="CopperPiece2inN2Chamber_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="CopperPiece_log" />
+    <positionref ref="CopperPiece1inN2Chamber_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="CopperWall_log" />
+    <positionref ref="CopperWallinN2Chamber_logp" />
+   </physvol>
+  </volume>
+  <volume name="CuShield_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="CuShield_box" />
+   <physvol>
+    <volumeref ref="N2Chamber_log" />
+   </physvol>
+   <physvol>
+    <volumeref ref="CFCopperShield_log" />
+    <positionref ref="CFCopperShieldinCuShield_logp" />
+    <rotationref ref="CFCopperShieldinCuShield_logr" />
+   </physvol>
+  </volume>
+  <volume name="CuSheetAbove_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="CuSheetAbove" />
+  </volume>
+  <volume name="ColdTransfer5_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="ColdTransfer5_tubs" />
+  </volume>
+  <volume name="CFCopperSheet_log" >
+   <materialref ref="NitrogenGas" />
+   <solidref ref="CFCopperSheet_tubs" />
+   <physvol>
+    <volumeref ref="ColdTransfer5_log" />
+   </physvol>
+  </volume>
+  <volume name="CuSheetBeneath_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="CuSheetBeneath" />
+   <physvol>
+    <volumeref ref="CFCopperSheet_log" />
+    <positionref ref="CFCopperSheetinCuSheetBeneath_logp" />
+    <rotationref ref="CFCopperSheetinCuSheetBeneath_logr" />
+   </physvol>
+  </volume>
+  <volume name="CuSheetLateral_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="CuSheetLateral" />
+  </volume>
+  <volume name="PbShield_log" >
+   <materialref ref="MetalLead" />
+   <solidref ref="PbShield_box" />
+   <physvol>
+    <volumeref ref="CuSheetLateral_log" />
+    <positionref ref="CuSheetLateralRightinPbShield_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="CuSheetLateral_log" />
+    <positionref ref="CuSheetLateralLeftinPbShield_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="CuSheetBeneath_log" />
+    <positionref ref="CuSheetBeneathinPbShield_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="CuSheetAbove_log" />
+    <positionref ref="CuSheetAboveinPbShield_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="CuShield_log" />
+   </physvol>
+   <physvol>
+    <volumeref ref="CuPlane_log" />
+    <positionref ref="CuPlaneEnddoor3inPbShield_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="CuPlane_log" />
+    <positionref ref="CuPlaneEnddoor2inPbShield_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="CuPlane_log" />
+    <positionref ref="CuPlaneEnddoor1inPbShield_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="CuPlane_log" />
+    <positionref ref="CuPlaneFrontdoor3inPbShield_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="CuPlane_log" />
+    <positionref ref="CuPlaneFrontdoor2inPbShield_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="CuPlane_log" />
+    <positionref ref="CuPlaneFrontdoor1inPbShield_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="CFLeadShield_log" />
+    <positionref ref="CFLeadShieldinPbShield_logp" />
+    <rotationref ref="CFLeadShieldinPbShield_logr" />
+   </physvol>
+  </volume>
+  <volume name="expHall_log" >
+   <materialref ref="NitrogenGas" />
+   <solidref ref="expHall_box" />
+   <physvol>
+    <volumeref ref="PbShield_log" />
+    <positionref ref="PbShieldinexpHall_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="MuonVetoSide_log" />
+    <positionref ref="MuonVetoSideBinexpHall_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="MuonVetoSide_log" />
+    <positionref ref="MuonVetoSideAinexpHall_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="MuonVetoEndSide_log" />
+    <positionref ref="MuonVetoEndSideinexpHall_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="MuonVetoTopSide_log" />
+    <positionref ref="MuonVetoTopSideinexpHall_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="MuonVetoFrontSide_log" />
+    <positionref ref="MuonVetoFrontSideinexpHall_logp" />
+   </physvol>
+  </volume>
+  <volume name="World" >
+   <materialref ref="Air" />
+   <solidref ref="solidWorld" />
+   <physvol>
+    <volumeref ref="expHall_log" />
+   </physvol>
+  </volume>
+ </structure>
+ <setup name="Default" version="1.0" >
+  <world ref="World" />
+ </setup>
+</gdml>

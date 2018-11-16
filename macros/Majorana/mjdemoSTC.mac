@@ -1,0 +1,69 @@
+# Management 
+/MG/manager/mglog routine
+/MG/manager/seedWithUUID
+
+# Process List
+#/MG/processes/realm BBdecay
+#/MG/processes/lowenergy true
+
+# Configure Detector
+/MG/geometry/detector MJSTC
+/MG/geometry/WorldMaterial Vacuum
+ 
+/MG/stc/EFROn true
+/MG/stc/cavernOn true
+/MG/stc/EFRwallsOn true
+/MG/stc/stringTestCryoOn true
+/MG/stc/coldPlateRotationInDegrees 0.0
+/MG/stc/CMSRotationInDegrees 0.0
+/MG/stc/thermalRotationInDegrees 0.0
+/MG/stc/stringOn true
+
+# ROOT output schema
+/MG/eventaction/rootschema MCRun
+/MG/eventaction/rootfilename STC_test.root
+/MG/io/MCRun/SetSensitiveIDLabelScheme askGeom 
+/MG/io/MCRun/setRunID 1
+/MG/io/MCRun/useTimeWindow true
+/MG/io/MCRun/setTimeWindow 86400 second
+/MG/io/MCRun/killAlphas true
+/MG/io/MCRun/stopNuclei true
+
+# Initialize Geant4 and geometry
+/run/initialize
+
+# Uncomment to run overlap check
+#/MG/geometry/CheckOverlaps
+#/MG/geometry/OverlapVerbosity true
+
+/MG/generator/select RDMiso
+/gun/energy 0 eV
+/grdm/ion 232 90 0
+/MG/generator/confine volume
+/MG/generator/volume cavern
+
+# Visualization using HepRepFile
+# Does not work if string is enabled, but works on all other components
+# /vis/open HepRepFile
+# /vis/scene/create
+# /vis/scene/endOfEventAction accumulate 20
+# /vis/scene/add/volume
+# /vis/sceneHandler/attach
+# /vis/viewer/flush
+# /vis/scene/add/trajectories
+# /vis/scene/add/hits
+
+# Visualization using RayTracer
+# Works for everything
+# /vis/open RayTracer
+# /vis/rayTracer/lightDirection 1.1 0.2 0.03
+# /vis/rayTracer/eyePosition 0.0 2.5 0.25
+# /vis/rayTracer/target 0.0 -0.3 -0.3
+# /vis/rayTracer/span 4
+# /vis/rayTracer/trace STC_noString.png
+# /vis/ASCIITree/verbose 13
+# /vis/drawTree
+
+# Run 2 events, reporting every 1 event
+/MG/eventaction/reportingfrequency 1
+/run/beamOn 2

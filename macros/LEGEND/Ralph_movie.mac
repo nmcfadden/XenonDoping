@@ -1,0 +1,49 @@
+# Management 
+/MG/manager/mglog debugging
+/MG/manager/seedWithUUID
+
+# Process List
+/MG/processes/realm BBdecay
+/MG/processes/lowenergy true
+/MG/processes/GetStepLimit
+
+# Configure Detector
+/MG/geometry/detector LGND_200_Baseline
+/MG/geometry/WorldMaterial Vacuum 
+
+# Initialize Geant4 and geometry
+/run/initialize
+
+/MG/generator/select DoubleBeta0
+/MG/generator/confine volume
+/MG/generator/volume CryostatAssembly_001_7StrAssembly_001_StringAssembly_002_CrystalAssembly_001_ActiveCrystal_001
+
+/MG/eventaction/rootschema MCRun
+/MG/eventaction/rootfilename PC_test.root
+
+#/vis/open ATree
+#/vis/ASCIITree/verbose 10
+#/vis/drawTree 
+
+/vis/open OGLIX
+
+
+
+/vis/scene/create
+
+/vis/scene/add/volume World
+/vis/scene/add/extent -300 300 -300 300 -300 300 cm
+/vis/sceneHandler/attach
+/vis/scene/add/trajectories
+/vis/scene/add/hits
+/vis/viewer/flush
+#/vis/viewer/update
+
+
+/vis/viewer/set/style surface
+/vis/viewer/set/projection perspective 45 deg
+/vis/viewer/set/lightsMove cam
+
+/control/alias theta 60
+/control/loop movie.loop phi 0 360 5
+

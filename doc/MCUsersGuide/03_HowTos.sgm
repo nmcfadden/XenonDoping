@@ -1,0 +1,372 @@
+<chapter id="HowTos">
+  <title>How To's</title>
+
+  <section id="WorkingWithReleases"><title>Working with Releases</title>
+    <section><title>Checking out a Release</title>
+      <para>
+        This section is specific to the PDSF cluster. 
+	Periodically, a stable version of the framework is tagged as a release and kept 
+	on PDSF machines. Users can copy these releases to their own area and build the 
+	libraries and executables. Each release contains a script that is used to setup the
+	correct environment variables, including the version of Geant4, root, etc. (The setup 
+	is done automatically when a release is copied.) 
+	Once you are logged in, you can issue the command 'getRelease &lt;relNo&gt;' where relNo 
+	is the release number. This copies the entire MaGe source for that release to the directory 
+	where the command is issued. The command 'getRelease' list the available releases. 
+	Releases are tagged as MaGe-xx-yy-zz.
+      </para>
+      <para>
+        If you copy multiple releases and want to move from one to another, make sure to source the 
+	<emphasis>Rel_spec_pdsf.csh</emphasis> in <emphasis>buildTools</emphasis> directory to setup 
+	the environment variables for that release.
+      </para></section>
+    
+
+    <section><title>How to commit your changes to CVS</title>
+      <para>
+	If you want to store your code in the CVS repository, make sure that the 
+	code compiles and commit only that code to CVS. If this is a new class or 
+	file, you need to first add it to CVS before committing it. Here are the steps:
+	<itemizedlist>
+	  <listitem><para>
+	      cd to the package directory where the new code is
+	    </para></listitem>
+	  <listitem><para>
+	      do <screen>cvs add <emphasis>filename</emphasis></screen>
+	    </para></listitem>
+	  <listitem><para>
+	      do <screen>cvs commit -m"<emphasis>some comment</emphasis>"</screen>  
+	      This commits changes to all 
+	      files in this package to CVS. If you want to commit individual files 
+	      issue 
+	      <screen>cvs commit -m"<emphasis>some comment</emphasis>" -f <emphasis>filename</emphasis> </screen> 
+	      command.
+	    </para></listitem>
+	</itemizedlist>
+	Note: doing a CVS commit form the MJ directory will commit changes to all 
+	packages in MJ directory. Only do this if you are absolutely sure that all 
+	the changes should be stored in CVS. It is best to send changes/new code 
+	to package librarians and let them commit changes to CVS.
+      </para></section>
+    
+    <section><title>New gmake features</title>
+      <para>
+	<orderedlist>
+	  <listitem><para>
+	      As of 6/8/2004, there are a number of new features added to the release 
+	      structure and makefiles. One can now build library for individual packages 
+	      by issuing 
+	      <screen>gmake <emphasis>pkgName</emphasis>.lib</screen> command. 
+	      This makes fixing compile errors for 
+	      the packages you are working on easier. The makefile creates 
+	      dependency files 
+	      (with <filename>.d</filename> extension) that are used to check if 
+              any header file that a file 
+	      depends on has been modified since last compilation.
+	    </para></listitem>
+	  <listitem><para>
+	      One can also build executables in any package. This is very useful for 
+	      testing one's package. To do this, you need to add the the name of 
+	      the source 
+	      file containing  the <filename>main()</filename> function in the GNUmakefile 
+               of the package. 
+	      See <filename>database/GNUmakefile</filename> for an example 
+              of how this is done. You build the 
+	      executable by issuing <filename>gmake pkgName.bin</filename> command
+	    </para></listitem>
+	  <listitem><para>
+	      There is a new package called <filename>sandbox</filename> which is a play 
+              package. 
+	      The purpose of this package is to test new ideas and code that don't belong 
+	      to any package yet. You can create an executable in this package to test the 
+	      code as well. <emphasis>DO NOT COMMIT ANY CODE TO CVS FROM 
+	      THIS PACKAGE</emphasis>. If you want to 
+	      have the code committed to CVS, either added  to an existing package  (with 
+	      the consent of the package librarian), or ask for a new package to be 
+	      created.
+	    </para></listitem>
+	  <listitem><para>
+	      There is also a package, <filename>macros</filename>, that holds the scripts 
+              and macro files 
+	      needed for running applications. Use this  package to add new scripts and 
+	      write the output of your application. This acts as a work area and shouldn't 
+	      contain any compilable code, it is skipped by the makefile during 
+	      compilation. 
+	      <emphasis>ONLY COMMIT SCRIPTS AND MACROS THAT ARE USEFUL TO ALL USERS
+	      </emphasis>.
+	    </para></listitem>
+	  <listitem><para>
+	      There are two versions of Geant4 libraries, one with debug symbols and 
+	      one without (the latter is default). If you need to run gdb on your 
+	      application 
+	      to trace bugs you need to link against the libraries with symbols. 
+	      To do this set the environment variable 
+              <varname>MJDEBUG</varname> to 1 
+	      <screen>setenv MJDEBUG 1</screen>
+	    </para></listitem>
+	</orderedlist>
+      </para>
+    </section>
+    
+  </section>
+
+   <section id="LinuxInstall">
+   <title>Performing a Standalone Installation on a Linux Machine (non-PDSF/Gerda)</title>
+   <para>
+   A standalone installation of MaGe was successfully performed on a
+   non-PDSF/Gerda machine at CENPA (crunch1.npl.washington.edu) running a recent
+   version of Fedora Core 3 (FC3). Here is a mini-tutorial based on the
+   experience:
+   </para>
+   <orderedlist numeration="Arabic">
+      <listitem>
+         <para>
+	 Make sure you have the package postgresql-devel installed on your
+	 system, and set the environment variable PGSQL_LIB_DIR to the
+	 directory containing libpq.so.
+	 </para>
+      </listitem>
+      <listitem>
+         <para>
+	 Install CLHEP (I used version 1.9.1.2), ROOT (v4.00.08f),
+	 and Geant4. 
+	 </para>
+	 <para>
+	 Note about Geant4 versions: a first attempt was made at
+	 CENPA to use Geant4.6.2 (the currently supported version
+	 for MaGe), but it does not compile with the version of gcc
+	 (3.4.2) shipped with FC3. This is a known issue, and the
+	 recommendation of the Geant4 team is to migrate to Geant4.7.0.
+	 So Geant4.7.0 was installed. If you use an earlier version
+	 of gcc, you may use either.
+	 </para>
+	 <para>
+	 Special Advice: when you install Geant4, I
+	 recommend you use the Configure script included with the
+	 distribution. If someone else installed Geant4 for you, track them
+	 down and check with them that they did this. Configure
+	 creates env.(c)sh scripts that you source to set all of your
+	 environment variables correctly. MaGe depends on these environment
+	 variables being set correctly. So if you disregard this advice and you end
+	 up having trouble installing MaGe as a result, you are on
+	 your own!
+	 </para>
+      </listitem>
+      <listitem>
+         <para>
+	 Obtain the MaGe source code: follow the first few steps of 
+	 <xref linkend="GettingStarted"/>.
+	 When checking out the code, it is recommend to use the option -P,
+	 as in "cvs co -P MaGe", to remove extraneous directories.
+	 </para>
+      </listitem>
+      <listitem>
+         <para>
+	 cd to the MaGe source code root. If you want the object files,
+	 libraries, and binaries to be built under this directory, set the
+	 G4WORKDIR environment variable to the MaGe source code root
+	 (recommended; the build may fail otherwise).
+	 </para>
+      </listitem>
+      <listitem>
+         <para>
+	 Enter the command "make lib". The make process will complain about
+	 there being no release information, and will tell you that it
+	 thinks you are building on "Gerda Machine X". This is just what it
+	 calls any non-PDSF computer; you may ignore this message.
+	 </para>
+      </listitem>
+      <listitem>
+         <para>
+	 A few errors were encountered due to incompatibilities with
+	 Geant4.7.0; these were easy to remedy by reading the 
+	 <ulink url="http://geant4.cern.ch/geant4/source/ReleaseNotes4.7.0.html#7.">Major 
+	 items for migration of user code</ulink>
+	 on the Geant4.7.0 Release Notes page.  For any other errors, 
+	 if you don't understand them, contact the code's author.
+	 </para>
+      </listitem>
+      <listitem>
+         <para>
+	 Before making the executable, one must do "mkdir bin" followed by
+	 "mkdir bin/Linux-g++". This has to do with the fact that the make
+	 process assumes you are on a Gerda machine which already has these
+	 directories. 
+	 </para>
+      </listitem>
+      <listitem>
+         <para>
+         Enter the command "make bin". This makes the MaGe executable,
+	 along with a utililty function databaseApp.
+	 </para>
+      </listitem>
+      <listitem>
+         <para>
+	 Contact Akbar Mokhtarani 
+	 (<ulink url="mailto:amokhtarani@lbl.gov">amokhtarani@lbl.gov</ulink>)
+	 to allow your system to connect to the database. Send him the IP
+	 address(es) of the system(s) on which you are running MaGe. Then
+	 comment-out all lines in the file MJDBProperties.txt, and then
+	 un-comment-out the last four lines to use the connection
+	 information for Akbar's database rather than the PDSF database.
+	 Once Akbar has added your system to the list of allowed IP
+	 addresses, test the connection by running "bin/Linux-g++/databaseApp".
+	 If you see screens and screens of materials data fly by, and no
+	 error messages at the end, you are ready to run MaGe.
+	 </para>
+      </listitem>
+      <listitem>
+         <para>
+	 Copy the PNNL generator files to your computer. You can find them
+	 on pdsf at /auto/majorana1/MJ/database/generators/PNNL. Make a
+	 symbolic link from MaGe/dat to PNNL/dat; if you plan to run any of
+	 the macros in the macros directory that use the PNNL generator,
+	 you will need to modify the line that initializes the generator
+	 to point to the correct location of the PNNL directory on your
+	 disk.
+	 </para>
+      </listitem>
+   </orderedlist>
+   <para>
+   Voila! Try out your exectuable by running some macros, e.g.
+   "bin/Linux-g++/MaGe macros/Co60.mac".
+   </para>
+   </section>
+
+   <section><title>Performing a Standalone Installation on Mac OS X</title>
+   <para>
+   With some patience, MaGe can run just fine on Mac OS X. The instructions
+   here used the following software versions: CLHEP 1.9.1.2, geant4.7.0,
+   and root 4.02.00. It is assumed that the user has experience
+   compiling geant4 code; if you have questions on any of these instructions
+   please <ulink url="mailto:jasondet@u.washington.edu">ask me</ulink>. It
+   is hoped that in the not-too-distant future, MaGe will be made more
+   cross-platform-friendly and much of this will not be necessary.
+   </para>
+   <orderedlist numeration="Arabic">
+      <listitem>
+         <para>
+	 Install postgresql. I recommend NOT using fink for this. Instead,
+	 get the installation from
+	 <ulink url="http://www.entropy.ch/software/macosx/postgresql">
+	 http://www.entropy.ch/software/macosx/postgresql</ulink>.
+	 Follow the instructions on that page. After you are done, add the following
+	 lines to your .(t)cshrc file (make appropriate changes for bash):
+	 <screen>setenv PGSQL_BASE_DIR /usr/local/pgsql</screen>
+	 <screen>setenv PGSQL_LIB_DIR $PGSQL_BASE_DIR/lib</screen>
+	 </para>
+      </listitem>
+      <listitem>
+         <para>
+	 Follow steps 2, 3, 4, 6, 7, 9, and 10 of 
+	 <xref linkend="LinuxInstall"/>.
+	 For step 7, replace "Linux-g++" with "$G4SYSTEM".
+	 </para>
+      </listitem>
+      <listitem>
+         <para>
+	 Make the following changes to the GNUMakefile in the
+	 base-directory of MaGe:
+         <screen>
+	 - Near line 65: add "analysis" to PKG_SKIP.
+	 - Near line 130: change the line that adds libpq.so to LIBS to
+	   read "LIBS = -L$(PGSQL_LIB_DIR) -lpq".
+         - Near line 140: Change instances of "Linux-g++" to "$(G4SYSTEM)".
+	 - Near line 155: remove REL_LIB from LDFLAGS.
+	 - Near line 170: change the compiler option "shared" to "dynamiclib".
+	 - Near line 250: In the line that builds libio.so, add the root 
+	   library flags to the linking flags, for example using 
+	   "$(shell root-config --libs)".
+         </screen>
+	 </para>
+      </listitem>
+      <listitem>
+         <para>
+	 Make the following changes to buildTools/standard.mk
+         <screen>
+	 - Near line 35: Add the following line after the call to the 
+	   archiver in target lib:         
+	   @if [ -f /usr/bin/ranlib -o -f /bin/ranlib ] ; then ranlib $(LIBDIR)/lib$(PACKAGENAME).a ;fi
+	 - Near line 80: Add the option -bind_at_load to the linker flags
+	   for the bin target.
+         </screen>
+	 </para>
+      </listitem>
+      <listitem>
+         <para>
+         Near line 60 of buildTools/load_g4.mk, the OpenGL library locations
+         are added to LDFLAGS and LOADLIBES. On my Mac, the OpenGL libraries
+         are located in /usr/X11R6/lib, so I had to change these lines to
+         read:
+         <screen>
+         LDFLAGS += -L/usr/X11R6/lib
+         override LOADLIBES += -lXmu -lXt -lXext -lX11 -lSM -lICE
+         override LOADLIBES += -lGLU -lGL
+         </screen>
+	 </para>
+      </listitem>
+      <listitem>
+         <para>
+	 In database/src/MJDatabaseUtil.cc, make the function byteswap
+	 return immediately. The byteswap procedure it implements is not
+	 necessary on Mac OS X.
+	 </para>
+      </listitem>
+   </orderedlist>
+   <para>
+   At this point, you should be able to compile MaGe by just typing "make"
+   from the base directory. Try out your exectuable by running some macros, e.g.
+   "bin/Darwin-g++/MaGe macros/Co60.mac".
+   </para>
+
+   <para>
+   If you are running on a laptop like me, it is likely that you will want to have
+   a local version of the database installed. This way you can run the code
+   even when you are on a plane, and you don't have to send Akbar a new IP
+   address every time to change locations. To do this, do the following:
+   </para>
+   <orderedlist numeration="Arabic">
+      <listitem>
+         <para>
+	 If you followed my suggestion above and didn't use fink to install
+	 postgresql, then get the pgsql-startupitem package from
+	 <ulink url="http://www.entropy.ch/software/macosx/postgresql">
+	 http://www.entropy.ch/software/macosx/postgresql</ulink>. This
+	 will setup the database server so that it starts up automatically
+	 whenever you turn on your computer and you never have to worry 
+	 about it. If you did use fink, you are on your own: you have to
+	 either start the server manually every time or write the startup
+	 service yourself (there are webpages on how to do this).
+	 </para>
+      </listitem>
+      <listitem>
+         <para>
+         Get the majorana database by doing:
+	 <screen>
+	 createuser [username] (answer yes to all questions)
+	 createdb majorana
+	 pg_dump -h128.3.11.122 -p5432 -Uakbarm majorana > mjdb.txt
+	 psql majorana &lt; mjdb.txt
+	 rm mjdb.txt
+	 </screen>
+	 Test it out by doing <screen>psql majorana</screen>.
+	 </para>
+      </listitem>
+      <listitem>
+         <para>
+	 Change MJDBProperties.txt so that 
+	 <screen>
+	 databaseURL=localhost
+	 userName=[username]
+	 databaseName=majorana
+	 port=5432
+	 </screen>
+	 </para>
+      </listitem>
+   </orderedlist>
+   <para>
+   MaGe should now be able to access your database. Test it by running
+   ../bin/Darwin-g++/databaseApp
+   </para>
+   </section>
+</chapter>

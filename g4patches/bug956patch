@@ -1,0 +1,37 @@
+--- /home/gx336-01/gsoft/usr/geant4.9.0.p01/source/processes/hadronic/models/neutron_hp/src/G4NeutronHPCaptureFS.cc	2007-08-28 14:40:34.000000000 +0200
++++ G4NeutronHPCaptureFS.cc	2008-04-07 09:24:33.000000000 +0200
+@@ -65,6 +65,14 @@
+     theNeutron.Lorentz(theNeutron, -1*theTarget);
+     eKinetic = theNeutron.GetKineticEnergy();
+ 
++// set excitation energies for meta stable states (currently only for Ge77m)
++    G4double random = G4UniformRand();
++    G4double ExcitationEnergy;
++    if (theBaseZ == 32 && theBaseA == 76 && random<0.95)
++       ExcitationEnergy = 159.7*keV;
++    else
++       ExcitationEnergy = 0;
++
+ // dice the photons
+ 
+     G4ReactionProductVector * thePhotons = 0;
+@@ -97,7 +105,8 @@
+         G4ParticleTable* theTable = G4ParticleTable::GetParticleTable();
+         if((*i)->GetMomentum().mag() > 10*MeV) 
+                  theOne->SetDefinition( 
+-                 theTable->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ)) );
++                 //theTable->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ)) );
++                 theTable->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), ExcitationEnergy) );
+         theOne->SetMomentum( (*i)->GetMomentum().vect() ) ;
+         theOne->SetTotalEnergy( (*i)->GetMomentum().t() );
+         thePhotons->push_back(theOne);
+@@ -124,7 +133,8 @@
+     {
+        G4DynamicParticle * theOne = new G4DynamicParticle;
+        G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
+-                                        ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ));
++                                        //->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ));
++                                        ->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), ExcitationEnergy);
+        theOne->SetDefinition(aRecoil);
+        // Now energy; 
+        // Can be done slightly better @

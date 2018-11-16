@@ -1,0 +1,82 @@
+# ============================================= #
+# Runs gammas in the LNGSBeGe detector            #
+# ============================================= # 
+#
+/MG/manager/mglog trace 
+#
+# Geometry setup 
+#
+/MG/geometry/detector LNGSBEGe
+/MG/geometry/database false
+#
+/MG/geometry/LNGSBEGe/top_lateral_DL 0.5 mm
+/MG/geometry/LNGSBEGe/bottom_DL 0.45 mm
+#
+#
+# Output
+#
+/MG/eventaction/rootschema Dario
+/MG/eventaction/rootfilename Cs137.root
+/MG/output/writeHitDetails false
+#
+# Primary gun
+#
+/MG/generator/select G4gun
+#
+# Other setups
+#
+/MG/processes/optical false
+/MG/processes/lowenergy true
+#/MG/processes/realm DarkMatter
+/MG/processes/useNoHadPhysics true
+#
+/run/initialize
+#/MG/geometry/CheckOverlaps
+#
+#
+#This generates isotropic gamma radiation
+#
+/MG/generator/g4gun/cone_on true
+/MG/generator/g4gun/coneDirection 0 0 -1
+/MG/generator/g4gun/thetaDelta 180 deg
+#
+# Detector coordinates:
+#  z = -15.5 mm --> 15.5 mm (31 mm)
+#  x,y = -35.0 mm --> 35.0 mm (70 mm totale)
+#
+# Top of the Al cover:
+#  z = 21.5 mm
+# Radius of the Al cover
+#  r = -45.3 mm
+#
+# Shoot an [isotropic] 662 keV gamma
+# 5 mm above the Al cap (21.5+5)
+#
+/gun/position 0 0 26.5 mm
+/gun/particle gamma
+/gun/energy 662 keV
+/tracking/verbose 0
+/run/beamOn 10000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+

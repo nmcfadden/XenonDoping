@@ -1,0 +1,55 @@
+# ==================================== #
+# Runs detector with phase II geometry #
+# ==================================== # 
+
+# 
+# General setup 
+# 
+/random/setSavingFlag true
+/random/setDirectoryName ./
+/MG/manager/mglog trace
+#/MG/manager/mglog debugging
+/MG/processes/realm BBdecay
+/MG/eventaction/rootschema GerdaArray
+#/MG/eventaction/rootschema GerdaArray
+/MG/eventaction/rootfilename PhaseII_ideal.root
+/MG/eventaction/reportingfrequency 10000
+#
+# Geometry setup 
+#
+/MG/geometry/detector GerdaArray
+/MG/geometry/database false
+#
+/MG/geometry/detector/geometryfile geometry.dat
+/MG/geometry/detector/matrixfile matrix_phase_ii_ideal.dat
+#
+# Geometry modifications 
+#
+# Stacking
+#
+/MG/output/killDaughter false
+/MG/output/useTimeWindow false
+#/MG/output/setTimeWindow 1 microsecond
+/MG/output/saveOnlyEventsWithEnergyDeposit true
+#
+# Initialize run 
+#
+
+/run/initialize
+
+#
+# generator setup 
+#
+/MG/generator/confine volumelist
+/MG/generator/volumelistfrom 0 
+/MG/generator/volumelistto 20
+/MG/generator/volumelist Holder_copper
+#
+/MG/generator/select G4gun
+/gun/particle ion
+/gun/ion 90 232 0
+/gun/energy 0.0 keV
+#
+/tracking/verbose 0
+/run/beamOn 100000
+

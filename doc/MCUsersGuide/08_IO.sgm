@@ -1,0 +1,48 @@
+<chapter id="IO">
+<title>Input/Output</title>
+
+<section id="IO_MGLogger"><title>Terminal output via the 
+   <filename>MGLogger</filename> class.</title>
+   <para>
+   The <filename>MaGe</filename> package comes with a terminal output class
+   that handles messages you want to write to the screen. A message is written
+   to the screen only if its severity exceeds that of the current severity 
+   setting. The allowed severity levels
+   are: <filename>debugging, trace, routine, warning, error, fatal</filename>.
+   The severity level is set via a Geant 4 messenger at run-time. 
+   For example, if we set
+   the severity to <filename>warning</filename> :
+   </para>
+<screen>
+MG/manager/mglog warning
+</screen>
+   <para>then the following line of code will produce terminal output:</para>
+<screen>
+MGLog(warning) &lt;&lt; "Your Warning here " &lt;&lt; endlog;
+</screen>
+   <para> 
+    However, if the severity level is set higher at run-time, to 
+    <filename>error</filename> or <filename>fatal</filename>, then nothing
+    will be written to the screen. Remember to put an 
+    <filename>endlog</filename> at the end of your statement. If you have a
+    statement that is set to <filename>fatal</filename>, nothing is written
+    to the screen, and the program is stopped immediately.
+   </para>
+</section>
+   
+<section id="IO_Common"><title>Common Output Classes</title>
+<para>
+</para>
+</section>
+
+<section id="IO_Gerda"><title>Gerda Output</title>
+<para>
+</para>
+</section>
+
+<section id="IO_Majorana"><title>Majorana Output</title>
+<para>
+</para>
+</section>
+
+</chapter>

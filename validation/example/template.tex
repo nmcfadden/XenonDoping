@@ -1,0 +1,72 @@
+\documentclass[pdftex, a4paper, 12pt,pointlessnumbers]{scrartcl} %twoside,
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{ae}
+\usepackage[automark]{scrpage2}
+
+% use high quality equations
+\usepackage[intlimits]{amsmath}
+\usepackage{amsfonts, amssymb, amsthm, amstext}
+\usepackage[all, warning]{onlyamsmath}
+%
+% use color and graphics support packages
+\usepackage[usenames, dvipsnames]{color}
+\usepackage[pdftex]{graphicx}
+\usepackage{subfigure, wrapfig}
+
+\usepackage[pdftex, plainpages = false, pdfpagelabels = true, colorlinks = true, linkcolor = blue, citecolor = blue,
+	linktocpage, pdfstartpage = 1, pdfview = FitH, pdfpagemode = UseNone]{hyperref}
+
+\title{Automatic Generated Report}
+\author{XX:author:XX}
+\date{\today}
+
+\hypersetup{
+	pdfsubject = {Automatic Generated Report},
+	pdftitle = {Automatic Generated Report},
+	pdfauthor = {XX:author:XX},
+	pdfcreator = {LaTeX, pdfTeX},
+	pdfproducer = {pdf2latex},
+	pdfkeywords = {automatic report}
+}
+
+\begin{document}
+ 
+\maketitle
+
+
+\tableofcontents
+
+\newpage
+
+\section{XX:header1:XX}
+
+In this test high energetic electrons (XX:electron_energy:XX) are shot on a thin (200 $\mu$m) silicon detector. Figure \ref{fig:1} shows the energy deposit of the electrons in the detector. A Landau distribution was fitted to the simulated data, the fit parameters are available in tabel \ref{tab:fitresults}.
+
+\begin{figure}[h]
+\centering
+	\includegraphics[width=120mm]{XX:LandauFit_1_figure:XX}
+	\caption[Energy deposit in 64PD]{Simulated energy deposit in 64PD for high energetic (XX:electron_energy:XX) electrons. The fit results are given in table \ref{tab:fitresults}.}
+	\label{fig:1}
+\end{figure}
+
+\begin{table}[h]
+	\centering
+	\captionabove{Results of Landau Fit}
+		\begin{tabular}{|c|c|}
+		\hline
+		constant & XX:LandauFit_1_constant:XX $\pm$ XX:LandauFit_1_constant_error:XX\\
+		\hline
+		MPV & XX:LandauFit_1_MPV:XX $\pm$ XX:LandauFit_1_MPV_error:XX\\
+		\hline
+		Sigma & XX:LandauFit_1_Sigma:XX $\pm$ XX:LandauFit_1_Sigma_error:XX\\
+		\hline
+		\end{tabular}
+	\label{tab:fitresults}
+\end{table}
+
+\section{Part 2}
+
+more XX:text:XX ...
+
+\end{document}

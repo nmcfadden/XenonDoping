@@ -1,0 +1,45 @@
+# $Id: g42gdml.mac,v 1.2 2007-10-16 11:45:59 mjelen Exp $
+# $Author: mjelen $
+# $Date: 2007-10-16 11:45:59 $
+# example showing how to dump Geant4 geometry into GDML file
+
+# disable database so that Gerda users can also play around
+#/MG/geometry/database false
+
+# choose a fancy but simple geometry for demonstration
+/MG/geometry/detector Corrado
+
+# disable hadronic processes to speed up initialization 
+/MG/processes/useNoHadPhysics true
+
+/run/initialize
+
+# get the tree structure of the geometry
+# --------------------------------------
+/vis/open ATree
+# display the names of physical and logical volumes
+/vis/ASCIITree/verbose 1
+# dump the tree
+/vis/drawTree
+
+# GDML options
+# -------------
+
+# there is possibility to change the schema file
+#/MG/geometry/GDML/schemaPath /path/to/gdml/schema
+
+# default name is "Corrado.gdml"
+#/MG/geometry/GDML/outputName someName.gdml
+
+# please refer to GDML users guide
+/MG/geometry/GDML/outputFormat 2
+
+# choose the logical volumes from atree to generate 
+# separated gdml files for each of them
+/MG/geometry/GDML/modularizeVolumes Crystal_log Spider_log
+
+# a crazier way to modularize
+#/MG/geometry/GDML/modularizeLevels 2 3 4 5 6 7 8 9 10
+
+# dump geometry to gdml
+/MG/geometry/GDML/write

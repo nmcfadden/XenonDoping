@@ -1,0 +1,93 @@
+0	ANG1		1	6.75	29.23	68		51		1e3	800e3	800e3	800e3	1e-10	13	19.5	4	1e3	0	0	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001
+1	RGI			1	6.75	38.25	84		73		1e3	800e3	800e3	800e3	1e-10	17	20		2	1e3	0	0	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001
+2	RGII		1	6.5		38.25	84		70		1e3	800e3	800e3	800e3	1e-10	17	20		2	1e3	0	0	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001
+3	RGIII		1	6.5		39.5	81		71		1e3	800e3	800e3	800e3	1e-10	13	16		2.5	1e3	0	0	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001
+4	ANG2		1	7 		40		107		94		1e3	800e3	800e3	800e3	1e-10	15	18		2	1e3	0	0	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001
+5	ANG3		1	7.5		39		93		83		1e3	800e3	800e3	800e3	1e-10	17	20		2	1e3	0	0	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001
+6	ANG4		1	7		37.5	100		89		1e3	800e3	800e3	800e3	1e-10	15	18		2	1e3	0	0	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001
+7	ANG5		1	6.25	39.25	105		94		1e3	800e3	800e3	800e3	1e-10	15	18		2	1e3	0	0	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001
+8	GTF1		1	5.75	43.5	75		43		1e3	800e3	800e3	800e3	1e-10	15	20		2	1e3	0	0	0	NaturalGe 	NaturalGe 	NaturalGe 1.0 0.001
+9	GTF2		1	6		42		84		46		1e3	800e3	1e3		800e3	1e3		0	0		0	0	0	0	0	NaturalGe 	NaturalGe 	NaturalGe 1.0 0.001
+10	GTF3		1	6		44.5	71		41.5	1e3	800e3	800e3	800e3	1e-10	15	20		2	1e3	0	0	0	NaturalGe 	NaturalGe 	NaturalGe 1.0 0.001
+11	GTF4		1	5.75	42.5	100		63		1e3	800e3	800e3	800e3	1e-10	17	20		2	1e3	0	0	0	NaturalGe 	NaturalGe 	NaturalGe 1.0 0.001
+12	GTF5		1	5.75	42		105		67.5	1e3	800e3	1e3		800e3	1e3		0	0		0	0	0	0	0	NaturalGe	NaturalGe 	NaturalGe 1.0 0.001
+13	GTF6		1	5.75	42		82.5	42.5	1e3	800e3	1e3		800e3	1e3		0	0		0	0	0	0	0	NaturalGe 	NaturalGe 	NaturalGe 1.0 0.001
+14	SIEGFRIED	2	5		37.5	70		0		1e3	1e3		1e3		1e3		1e3		0	0		0	0	6	3	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001
+15	SIEGFRIED	2	5		37.5	70		0		1e3	1e3		1e3		1e3		1e3		0	0		0	0	6	3	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001
+16	SIEGFRIED	2	5		37.5	70		0		1e3	1e3		1e3		1e3		1e3		0	0		0	0	6	3	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001
+17	SIEGFRIED	2	5		37.5	70		0		1e3	1e3		1e3		1e3		1e3		0	0		0	0	6	3	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001
+18	SIEGFRIED	2	5		37.5	70		0		1e3	1e3		1e3		1e3		1e3		0	0		0	0	6	3	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001
+19	SIEGFRIED	2	5		37.5	70		0		1e3	1e3		1e3		1e3		1e3		0	0		0	0	6	3	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001
+20	SIEGFRIED	2	5		37.5	70		0		1e3	1e3		1e3		1e3		1e3		0	0		0	0	6	3	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001
+21	SIEGFRIED	2	5		37.5	70		0		1e3	1e3		1e3		1e3		1e3		0	0		0	0	6	3	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001
+22	SIEGFRIED	2	5		37.5	70		0		1e3	1e3		1e3		1e3		1e3		0	0		0	0	6	3	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001
+23	SIEGFRIED	2	5		37.5	70		0		1e3	1e3		1e3		1e3		1e3		0	0		0	0	6	3	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001
+24	SIEGFRIED	2	5		37.5	70		0		1e3	1e3		1e3		1e3		1e3		0	0		0	0	6	3	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001
+25	SIEGFRIED	2	5		37.5	70		0		1e3	1e3		1e3		1e3		1e3		0	0		0	0	6	3	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001
+26	SIEGFRIED	2	5		37.5	70		0		1e3	1e3		1e3		1e3		1e3		0	0		0	0	6	3	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001
+27	SIEGFRIED	2	5		37.5	70		0		1e3	1e3		1e3		1e3		1e3		0	0		0	0	6	3	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001
+28	SIEGFRIED	2	5		37.5	70		0		1e3	1e3		1e3		1e3		1e3		0	0		0	0	6	3	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001
+29	SIEGFRIED	2	5		37.5	70		0		1e3	1e3		1e3		1e3		1e3		0	0		0	0	6	3	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001
+30	SIEGFRIED	2	5		37.5	70		0		1e3	1e3		1e3		1e3		1e3		0	0		0	0	6	3	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001
+31	SIEGFRIED	2	5		37.5	70		0		1e3	1e3		1e3		1e3		1e3		0	0		0	0	6	3	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001
+32	SIEGFRIED	2	5		37.5	70		0		1e3	1e3		1e3		1e3		1e3		0	0		0	0	6	3	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001
+33	SIEGFRIED	2	5		37.5	70		0		1e3	1e3		1e3		1e3		1e3		0	0		0	0	6	3	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001
+34	SIEGFRIED	2	5		37.5	70		0		1e3	1e3		1e3		1e3		1e3		0	0		0	0	6	3	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001 1.0 0.001
+35	BEGE		1	0.5		40.5	32.0    1e-3	1e3	400e3   400e3	1e3		1e3		0	0		0	0	0	0	0	EnrichedGe 	EnrichedGe 	EnrichedGe 1.0 0.001
+36  BEGe_b2b	3	0.	37.5	35.0	0.0	0.0	600e3	600e3	600e3	1e3	0	0	0	0 	0	0	0	EnrichedGe 	EnrichedGe 	EnrichedGe
+37  GD32B	4	0.0	35.9	32.2	0.0	590.0	988e3	988e3	988e3	1e3	7.5	10.5	2.0	0.0	0	0	0.0	EnrichedGe 	EnrichedGe 	EnrichedGe  1.0 0.001
+38  GD32C	4	0.0	36.0	33.2	0.0	590.0	809e3	809e3	809e3	1e3	7.5	10.5	2.0	0.0	0	0	0.0	EnrichedGe 	EnrichedGe 	EnrichedGe  1.0 0.001
+39  GD32D	4	0.0	36.1	32.0	0.0	590.0	683e3	683e3	683e3	1e3	7.5	10.5	2.0	0.0	0	0	0.0	EnrichedGe 	EnrichedGe 	EnrichedGe  1.0 0.001
+40  GD35B	4	0.0	38.3	32.0	0.0	590.0	785e3	785e3	785e3	1e3	7.5	10.5	2.0	0.0	0	0	0.0	EnrichedGe 	EnrichedGe 	EnrichedGe  1.0 0.001
+41  GD35C	4	0.0	37.4	26.4	0.0	590.0	764e3	764e3	764e3	1e3	7.5	10.5	2.0	0.0	0	0	0.0	EnrichedGe 	EnrichedGe 	EnrichedGe  1.0 0.001
+42 GD32A 5 0.0 33.13	 24.90	 5.50	 590.0	 910e3	 910e3	 910e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 30.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+43 GD32B 5 0.0 35.95	 32.16	 0.00	 590.0	 1050e3	 1050e3	 1050e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+44 GD32C 5 0.0 35.99	 33.15	 0.00	 590.0	 960e3	 960e3	 960e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+45 GD32D 5 0.0 36.15	 32.12	 0.00	 590.0	 770e3	 770e3	 770e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+46 GD35A 5 0.0 36.77	 35.34	 12.75	 590.0	 950e3	 950e3	 950e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 29.12	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+47 GD35B 5 0.0 38.16	 32.10	 0.00	 590.0	 780e3	 780e3	 780e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+48 GD35C 5 0.0 37.42	 26.32	 0.00	 590.0	 790e3	 790e3	 790e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+49 GD61A 5 0.0 36.74	 33.57	 16.13	 590.0	 1010e3	 1010e3	 1010e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 31.75	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+50 GD61B 5 0.0 37.98	 30.21	 0.00	 590.0	 1000e3	 1000e3	 1000e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+51 GD61C 5 0.0 37.28	 26.45	 0.00	 590.0	 920e3	 920e3	 920e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+52 GD76B 5 0.0 29.14	 26.29	 0.00	 590.0	 1140e3	 1140e3	 1140e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+53 GD76C 5 0.0 37.92	 33.18	 0.00	 590.0	 1140e3	 1140e3	 1140e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+54 GD79B 5 0.0 38.42	 29.04	 0.00	 590.0	 1040e3	 1040e3	 1040e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+55 GD79C 5 0.0 39.48	 30.22	 0.00	 590.0	 1100e3	 1100e3	 1100e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+56 GD89A 5 0.0 34.31	 28.34	 12.00	 590.0	 990e3	 990e3	 990e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 25.25	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+57 GD89B 5 0.0 38.02	 24.85	 0.00	 590.0	 1130e3	 1130e3	 1130e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+58 GD89C 5 0.0 37.35	 24.75	 0.00	 590.0	 990e3	 990e3	 990e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+59 GD89D 5 0.0 36.72	 22.89	 0.00	 590.0	 1020e3	 1020e3	 1020e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+60 GD91A 5 0.0 35.27	 31.18	 11.50	 590.0	 990e3	 990e3	 990e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 28.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+61 GD91B 5 0.0 35.29	 30.26	 0.00	 590.0	 960e3	 960e3	 960e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+62 GD91C 5 0.0 34.95	 29.79	 0.00	 590.0	 960e3	 960e3	 960e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+63 GD91D 5 0.0 35.65	 31.88	 0.00	 590.0	 990e3	 990e3	 990e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+64 GD00A 5 0.0 35.16	 26.41	 14.35	 590.0	 910e3	 910e3	 910e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 23.25	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+65 GD00B 5 0.0 36.98	 29.46	 0.00	 590.0	 1040e3	 1040e3	 1040e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+66 GD00C 5 0.0 37.76	 33.64	 0.00	 590.0	 1010e3	 1010e3	 1010e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+67 GD00D 5 0.0 38.20	 32.28	 0.00	 590.0	 1020e3	 1020e3	 1020e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+68 GD02A 5 0.0 35.23	 27.55	 12.36	 590.0	 860e3	 860e3	 860e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 28.75	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+69 GD02B 5 0.0 35.51	 28.66	 0.00	 590.0	 970e3	 970e3	 970e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+70 GD02C 5 0.0 37.44	 32.59	 0.00	 590.0	 1030e3	 1030e3	 1030e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+71 GD02D 5 0.0 37.30	 27.91	 6.83	 590.0	 1450e3	 1450e3	 1450e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 34.25	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+72 dep1D 5 0.0 38.34	 22.83	 0.00	 590.0	 350e3	 350e3	 350e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+73 dep2A 5 0.0 35.00	 28.00	 0.00	 590.0	 999e3	 999e3	 999e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+74 dep2B 5 0.0 37.73	 30.95	 0.00	 590.0	 760e3	 760e3	 760e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+75 dep3B 5 0.0 37.05	 41.00	 0.00	 590.0	 430e3	 430e3	 430e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+76 dep3D 5 0.0 39.00	 26.40	 0.00	 590.0	 999e3	 999e3	 999e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+77 dep4C 5 0.0 37.28	 33.45	 0.00	 590.0	 640e3	 640e3	 640e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+78 dep4D 5 0.0 37.00	 32.00	 0.00	 590.0	 394e3	 394e3	 394e3	 1e3	 7.5	 10.5	 2.0	 0.0 0 0 0.00	 EnrichedGe EnrichedGe EnrichedGe 1.0 0.001
+79      ANG1    11      6.75    29.23   68      51     1e3     800e3   800e3   800e3   1e-10   13     19.5    4       1e3     0       0       0       EnrichedGe      EnrichedGe      EnrichedGe 1.0 0.001
+80      RGI     11      6.75    38.25   84      73     1e3     800e3   800e3   800e3   1e-10   17     20      2       1e3     0       0       0       EnrichedGe      EnrichedGe      EnrichedGe 1.0 0.001
+81      RGII    11      6.5     38.25   84      70     1e3     800e3   800e3   800e3   1e-10   17     20      2       1e3     0       0       0       EnrichedGe      EnrichedGe      EnrichedGe 1.0 0.001
+82      RGIII   11      6.5     39.5    81      71     1e3     800e3   800e3   800e3   1e-10   13     16      2.5     1e3     0       0       0       EnrichedGe      EnrichedGe      EnrichedGe 1.0 0.001
+83      ANG2    11      7       40      107     94     1e3     800e3   800e3   800e3   1e-10   15     18      2       1e3     0       0       0       EnrichedGe      EnrichedGe      EnrichedGe 1.0 0.001
+84      ANG3    11      7.5     39      93      83     1e3     800e3   800e3   800e3   1e-10   17     20      2       1e3     0       0       0       EnrichedGe      EnrichedGe      EnrichedGe 1.0 0.001
+85      ANG4    11      7       37.5    100     89     1e3     800e3   800e3   800e3   1e-10   15     18      2       1e3     0       0       0       EnrichedGe      EnrichedGe      EnrichedGe 1.0 0.001
+86      ANG5    11      6.25    39.25   105     94     1e3     800e3   800e3   800e3   1e-10   15     18      2       1e3     0       0       0       EnrichedGe      EnrichedGe      EnrichedGe 1.0 0.001
+87      GTF1    11      5.75    43.5    75      43     1e3     800e3   800e3   800e3   1e-10   15     20      2       1e3     0       0       0       NaturalGe       NaturalGe       NaturalGe 1.0 0.001
+88      GTF2    11      6       42      84      46     1e3     800e3   1e3     800e3   1e3     0      0       0       0       0       0       0       NaturalGe       NaturalGe       NaturalGe 1.0 0.001
+89      GTF3    11      6       44.5    71      41.5   1e3     800e3   800e3   800e3   1e-10   15     20      2       1e3     0       0       0       NaturalGe       NaturalGe       NaturalGe 1.0 0.001
+90      GTF4    11      5.75    42.5    100     63     1e3     800e3   800e3   800e3   1e-10   17     20      2       1e3     0       0       0       NaturalGe       NaturalGe       NaturalGe 1.0 0.001
+91      GTF5    11      5.75    42      105     67.5   1e3     800e3   1e3     800e3   1e3     0      0       0       0       0       0       0       NaturalGe       NaturalGe       NaturalGe 1.0 0.001
+92      GTF6    11      5.75    42      82.5    42.5   1e3     800e3   1e3     800e3   1e3     0      0       0       0       0       0       0       NaturalGe       NaturalGe       NaturalGe 1.0 0.001

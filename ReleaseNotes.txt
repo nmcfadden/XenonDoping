@@ -1,0 +1,120 @@
+
+HEAD -- ADD YOUR LATEST CHANGES HERE
+------------------------------------
+
+=======
+
+Major changes in the Gerda part of MaGe to simulate the LAr Instrumention (N. Barros):
+      - Implemented a new base system for the LAr instrumentation. It is implemented as an extension of the GerdaArray geometry.
+      - Extended GerdaArray output schema to optionally include LAr Instrumentation data (if available). 
+      - Added new stacking checks to reweight track priority if LAr is instrumented. Now optical photons are left to be 
+        tracked at the end and they are only tracked if the any of the other tracks registered a hit in the germanium.
+
+	- Added a new crystal type to Gerda geometry (type 3), which is used to design back-to-back BEGe's. N. Barros 
+	- Implemented a new lock system (PhaseIILock) based on the old design but now having two DN250 CF flanges.
+	- Implemented a two-3 string array matrix file (matrix_phase_ii_bege.txt). One of the 3-string arms is filled with 24 BEGe's.
+
+
+MaGe-01-12-00: 5-Nov-2011
+-------------------------
+
+MaGe-01-07-00: 3-Jan-2008
+-------------------------
+
+
+MaGe-01-06-00: 7-Mar-2007
+-------------------------
+
+
+MaGe-01-05-90: 5-Jan-2006
+-------------------------
+
+- Added support for 3D reconstruction and ME to mjprocessors. R. Henning
+- Added messengers to MGOutG4Step class to kill alpha and beta tracks
+- Added TimeWindow functionality to MGVOutputManager class.  It is now
+  possible to split up an event into several events based on a specified
+  time window.  Output manager classes that derive from MGVOutputManager and
+  want to use this function need to write their own versions.  This has been 
+  done for MGOutputG4Steps, MJOutputDetectorEvent, and MJOutputMCEvent
+  (R. Johnson)
+- Added messenger to stop nuclei after one step. R. Henning
+- Added LLNL 8x5 geometry. R. Henning
+- Added rootplot.cxx. (R. Henning)
+- Multiple changes and improvements to segmentation and PSD 
+  procesoors in mjprocessors. (R. Henning)
+- Corrected bug causing offset between logical and physical
+  names in shield of Reference Design. (R. Henning) 
+- Added general surface sampler (J. Detwiler)
+- Chopped G4PhysicalVolumeStore manipulations out of
+  MGGeneratorPositionSampling and put them into a new class
+  MGPhysVolNavigator (J. Detwiler)
+- Added base output class MGOutputASCII for text files (J. Detwiler)
+- MGGeneratorG4Gun generator modified. It is now possible to sample 
+  the direction of the particle isotropically from a cone, with 
+  given axis and given opening angle. The option is activated through 
+  a bool flag (by default it is false). Messenger changed accordingly
+  (L. Pandola)
+- Included a new test geometry in munichteststand/ and registered 
+  in geometry/MGGeometryDetectorConstruction.cc. Added the 
+  corresponding output-scheme (ASCII) and registered (L. Pandola)
+- New gerdageometry/ according to the latest design (K. Kroeninger). 
+  Also added PMTs in the geometry. Data & tools for the tracking of 
+  optical photons for the simulation of the Cherenkov muon veto 
+  (M. Knapp)
+- Modified materials/ and geometry/ in order to allow the definition 
+  of new materials on-the-fly. The material info are read from files. 
+  It works only if the database is off (L. Pandola)
+- Added functionality in G4gun generator. It is possible to generate the 
+  direction of the primary particle in a cone of given opening angle 
+  pointing towards a target point. (L. Pandola)
+- Modified geometry/ in order to allow the definition of (simple) setups 
+  directly from an external file. The geometry can include boxes, cylinders 
+  and spheres (possibly nested). (L. Pandola)
+- Registered new geometries in munichteststand/ used for the simulation of 
+  the screening facilities in Heidelberg, and the corresponding output scheme 
+  in gerdaio/ (L. Pandola)
+
+MaGe-01-05-00: 5-Jan-2006
+-------------------------
+- Implementation of /dev/random for random seeds (J. Detwiler)
+- First implementation of 17A geometry (R. Johnson)
+- Updates to mjprocessor package (R. Henning)
+- The geometry for the Gran Sasso LArGe stand is now working (L. Pandola)
+- Fixed bug with volume position sampler, affecting boolean solids 
+  (K. Kroeninger)
+
+MaGe-01-01-00: 3-Jan-2006  ** <--- Does this tag exist? (Luciano) ***
+-------------------------
+- Updated MGOutputG4StepsData class to include name of volume. (R. Henning)
+- Addition of mjprocessor package. MaGe does not depend on it (R. Henning)
+
+
+MaGe-01-00-00: 30-Dec-2005
+--------------------------
+- First production version of Majorana Reference Design. 
+- Completed Majorana-related geometries:
+   LANL Clover Detector
+   LANL Clover in FEL with Barrel shield
+   57 Banger Design
+   Solid Block
+   SLAC Beamdump
+- Majorana-related geometries that are WIP:
+   LArGe
+   UWLArGe
+- Implemented Generators:
+   Decay0 interface
+   G4Gun
+   PNNL cascade
+   RDM
+   Position (Volume) sampler
+   "Wang" Neutrons
+   TUNL FEL beam
+   Cosmic Rays (Lipari et al.)
+   MUSUN interface (Kudryavtsev et al.) for cosmic ray events
+   Sources4A interface (from LANL) for neutron events
+- Gerda geometries:
+   Gerda set-up and shielding (new version with third wall; crystals 
+    positions and dimensions read from database)
+   LArGe setup at Heidelberg 
+   LArGe setup at Gran Sasso (currently not working)
+   Test stands at Munich

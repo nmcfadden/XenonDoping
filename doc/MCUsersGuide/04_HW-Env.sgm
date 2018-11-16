@@ -1,0 +1,153 @@
+<chapter id="HW-Env">
+   <title>Hardware Requirements and Environment
+   </title>
+  <section><title>
+      Majorana Simulation  Software Development Environment
+    </title>
+    
+    <section><title>Overview</title>
+      <para>
+	The Majorana software environment is based on modular code development. 
+	Each module, called a package, encapsulates code and scripts that 
+	define a subsystem or a  component in the simulation environment. 
+	Packages are created according to a predefined structure. 
+	This establishes 
+	uniformity among all packages and allows for automated code compilation 
+	and release builds. The top most directory is called <filename>MJ</filename> 
+        under which all 
+	other packages are contained. 
+	There is no compilable code at this directory 
+	level, only the main makefile. 
+	Here is an ASCII representation of the MJ directory structure: 
+	<screen>
+	  MJ-- 
+              |- GNUmakefile
+              |- README
+              |+- package1
+              |+- package2
+              |+- package3
+              |+- lib
+              |+- bin
+              |+- obj
+	</screen>
+
+	The last three directories are created by the makefile for storing libraries,
+	executables, and object files, respectively. They are not stored in CVS.
+	Majorana uses CVS for code repository. CVS is a well known and widely used 
+	code versioning system that allows multiple developers to work on different 
+	versions of the same code and then merge their changes. It also maintains a 
+	history of all the changes and provides facilities to back out changes and 
+	retrieve earlier versions. Developers and users are encouraged to work off 
+	of a release. A release is a snapshot of the CVS repository marked with some 
+	identification tag. This structures enables developer and users to check out 
+	only the packages they need to work on and only build those libraries locally 
+	and get the rest of needed libraries from the release. See 
+        <xref linkend="HowTos"/> for examples of how this works.
+      </para>
+    </section>
+    
+    <section><title>Packages</title>
+      <para>
+	Each package contains code, scripts, and relevant data for a subsystem or 
+	component in the simulation environment. Examples of packages are: a)
+	'database' that holds code and utilities for storing and retrieving data form 
+	the database, b)'materials' that contain code for constructing materials needed 
+	for  simulation runs. The structure of all packages follow a predefined format 
+	to facilitate automated compilation and release builds. New packages can be 
+	created and included into the release without any change to other packages 
+	and makefiles. Each package contains a subdirectory with the same name as 
+	the package itself where the header, .hh, files are places and a src subdirectory 
+	for placing the implementation, .cc, files. An include subdirectory can also 
+	be included to store the header files that are not for public use and are 
+	internal to the package. There is a GNUmakefile in each package that specifies 
+	the subdirectories and build options for that package (e.g. executable code.) 
+	Packages can contain other directories to hold utilities and scripts for that 
+	package. These directories are not searched during the build. Here is an overview 
+	of a package structure:
+	<screen>
+	  database .
+	           |- GNUmakefile
+	           |- README
+	           |- History
+	           |+ src
+	           |+ database
+	           |+ schema
+	           |+ include
+	</screen>
+
+	As is shown, each package contains a README file that describes the purpose of 
+	that package and description of classes and interfaces and how to use them; 
+	and a History file that logs the changes to that package over time. 
+	There are few packages that only contain scripts, utilities, and documentations. 
+	MJTools contains different scripts used in Majorana environment. buildTools 
+	contains various makefiles needed for compiling and building libraries and 
+	executables. macros contains macro, .mac, files used for simulation runs. 
+	The doc directory is for user's guide and other documentations.
+	The 'sandbox' package is meant for users who want to write new codes that don't 
+	belong to any package yet. It is merely a play package to try new ideas. The 
+	code in this package should not be committed to CVS. If one wants to put their 
+	codes in CVS they should either include them with other packages (if relevant) 
+	or ask for a new package to be created.
+      </para>
+    </section>
+    <section><title>Makefiles</title>
+      <para>
+	
+	Majorana simulation environment uses make files to manage compilation and 
+	linking of the packages. This system checks the dependencies for each file 
+	and recompiles them if any the dependencies has been modifies since the last 
+	compilation. Users invoke the top level, MJ level, makefile with different 
+	targets for creating libraries and building executables. This makefile invokes 
+	the makefiles in each checked out package and builds the libraries for them. 
+	It also gets the necessary libraries from the release, if they are not in the 
+	local directory, and builds the executables. Developers and users should 
+	generally not need to modify any of these makefiles, except for adding a 
+	package level executable. The main executable is called
+        <filename>MJApp</filename> which resides 
+	in the <filename>MJ/bin</filename> directory. This application is included 
+        in the management 
+	package and interacts with different packages to build the detector and run 
+	event generators.
+      </para>
+    </section>
+    
+    <section><title>Releases</title>
+      <para>
+	
+	Majorana uses a release system to allow users to work off of a stable code 
+	base while developers continue developing code. A release is a snap shot of 
+	the CVS repository at some specific time. Releases are identified by the 
+	numbering scheme that specifies minor and major code revisions. We have 
+	decided to use XX.YY numbering scheme where YY indicates minor revision and 
+	XX indicates major revision of the code.
+	Each package in a release has a specific tag that is used to build that 
+	release. Users working with specific release are assured that the code in 
+	the release is never changed and can add new functionality to their code 
+	based on that release. Some releases are used for production runs and some 
+	are for development purposes. Production releases must, naturally, be stable 
+	and have gone through rigorous quality checks for physics results by designated 
+	physicists. Development releases are only meant for stable code to allow new 
+	features be added and tested. Releases are build in 
+        <filename>/auto/common/majorana/builds</filename>
+	area.
+      </para>
+    </section>
+    
+    <section><title>MJHOME</title>
+      <para>
+	
+	Majorana experiment is assigned some disk quota on the NERSC pdsf clusters. 
+	The disk is mounted under /auto/common/majorana. This is defined as 
+        <varname>MJHOME</varname> 
+	environment variable is users' account. Common executables and utility scripts 
+	are kept here for general use. Releases are also maintained under 
+        <filename>$MJHOME/builds</filename>.
+	The <filename>$MJHOME/simu</filename> holds the external packages used in the 
+        simulation runs. These 
+	are CLHEP, Geant4, root, and Dawn packages from CERN. They can be updated to more 
+	recent versions when there is a need for it, without relying on the pdsf staff to 
+	sync their versions with our needs.
+      </para>
+    </section>
+  </section>
+</chapter>

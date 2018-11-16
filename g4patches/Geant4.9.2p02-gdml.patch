@@ -1,0 +1,38 @@
+--- G4GDMLWrite.cc_old	2009-08-28 08:59:14.000000000 +0200
++++ G4GDMLWrite.cc	2010-08-04 13:02:29.000000000 +0200
+@@ -26,6 +26,12 @@
+ //
+ // $Id: G4GDMLWrite.cc,v 1.50.2.2 2009/08/11 08:27:49 gcosmo Exp $
+ // GEANT4 tag $Name: geant4-09-02-patch-02 $
++// 
++// 03 November 2009
++// Modified by Oleksandr Volynets (Alex):
++//    create files according to their logical volume names
++//    do not exit if the filename of gdml file already exists
++//
+ //
+ // class G4GDMLWrite Implementation
+ //
+@@ -139,8 +145,9 @@
+    if (FileExists(fname))
+    {
+      G4String ErrorMessage = "File '"+fname+"' already exists!";
+-     G4Exception("G4GDMLWrite::Write()", "InvalidSetup",
+-                 FatalException, ErrorMessage);
++//     Commented by Alex Volynets
++//     G4Exception("G4GDMLWrite::Write()", "InvalidSetup",
++//                 FatalException, ErrorMessage);
+    }
+    
+    VolumeMap().clear(); // The module map is global for all modules,
+@@ -292,7 +299,9 @@
+    if (DepthMap().find(depth) != DepthMap().end()) // Modularize via depth
+    {
+      std::stringstream stream;
+-     stream << "depth" << depth << "_module" << DepthMap()[depth] << ".gdml";
++//     Alex's replace
++     stream<<physvol->GetLogicalVolume()->GetName()<<".gdml";
++//     stream << "depth" << depth << "_module" << DepthMap()[depth] << ".gdml";
+      DepthMap()[depth]++;           // There can be more modules at this depth!
+      return G4String(stream.str());
+    }

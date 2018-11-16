@@ -1,0 +1,30 @@
+
+
+/MG/eventaction/reportingfrequency 10
+
+/MG/manager/mglog trace
+/MG/geometry/detector solidBlock
+/MG/geometry/solidblock/material Iron
+/MG/geometry/solidblock/edgeLength 1.0 cm
+/MG/eventaction/rootschema HPNeutronTest
+/MG/eventaction/rootfilename Test.root
+
+/MG/generator/select SPS
+
+/gps/ene/type Lin
+/gps/ene/min 0.0 MeV
+/gps/ene/max 20.0 MeV
+/gps/ene/gradient 0.0
+/gps/ene/intercept 0.05
+/gps/position 0.0 0.0 0.51 cm
+/gps/direction 0.0 0.0 -1.0
+/gps/particle neutron
+
+#/tracking/verbose 2
+
+/run/initialize
+/run/beamOn 30
+
+
+
+

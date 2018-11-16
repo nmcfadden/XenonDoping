@@ -1,0 +1,34 @@
+# Management 
+/MG/manager/mglog trace
+/MG/manager/useInternalSeed 109
+
+#/event/verbose 2
+#/run/verbose 
+#/tracking/verbose 2 
+
+# Process List
+/MG/geometry/database false
+/physics_engine/tailor/MuonNuclear on
+/MG/eventaction/reportingfrequency 1000
+
+/MG/eventaction/writeOutFileDuringRun true
+/MG/eventaction/writeOutFrequency 10000
+
+# Configure Detector.
+/MG/geometry/detector CERN_NA55
+/MG/geometry/CERN_NA55/setBeamDumpType Lead
+/MG/geometry/WorldMaterial Vacuum
+
+# ROOT output schema
+/MG/eventaction/rootschema CERN_NA55 
+/MG/eventaction/rootfilename /eliza10/majorana/users/dccombs/Lead/cern09.root 
+
+# Select G4 Generator
+/MG/generator/select G4gun 
+/gun/number 1
+/gun/particle mu-
+/gun/position 0 0 0 cm
+/gun/direction 0 0 1 
+/gun/energy 190 GeV
+/run/initialize
+/run/beamOn 1000000

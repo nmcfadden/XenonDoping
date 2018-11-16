@@ -1,0 +1,9 @@
+/control/verbose 2
+/run/verbose 2
+#
+/gun/particle ion
+/gun/ion 21	46
+
+/rdecay01/fullChain true
+/rdecay01/event/printModulo 100000
+/run/beamOn 1000000

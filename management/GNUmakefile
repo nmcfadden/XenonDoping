@@ -1,0 +1,26 @@
+# GNUmakefile
+# Created for MaGe modules by Jason Detwiler, June 2005
+
+include ../buildTools/config.mk
+
+name := $(notdir $(shell pwd))
+G4TARGET := $(name)
+G4EXLIB := true
+
+MGTARGETS = MaGe
+# the order in this list matters! Items in the list earlier depend upon those that come later, which
+# is unfortunately why geometry is listed twice (i.e. there is a circular dependency)
+MGTARGETDEPS = management tonscalegeometry mjdemonstrator legendgeometry bacongeometry gerdageometry mjgeometry munichteststand lngsgesetups materials generators geometry processes gerdaio mjio legendio io 
+MGTARGETDEPS := $(filter-out $(PKG_SKIP), $(MGTARGETDEPS))
+
+.PHONY: all
+all: lib mgbin
+
+G4VIS_USE_OPENGLX=1
+G4VIS_USE_OPENGLQT=
+G4VIS_USE_RAYTRACERX=1
+G4VIS_USE_OPENGLXM=
+
+include /mnt/mjdDisk1/Majorana/soft/geant4.10.04.p02-build/share/Geant4-10.4.2/geant4make/config/binmake.gmk
+include ../buildTools/mgbin.mk
+include ../buildTools/install.mk

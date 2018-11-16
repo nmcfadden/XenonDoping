@@ -1,0 +1,63 @@
+# A simple outline of a macro, from which one can 
+# 1) See the general structure, and
+# 2) use as a template
+# In general, a MaGe macro should specify which Process List, Geometry, Output
+# Scheme, and the particle Generator.  There is also the option of
+# visualization.  Visualization is a bit tricky to make general, as not every
+# machine has the same programs needed for visualization.  
+
+
+# Management - diagnostistic and status information
+# See MaGe/management/src/MGManagerMessenger.cc for all options
+/MG/manager/mglog routine
+/MG/eventaction/reportingfrequency 10000
+
+
+# Process List - which physics do you want in your simulation?
+# See MaGe/processes/src/MGProcessesMessenger.cc for all options
+/MG/processes/realm BBdecay
+
+
+# Configure Detector - Pick your geometry and customize it
+# See MaGe/geometry/src/MGGeometryDetectorConstruction.cc, as well as the
+# detector's own Messenger, for all options
+
+/MG/geometry/detector idealCoax
+/MG/geometry/idealCoax/setDefaults
+/MG/geometry/idealCoax/deadLayerOn true
+/MG/geometry/idealCoax/cutInHalfOn false
+/MG/geometry/idealCoax/outerDeadLayer 0.3 micrometer
+/MG/geometry/idealCoax/coreDeadLayer 0.05 cm
+/MG/geometry/idealCoax/height 7.0 cm
+/MG/geometry/idealCoax/radius 3.1 cm
+/MG/geometry/idealCoax/coreDepth 6.0 cm
+/MG/geometry/idealCoax/coreRadius 0.50 cm
+/MG/geometry/idealCoax/cornerRadius 0.25 cm
+/MG/geometry/idealCoaxWShield/shieldOn false
+/MG/geometry/WorldMaterial Vacuum
+# Note - The default material for the WorldVolume is Air
+
+# Input/Output - Pick how you want to record and store simulated data
+# See MaGe/management/src/MGManagementEventAction.cc, as well as the io class's
+# own Messenger, for all options
+
+/MG/eventaction/rootschema G4Steps
+/MG/eventaction/rootfilename Sample.root
+/MG/io/G4Steps/setWriteSensitiveOnly true
+
+/run/initialize
+
+# Generator - Pick initial particles and vertices
+# See MaGe/generators/src/MGGeneratorPrimaryMessenger.cc, as well as the
+# individual generator's own messenger, for all options
+
+/MG/generator/select SPS
+
+/gps/particle gamma
+/gps/pos/centre 0.0 0.0 0.0 cm
+/gps/direction 1 1 1
+/gps/energy 1.0 MeV
+/gps/ang/type iso
+
+
+/run/beamOn 10

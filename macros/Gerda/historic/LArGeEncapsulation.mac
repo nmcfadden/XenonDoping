@@ -1,0 +1,36 @@
+/MG/manager/mglog trace
+/MG/processes/realm BBdecay
+/MG/eventaction/rootschema Dario
+/MG/eventaction/rootfilename testLArGe.root
+/MG/eventaction/reportingfrequency 50000
+
+# Define the geometry
+/MG/geometry/detector GS_LArGe
+/MG/geometry/gslarge/numcol 1
+/MG/geometry/gslarge/encaps true
+/MG/geometry/database false
+
+# Neglect physical processes
+/MG/processes/useNoHadPhysics true
+/MG/processes/optical false
+#
+/run/initialize
+#
+# Un-comment to check for overlaps in the geometry
+#/MG/geometry/CheckOverlaps
+#
+# -------------------------------
+# GEANTINO
+# -------------------------------
+# Generate geantino to inspect if geometry is correct
+/MG/generator/select G4gun
+/gun/particle geantino
+/gun/position -2. 0. 0. m
+/gun/direction 1. 0. 0.
+/gun/energy 1 MeV
+/tracking/verbose 1
+/run/beamOn 1
+/gun/position 0 0 2 m
+/gun/direction 0 0 -1
+/run/beamOn 1
+

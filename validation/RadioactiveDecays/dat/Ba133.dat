@@ -1,0 +1,66 @@
+# identifier	type (0=gamma, 1=beta, 2=alpha, 3=secondaryelectron)	energy [keV]	intensity [%]
+
+XX:Ba133_Auger3.6keV:XX	3	3.55	0.004	140.7	1.8
+XX:Ba133_ConversionElectron17keV:XX	3	17.1779	0.0007	10.78	0.13
+XX:Ba133_Auger25.5keV:XX	3	25.5	0.03	14.6	0.6
+XX:Ba133_ConversionElectron43.6keV:XX	3	43.6293	0.0014	3.97	0.09
+XX:Ba133_ConversionElectron45.0keV:XX	3	45.0125	0.0013	49.4	0.4
+XX:Ba133_ConversionElectron47.4keV:XX	3	47.4482	0.0007	1.9	0.4
+XX:Ba133_ConversionElectron51.9keV:XX	3	51.9454	0.0007	0.4	0.09
+XX:Ba133_ConversionElectron52.9keV:XX	3	52.9317	0.0007	0.099	0.018
+XX:Ba133_ConversionElectron73.9keV:XX	3	73.8996	0.0014	0.574	0.019
+XX:Ba133_ConversionElectron75.3keV:XX	3	75.2828	0.0013	7.36	0.07
+XX:Ba133_ConversionElectron78.4keV:XX	3	78.3968	0.0014	0.118	0.004
+XX:Ba133_ConversionElectron79.4keV:XX	3	79.3831	0.0014	0.0307	0.0011
+XX:Ba133_ConversionElectron79.8keV:XX	3	79.78	0.0013	1.512	0.014
+XX:Ba133_ConversionElectron80.8keV:XX	3	80.7663	0.0013	0.392	0.003
+XX:Ba133_ConversionElectron124.6keV:XX	3	124.6263	0.0017	0.1522	0.0023
+XX:Ba133_ConversionElectron154.9keV:XX	3	154.8966	0.0017	0.0306	0.0009
+XX:Ba133_ConversionElectron159.4keV:XX	3	159.3938	0.0017	0.00639	0.00021
+XX:Ba133_ConversionElectron160.4keV:XX	3	160.3801	0.0017	0.00162	0.00004
+XX:Ba133_ConversionElectron187.3keV:XX	3	187.2527	0.0015	0.0378	0.0003
+XX:Ba133_ConversionElectron217.5keV:XX	3	217.523	0.0015	0.00504	0.00004
+XX:Ba133_ConversionElectron222.0keV:XX	3	222.0202	0.0015	0.001017	0.00001
+XX:Ba133_ConversionElectron223.0keV:XX	3	223.0065	0.0015	0.0002655	0.0000024
+XX:Ba133_ConversionElectron240.4keV:XX	3	240.4151	0.0014	0.331	0.001
+XX:Ba133_ConversionElectron266.9keV:XX	3	266.8664	0.0007	0.691	0.023
+XX:Ba133_ConversionElectron270.7keV:XX	3	270.6854	0.0014	0.06089	0.00019
+XX:Ba133_ConversionElectron275.2keV:XX	3	275.1826	0.0014	0.01261	0.00004
+XX:Ba133_ConversionElectron276.2keV:XX	3	276.1689	0.0014	0.003224	0.00001
+XX:Ba133_ConversionElectron297.1keV:XX	3	297.1367	0.0007	0.0895	0.0003
+XX:Ba133_ConversionElectron301.6keV:XX	3	301.6339	0.0007	0.01815	0.00006
+XX:Ba133_ConversionElectron302.6keV:XX	3	302.6202	0.0007	0.004766	0.000016
+XX:Ba133_ConversionElectron320.0keV:XX	3	320.0288	0.0007	1.309	0.004
+XX:Ba133_ConversionElectron347.9keV:XX	3	347.8634	0.0013	0.1502	0.0005
+XX:Ba133_ConversionElectron350.3keV:XX	3	350.2991	0.0007	0.2159	0.0007
+XX:Ba133_ConversionElectron354.8keV:XX	3	354.7963	0.0007	0.04468	0.00014
+XX:Ba133_ConversionElectron355.8keV:XX	3	355.7826	0.0007	0.01117	0.00003
+XX:Ba133_ConversionElectron378.1keV:XX	3	378.1337	0.0013	0.02414	0.00008
+XX:Ba133_ConversionElectron382.6keV:XX	3	382.6309	0.0013	0.005006	0.000017
+XX:Ba133_ConversionElectron383.6keV:XX	3	383.6172	0.0013	0.001252	0.000004
+
+XX:Ba133_xray4.3keV:XX	0	4.29	0.004	16.3	0.8
+XX:Ba133_xray30.6keV:XX	0	30.625	0.03	35.1	1
+XX:Ba133_xray31.0keV:XX	0	30.973	0.03	64.3	1.8
+XX:Ba133_xray34.9keV:XX	0	34.92	0.03	6.09	0.16
+XX:Ba133_xray35.0keV:XX	0	34.987	0.03	11.8	0.3
+XX:Ba133_xray35.8keV:XX	0	35.818	0.04	3.64	0.1
+
+# gammas  -- updated 02 April 2012 A.G. Schubert
+# Yu. Khazov, A. Rodionov, F.G. Kondev, Nuclear Data Sheets for A = 133, Nuclear
+# Data Sheets, Volume 112, Issue 4, April 2011, Pages 855-1113, ISSN 0090-3752,
+# 10.1016/j.nds.2011.03.001.
+# (http://www.sciencedirect.com/science/article/pii/S0090375211000202)
+
+XX:Ba133_gamma53keV:XX	0	53.1622	0.0006	2.14	0.03
+XX:Ba133_gamma80keV:XX	0	79.6142	0.0012	2.65	0.05
+XX:Ba133_gamma81keV:XX	0	80.9979	0.0011	32.9	0.3
+XX:Ba133_gamma161keV:XX	0	160.6120 0.0016	0.638	0.005
+XX:Ba133_gamma223keV:XX	0	223.2368 0.0013	0.453	0.003
+XX:Ba133_gamma276keV:XX	0	276.3989 0.0012 7.16	0.05
+XX:Ba133_gamma303keV:XX	0	302.8508 0.0005	18.34	0.13
+XX:Ba133_gamma356keV:XX	0	356.0129 0.0007	62.05	0.19
+XX:Ba133_gamma384keV:XX	0	383.8485 0.0012	8.94	0.06
+
+
+XX:Ba133_halflife_literature:XX 101 5533099

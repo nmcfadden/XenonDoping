@@ -1,0 +1,6 @@
+
+# material density [g/cm^3] 
+XX:Ge_density:XX	10	5.323
+
+XX:Ge_attenuation_gamma2MeV:XX	11	2	0.04086
+XX:Ge_CSDA_electron2MeV:XX	12	2	1.42

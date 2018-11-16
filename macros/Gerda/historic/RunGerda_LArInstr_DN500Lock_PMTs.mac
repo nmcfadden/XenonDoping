@@ -1,0 +1,183 @@
+# #
+#
+# Example macro to run the LAr Instrumentation (fiber flavor) in MaGe.
+# This macro already uses the new phase-II DN500 lock with a dynamically defined number of strings
+#
+# #
+#
+# Fixed the random seed so that the simulation is always absolutely the same.
+#
+#/MG/manager/heprandomseed 1337460271
+
+/control/verbose 2
+
+#/MG/manager/mglog routine
+#/MG/manager/mglog trace
+/MG/manager/mglog debugging
+
+###################################
+# Geometry
+###################################
+
+#
+# No geometry specifiers
+# Load the default GerdaArray design
+#
+/MG/geometry/database false
+/MG/geometry/detector GerdaArray
+#
+# Use the tentative phase-II geometry
+#
+/MG/geometry/lock/type PhaseII_DN500
+# Set it to have a total of 7 strings (1 central, 6 radially distributed).
+# IMPORTANT: This only defines the positions of the strings. Not all strings need to have detectors.
+/MG/geometry/lock/dn500/n_strings 7
+# distance between the central string and the radial ones.
+# The distance between the radial strings is calculated automatically based on their number
+# The distance is counted from the center of the string.
+/MG/geometry/lock/dn500/string_distance 10.0 cm
+#
+#
+#
+/MG/geometry/detector/geometryfile geometry.dat
+# Matrix file with phase II simplified lock design 
+/MG/geometry/detector/matrixfile   matrix_lagerbier_dn500_7strings.dat
+/MG/geometry/detector/crystal/begepairgap 5.0 mm
+#
+# Don't construct cabling
+# Not yet implemented for the new detector types
+# 
+/MG/geometry/general/constructsupport true
+/MG/geometry/general/constructcabling false
+#
+###################################
+# Activate the LAr instrumentation
+###################################
+
+#
+# This activates automatically the optical processes
+#
+/MG/geometry/general/constructLArInstrumentation true
+
+#
+# Load the desired design implementation 
+#
+/MG/geometry/LArInst/SelectDesign PMT
+
+#
+# Set the apropriate output schema
+#
+/MG/eventaction/rootschema GerdaInstrumentedArray
+/MG/eventaction/rootfilename testGerdaLArInstr.root
+/MG/eventaction/reportingfrequency 1
+
+
+
+###################################
+# Other options/optimizations
+###################################
+
+#
+# Bypass the (long) loading of hadronic physics tables
+#
+/MG/processes/useNoHadPhysics true
+
+###################################
+# Initialization
+###################################
+#
+# Initialize
+#
+/run/initialize
+
+###################################
+# Event generator
+###################################
+
+#
+# geometry has to be created first 
+#
+#
+# Confine the source to the upper holders
+#
+/MG/generator/confine volumelist
+/MG/generator/volumelist Holder_UpperPlate
+/MG/generator/volumelistfrom 0
+/MG/generator/volumelistto 11
+
+#
+# Simulate a series of Tl208 decays in the detector holders
+# For production the decay0 generator would normally be used.
+# For testing, the faster ion generator is fine
+#
+/MG/generator/select G4gun
+/gun/particle ion
+/gun/ion 81 208 0
+/gun/energy 0.0 keV
+
+# Don't enable this unless you want to be swamped by thousands of 
+# optical photon tracks
+#/tracking/verbose 1
+#
+
+
+
+###################################
+# LAr Instrumentation optimizations
+###################################
+
+#
+# This only tracks photons that produced hits in Germanium *and* 
+# the hits in a single crystal amount to an energy inside the specified interval
+# (in this case, only events that deposit a energy in [1.8, 20] MeV in a single crystal are tracked)
+# The default (false) implies tracking photons from events that deposit energy in the germanium, 
+# independently of the amount
+#
+#/MG/output/LArInst/ApplyLArInstGeEnergyCut true
+#/MG/output/LArInst/SetGeEnergyCutLow 1.8 MeV
+#/MG/output/LArInst/SetGeEnergyCutHigh 20.0 MeV
+
+#
+# Write the total number of simulated events to file 
+#
+/MG/output/WriteNumberOfEventsToFile true
+
+#
+# Track the optical photons independently whether there are hits in germanium or not.
+#
+/MG/output/LArInst/alwaysTrackPhotons true
+
+#
+# Keep this line so that geant4 does not keep the whole trajectory history in memory. 
+# It has nothing to do with storing trajectories to 
+# file (which should not be done with optical photons anyway)
+#
+/tracking/storeTrajectory 0
+
+
+###################################
+# Vizualization
+###################################
+
+#/vis/open ATree
+#/vis/open DAWNFILE
+#/vis/open OIX
+#/vis/scene/create
+#/vis/scene/add/volume CryoLiquidPhysical
+#/vis/sceneHandler/attach
+#/vis/viewer/flush
+#
+#/vis/scene/add/trajectories
+#/vis/scene/add/hits
+#/tracking/storeTrajectory 1
+
+
+
+###################################
+# Run start
+###################################
+
+/run/beamOn 1
+
+
+

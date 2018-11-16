@@ -1,0 +1,16 @@
+# identifier	type (0=gamma, 1=beta, 2=alpha, 3=secondaryelectron)	energy [keV]	intensity [%]
+
+XX:Sc46_beta357keV:XX	1	356.9	0.7	99.9964	0.0007
+XX:Sc46_beta1477keV:XX	1	1477.4	0.7	0.0036	0.0007
+
+XX:Sc46_gamma143keV:XX	0	142.528	0.008	62.0	0.6
+XX:Sc46_gamma889keV:XX	0	889.277	0.003	99.984	0.001
+XX:Sc46_gamma1121keV:XX	0	1120.545	0.004	99.987	0.001
+XX:Sc46_gamma2010keV:XX	0	2010	20	1.3e-5	0.1e-5
+
+XX:Sc46_Auger0.37keV:XX	3	0.37	0.004	56.56	0.17
+XX:Sc46_Auger3.64keV:XX	3	3.64	0.04	26.87	0.17
+XX:Sc46_ConversionElectron138keV:XX	3	138.035	0.008	33.418	0.3
+XX:Sc46_ConversionElectron142keV:XX	3	142.028	0.008	3.404	0.03
+
+XX:Sc46_halflife_literature:XX 101 7239500

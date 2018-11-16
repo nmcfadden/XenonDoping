@@ -1,0 +1,69 @@
+#
+#
+# The first line sets the verbosity level
+#/MG/manager/mglog debugging 
+/MG/manager/mglog trace
+#
+# Geometry setup 
+#
+/MG/geometry/detector Bruno
+/MG/geometry/database false
+#
+#
+/MG/geometry/bruno/sample sbox
+#
+# Output setup
+#
+/MG/eventaction/rootschema Dario
+/MG/eventaction/rootfilename Test.root
+#
+# Other setups
+#
+/MG/processes/optical false
+/MG/processes/lowenergy true
+/MG/processes/realm DarkMatter
+#
+#
+#/MG/generator/confine volume
+#/MG/generator/volume sample
+#
+/MG/generator/select G4gun
+#/MG/generator/select RDMiso
+/tracking/verbose 0
+#
+#
+/run/initialize
+#
+#
+/gun/particle geantino
+/gun/energy 1 keV
+#/gun/ion 11 22
+/gun/position 0 0 25
+#/gun/direction 0 0 -1
+#
+# Isotropic direction distribution
+#
+/MG/generator/g4gun/cone_on true
+/MG/generator/g4gun/coneDirection 0 0 -1
+/MG/generator/g4gun/thetaDelta 180 deg
+#
+# Visualization
+#
+/vis/scene/create
+/vis/open DAWNFILE
+#
+#/vis/viewer/set/viewpointThetaPhi 80 -90 deg
+#/vis/viewer/set/lightsVector -1 1 1
+/vis/viewer/zoom 2.5
+/vis/viewer/set/viewpointVector 1 0.25 0.25
+#
+/tracking/storeTrajectory 1
+/vis/scene/add/trajectories
+/vis/scene/endOfEventAction accumulate
+/vis/viewer/flush
+#
+#
+#/run/beamOn 1000
+ 
+
+

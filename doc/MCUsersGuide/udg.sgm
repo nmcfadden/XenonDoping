@@ -1,0 +1,38 @@
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.1//EN" "http://www.oasis-open.org/docbook/xml/4.1/docbookx.dtd" [
+<!ENTITY Intro 		 SYSTEM	"01_Intro.sgm">
+<!ENTITY GettingStarted	 SYSTEM	"02_GettingStarted.sgm">
+<!ENTITY HowTos 	 SYSTEM	"03_HowTos.sgm">
+<!ENTITY HW-Env		 SYSTEM	"04_HW-Env.sgm">
+<!ENTITY Structure	 SYSTEM	"05_Structure.sgm">
+<!ENTITY Geometry	 SYSTEM	"06_Geometry.sgm">
+<!ENTITY Physics	 SYSTEM	"07_Physics.sgm">
+<!ENTITY IO		 SYSTEM	"08_IO.sgm">
+<!ENTITY Database	 SYSTEM	"09_Database.sgm">
+<!ENTITY Waveforms	 SYSTEM	"10_Waveforms.sgm">
+<!ENTITY EventGenerators SYSTEM	"11_Generators.sgm">
+<!ENTITY Documentation	 SYSTEM	"12_Documentation.sgm">
+<!ENTITY Results	 SYSTEM	"13_Results.sgm">
+<!ENTITY QAQC    	 SYSTEM	"14_QAQC.sgm">
+<!ENTITY Messengers   	 SYSTEM	"A_Messengers.sgm">
+]>
+
+<book>
+   <title>Majorana Monte Carlo User's and Developer's Guide
+   </title>
+   &Intro;
+   &GettingStarted;
+   &HowTos;
+   &HW-Env;
+   &Structure;
+   &Geometry;
+   &Physics;
+   &IO;
+   &Database;
+   &EventGenerators;
+   &Waveforms;
+   &Documentation;
+   &Results;
+   &QAQC; 
+</book>
+
+

@@ -1,0 +1,9 @@
+/MG/manager/mglog routine
+/MG/manager/heprandomseed 92348
+/MG/geometry/detector clover
+/MG/eventaction/rootschema LANLCloverNoPS
+/MG/eventaction/rootfilename a.root
+/MG/generator/select G4gun
+/gun/position 0.0 0.0 14.8
+/run/initialize
+/run/beamOn 10000

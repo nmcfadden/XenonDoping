@@ -1,0 +1,65 @@
+# Management 
+/MG/manager/mglog routine
+
+/MG/manager/seedWithUUID
+#/MG/manager/useInternalSeed 10
+
+
+
+# Process List
+/MG/processes/realm DarkMatter #BBdecay #CosmicRays
+/MG/processes/lowenergy true
+#/MG/processes/optical true
+
+# Configure Detector
+/MG/geometry/detector LGND_200_Baseline
+/MG/L200/FiberShape square #circle
+#/MG/geometry/WorldMaterial Vacuum 
+
+# Initialize Geant4 and geometry
+/run/initialize
+
+
+/MG/eventaction/rootschema MCRun 
+/MG/eventaction/reportingfrequency 10000
+/MG/eventaction/rootfilename SensitiveVolumes_NoOptical-1M.root
+
+#/
+#/MG/io/G4Steps/setWriteSensitiveStepsOnly true
+#/MG/io/G4Steps/useTimeWindow true
+#/MG/io/G4Steps/setTimeWindow 86400 second
+
+/MG/io/MCRun/SetSensitiveIDLabelScheme askGeom
+/MG/io/MCRun/setRunID 001
+/MG/io/MCRun/useTimeWindow true
+/MG/io/MCRun/setTimeWindow 86400 second
+/MG/io/MCRun/setNSteps 100000000000
+#/MG/io/MCRun/setWriteAllSteps
+#/MG/io/MCRun/setWriteAllStepsInEventsThatDepositEnergy
+
+#/MG/generator/select DoubleBeta0
+#/MG/generator/confine volume
+#/MG/generator/volume cavern
+
+/MG/generator/select LGNDLiquidArgon
+/MG/generator/LGNDLiquidArgon/SetRadius 490 mm
+/MG/generator/LGNDLiquidArgon/SetHeight 1. m
+/MG/generator/LGNDLiquidArgon/SetCenterVector 0.0 0.0 600.0 mm
+/MG/generator/LGNDLiquidArgon/SetParticle gamma
+/MG/generator/LGNDLiquidArgon/SetEnergy 1. MeV
+
+
+#/gps/particle opticalphoton
+#/gps/pos/type Point
+#/gps/pos/centre 150. 0. 0. cm
+#/gps/ang/type iso
+
+#/gps/ene/type Gauss
+#/gps/ene/mono 9.6862 eV
+#/gps/ene/sigma 0.221 eV
+
+#/MG/generator/select RDMiso
+#/gun/energy 0 eV
+##208Tl
+#/grdm/ion 208 81 0
+/run/beamOn 1000000

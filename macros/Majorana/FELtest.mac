@@ -1,0 +1,15 @@
+/MG/manager/mglog routine
+/MG/geometry/detector cloverinNaIbarrel
+/MG/eventaction/reportingfrequency 1000		
+/MG/eventaction/rootschema LANLCloverInNaIBarrel
+/MG/eventaction/rootfilename /auto/majorana1/users/rhenning/testFEL3.root
+/MG/generator/select TUNLFEL
+/MG/generator/TUNLFEL/energysigma 10 keV
+/MG/generator/TUNLFEL/meanenergy 2.04 MeV
+/MG/generator/TUNLFEL/majorsigma 0.6 cm
+/MG/generator/TUNLFEL/minorsigma 0.6 cm
+/MG/generator/TUNLFEL/origin 2.0 2.0 200.0 cm
+/MG/generator/TUNLFEL/rho 0.0
+/run/initialize
+/run/beamOn 200
+

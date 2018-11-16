@@ -1,0 +1,308 @@
+\section{Introduction }
+
+The simulation package is written in C++ and uses object-{}oriented
+         programming techniques and the STL. 
+         The geometry, tracking and physics package
+         is Geant 4 based. A working knowledge of Geant 4 is required to 
+         follow the discussions in this section. 
+         Waveform simulation is performed with custom software.
+ 
+
+\section{Program Structure}
+
+       The program consists of sets of C++ classes that are grouped into
+      software packages. All the software packages are built into a 
+      single executable, \nolinkurl{MaGe}. The simulation is 
+      setup by selecting detector geometries,
+      physics processes, generators, etc. via text macros based on Geant 4 
+      messengers. The software packages name's, with their corresponding CVS
+      directory names in brackets, are given below: 
+ 
+
+\begin{lstlisting}
+  MaGe--
+     |- Database (database)
+     |- Generators (generators)
+     |- Geometry (geometry)
+     |- Gerda specific geometry (gerdageometry)
+     |- Majorana specific geometry (mjgeometry)
+     |- Output (io)
+     |- Gerda specific output (gerdaio)
+     |- Majorana specific output (mjio)
+     |- Management (management)
+     |- Materials (materials)
+     |- Processes (processes)
+     |- Waveform (waveform)
+   \end{lstlisting}
+
+      Note that not every CVS directory contains a software package, since 
+     some CVS directories, ie. \nolinkurl{doc}, do not contain
+     parts of the simulation program. Other packages, such as 
+ \nolinkurl{Geometry}, are spread over several CVS directories
+     to separate code from the Gerda and Majorana.  
+     Each package is discussed in detail in subsequent chapters. We will give
+     a brief summary of each package here, as well as how they are connected.
+ 
+
+\noindent
+\begin{description}
+\item[{Database}] 
+
+             Interfaces with the PostGreSQL database server.
+            The database is used to store geometry data and calibration 
+            constants and also contains all the materials definitions.
+	    Currently only used by the Majorana experiment.
+ 
+
+
+\item[{Generators}] 
+
+             The different event generators. Currently several event
+	    generators are supported and are user-{}selectable at runtime. See
+ Chapter \ref{Physics}.
+ 
+
+
+\item[{Geometry}] 
+
+             The classes describing the different detector geometries. 
+            It is possible to combine different geometries into a single 
+            detector, ie. a NaI veto barrel around a clover detector, the
+	    Gerda detector geoemetry, etc. 
+            See Chapter \ref{Geometry}.
+ 
+
+
+\item[{Output}] 
+
+          The classes describing the different output for the 
+         different detectors. Both AIDA and Root are supported. 
+	 It is possible to have more than one output class
+         per detector. 
+	 Also contains the \nolinkurl{MGLogger} class 
+         that handles terminal
+         output and error messages. See Chapter \ref{IO}  
+
+
+\item[{Management}] 
+
+ 	   Management classes, including 
+ \nolinkurl{MaGe/management/MaGe.cc} that contains the 
+ \texttt{m\-a\-i\-n\-(\-)}. See 
+ Section \ref{Structure_Implement} for more information on the 
+           management 
+           classes.
+ 
+
+
+\item[{Materials}] 
+
+            These classes automatically build requested materials from elements
+           that are in turn build from isotopes. All material, elemental and
+           isotopic data are stored in the database. All new materials
+           have to be added to the database. See Chapter \ref{Geometry}  
+
+
+\item[{Processes}] 
+
+            User-{}selectable Geant 4 physics lists for specific simulations, ie. 
+           double-{}beta decay studies requires different physics process than
+           dark matter studies. See Chapter \ref{Physics}.
+ 
+
+
+\item[{Waveform}] 
+
+            Waveform simulation package. Can be run independently from Geant 4. 
+           Not yet implemented. See Chapter \ref{Waveforms}.
+ 
+
+
+
+\end{description}
+
+\section{How Everything is Implemented and 
+Fits Together.}
+\label{Structure_Implement}
+
+       In the \nolinkurl{main()} function a collection
+      of ``management" classes are instantiated. These classes control specific
+      components of the framework. Classes can communicate with each other
+      via the singleton \nolinkurl{MGManager} class. The 
+ \nolinkurl{MGManager} class is instantiated 
+      in the file \nolinkurl{MG/management/MaGe.cc}, and is 
+      a collection of pointers to all the management classes.
+      By using the \nolinkurl{MGManager} class, global variables are
+      avoided.  
+ 
+
+       The management class are listed below in the order they are instantiated:
+ 
+
+\noindent
+\begin{description}
+\item[{\nolinkurl{MGGeometryDetectorConstruction}}] 
+
+          Selects detector geometry via Geant 4 messenger and constructs it
+         in Geant 4. Also constructs all required materials from the database,
+	 if requested by the selected detector.
+         See Chapter \ref{Geometry}. Accessed via:
+ \texttt{M\-G\-M\-a\-n\-a\-g\-e\-r\-:\-:\-G\-e\-t\-M\-G\-G\-e\-o\-m\-e\-t\-r\-y\-D\-e\-t\-e\-c\-t\-o\-r\-C\-o\-n\-s\-t\-r\-u\-c\-t\-i\-o\-n\-(\-)}  
+
+
+\item[{\nolinkurl{MGProcessesList}}] 
+
+          Geant 4 physics list. User can select different physics packages
+         via Geant 4 messengers. See Chapter \ref{Physics}. Accessed via:
+ \texttt{M\-G\-M\-a\-n\-a\-g\-e\-r\-:\-:\-G\-e\-t\-M\-G\-P\-r\-o\-c\-e\-s\-s\-e\-s\-L\-i\-s\-t\-(\-)}  
+
+
+\item[{\nolinkurl{MGManagementVisualization}}] 
+
+          Registers Geant 4 visualization packages. Performs no other actions.
+ 
+
+
+\item[{\nolinkurl{MGGeneratorPrimary}}] 
+
+          Selects and manages event generators. See Chapter \ref{Physics}.
+	 Accessed via:
+ \texttt{M\-G\-M\-a\-n\-a\-g\-e\-r\-:\-:\-G\-e\-t\-M\-G\-G\-e\-n\-e\-r\-a\-t\-o\-r\-P\-r\-i\-m\-a\-r\-y\-(\-)}  
+
+
+\item[{\nolinkurl{MGManagementRunAction}}] 
+
+          Performs pre-{} and post run actions by 
+         executing \texttt{B\-e\-g\-i\-n\-O\-f\-R\-u\-n\-A\-c\-t\-i\-o\-n\-(\-)} 	 and \texttt{E\-n\-d\-O\-f\-R\-u\-n\-A\-c\-t\-i\-o\-n\-(\-)} methods 
+         of output
+         classes. Derived from \nolinkurl{G4UserRunAction}.
+	 Accessed via:
+ \texttt{M\-G\-M\-a\-n\-a\-g\-e\-r\-:\-:\-G\-e\-t\-M\-G\-R\-u\-n\-A\-c\-t\-i\-o\-n\-(\-)}  
+
+
+\item[{\nolinkurl{MGManagementEventAction}}] 
+
+          Performs pre-{} and post event actions by 
+         Executing \texttt{B\-e\-g\-i\-n\-O\-f\-E\-v\-e\-n\-t\-A\-c\-t\-i\-o\-n\-(\-)} 	 and \texttt{E\-n\-d\-O\-f\-E\-v\-e\-n\-t\-A\-c\-t\-i\-o\-n\-(\-)} methods 
+         of output
+         classes. Selects and contains pointer to Root output class 
+         (Chapter \ref{IO}). 
+         Derived from \nolinkurl{G4UserEventAction}.
+	 Accessed via:
+ \texttt{M\-G\-M\-a\-n\-a\-g\-e\-r\-:\-:\-G\-e\-t\-M\-G\-E\-v\-e\-n\-t\-A\-c\-t\-i\-o\-n\-(\-)}  
+
+
+\item[{\nolinkurl{MGManagementSteppingAction}}] 
+
+          Performs actions during each step of Geant 4 tracking by  
+         executing \texttt{U\-s\-e\-r\-S\-t\-e\-p\-p\-i\-n\-g\-A\-c\-t\-i\-o\-n\-(\-)}          method of root output classes.
+	 Derived from \nolinkurl{G4UserSteppingAction}.
+	 Accessed via:
+ \texttt{M\-G\-M\-a\-n\-a\-g\-e\-r\-:\-:\-G\-e\-t\-M\-G\-S\-t\-e\-p\-p\-i\-n\-g\-A\-c\-t\-i\-o\-n\-(\-)}  
+
+
+
+\end{description}
+
+       A pointer to the \texttt{M\-G\-M\-a\-n\-a\-g\-e\-r} singleton 
+      class is accessible via the 
+ \texttt{M\-G\-M\-a\-n\-a\-g\-e\-r\-:\-:\-G\-e\-t\-M\-G\-M\-a\-n\-a\-g\-e\-r\-(\-)} method.
+      The Geant 4 visualization and run manager are also accessible via:
+ \texttt{M\-G\-M\-a\-n\-a\-g\-e\-r\-:\-:\-G\-e\-t\-G\-4\-R\-u\-n\-M\-a\-n\-a\-g\-e\-r\-(\-)} and
+ \texttt{M\-G\-M\-a\-n\-a\-g\-e\-r\-:\-:\-G\-e\-t\-G\-4\-V\-i\-s\-M\-a\-n\-a\-g\-e\-r\-(\-)} methods.
+ 
+
+       There are two packages that are not accessible via the 
+ \texttt{M\-G\-M\-a\-n\-a\-g\-e\-r}. The first is the Waveform
+      package that is not implemented yet. It will be accessible via 
+ \texttt{M\-G\-M\-a\-n\-a\-g\-e\-r} when it is implemented. 
+      The other
+      is the database. For historical reasons, it is accessed via it's own
+      singleton control class: \texttt{M\-G\-D\-a\-t\-a\-b\-a\-s\-e}. See
+ Chapter \ref{Database}.
+ 
+
+\section{Programming Guidelines and Naming Conventions}
+
+   MaGe requires the use of good object-{}oriented programming techniques.
+  We strongly discourage the use of ``Fortranized" C++. Our coding conventions
+  are based on modified  
+ \href{http://root.cern.ch/root/Conventions.html}{Root} and 
+ \href{http://pcroot.cern.ch/TaligentDocs/TaligentOnline/DocumentRoot/1.0/Docs/books/WM/WM_3.html}{   Taligent guides }. Enforcing too rigid 
+  programming rules are not feasible, although we require the following 
+  reasonable conventions:
+ 
+\begin{itemize}
+
+\item{}           All class names begin with \texttt{G\-E\-, M\-G},
+	  or \texttt{M\-G}. 
+ \texttt{G\-E} is reserved for classes specific
+	  to the Gerda simulation, such as geometries. 
+ \texttt{M\-J} is specfically for Majorana 
+	  classes. Common classes, such as management, start with 
+ \texttt{M\-G}. If in doubt, use 
+ \texttt{M\-G}.
+ 
+
+
+\item{}           All virtual base class names begin with 
+ \texttt{M\-G\-V\-, M\-G\-V\-, G\-E\-V}.
+ 
+
+
+\item{}           All class member variables names begin with 
+ \texttt{f}  
+
+
+\item{}           All local automatic variables names must begin with a lowercase, ie 
+ \texttt{s\-o\-m\-e\-L\-o\-c\-a\-l\-R\-a\-n\-d\-o\-m\-N\-u\-m\-b\-e\-r}  
+
+
+\item{}          All variable, class names, etc. should have descriptive, 
+         written out names. Think carefully about naming and avoid ambiguity.
+ 
+
+
+\item{}          All unitialized pointers should be set to 0 or 
+ \texttt{N\-U\-L\-L}.
+ 
+
+
+\item{}          All terminal output should be done via the 
+ \nolinkurl{MGLogger} class, if possible. 
+	 See Section \ref{IO_MGLogger}. 
+ 
+
+
+\item{}          Code should be indented 3 spaces per nesting level. 
+ 
+
+
+\item{}          Lines longer than 80 columns should be wrapped with a carriage return.
+ 
+
+
+\item{}          The use of a separator between methods, ie.
+ 
+
+\begin{lstlisting}
+//---------------------------------------------------------------------------//
+\end{lstlisting}
+
+          is strongly encouraged.
+ 
+
+\end{itemize}
+
+    Some of the older code in the \nolinkurl{MaGe}    package do not follow these rules, since they were written before the rules 
+   were made explicit. Please do not follow their conventions. If you 
+   encounter any cases not covered here, use the Root/Taligent guideline, 
+   use you best judgment, or contact Reyco Henning (Majorana) or 
+   Xiang Liu (Gerda).
+ 
+%\begin{DBKadmonition}{warning}{Important}
+% FixME there should be some sort of admonition added here
+\emph{Remember that you are not coding for yourself! Many others will have to read you code. Write the code the way you would like to read it!}  
+%\end{DBKadmonition}
+
+

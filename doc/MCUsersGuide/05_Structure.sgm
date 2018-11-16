@@ -1,0 +1,361 @@
+<chapter id="Structure"><title>Program Structure and Guidelines</title>
+
+<section> <title> Introduction </title>
+   <para>The simulation package is written in C++ and uses object-oriented
+         programming techniques and the STL. 
+         The geometry, tracking and physics package
+         is Geant 4 based. A working knowledge of Geant 4 is required to 
+         follow the discussions in this section. 
+         Waveform simulation is performed with custom software.
+   </para>
+</section>
+
+<section> <title>Program Structure</title>
+   <para> 
+      The program consists of sets of C++ classes that are grouped into
+      software packages. All the software packages are built into a 
+      single executable, <filename>MaGe</filename>. The simulation is 
+      setup by selecting detector geometries,
+      physics processes, generators, etc. via text macros based on Geant 4 
+      messengers. The software packages name's, with their corresponding CVS
+      directory names in brackets, are given below: 
+   </para> 
+   <screen>
+  MaGe--
+     |- Database (database)
+     |- Generators (generators)
+     |- Geometry (geometry)
+     |- Gerda specific geometry (gerdageometry)
+     |- Majorana specific geometry (mjgeometry)
+     |- Output (io)
+     |- Gerda specific output (gerdaio)
+     |- Majorana specific output (mjio)
+     |- Management (management)
+     |- Materials (materials)
+     |- Processes (processes)
+     |- Waveform (waveform)
+   </screen>
+   <para>
+     Note that not every CVS directory contains a software package, since 
+     some CVS directories, ie. <filename>doc</filename>, do not contain
+     parts of the simulation program. Other packages, such as 
+     <filename>Geometry</filename>, are spread over several CVS directories
+     to separate code from the Gerda and Majorana.  
+     Each package is discussed in detail in subsequent chapters. We will give
+     a brief summary of each package here, as well as how they are connected.
+   </para>
+
+   <glosslist>
+      <glossentry><glossterm>Database</glossterm>
+      <glossdef>
+         <para>
+            Interfaces with the PostGreSQL database server.
+            The database is used to store geometry data and calibration 
+            constants and also contains all the materials definitions.
+	    Currently only used by the Majorana experiment.
+         </para>
+      </glossdef>
+      </glossentry>
+
+      <glossentry><glossterm>Generators</glossterm>
+      <glossdef>
+         <para>
+            The different event generators. Currently several event
+	    generators are supported and are user-selectable at runtime. See
+	    <xref linkend="Physics"/>.
+         </para>
+      </glossdef>
+      </glossentry>
+
+      <glossentry><glossterm>Geometry</glossterm>
+      <glossdef>
+         <para>
+            The classes describing the different detector geometries. 
+            It is possible to combine different geometries into a single 
+            detector, ie. a NaI veto barrel around a clover detector, the
+	    Gerda detector geoemetry, etc. 
+            See <xref linkend="Geometry"/>.
+         </para>
+      </glossdef>
+      </glossentry>
+
+      <glossentry><glossterm>Output</glossterm>
+      <glossdef>
+        <para>
+         The classes describing the different output for the 
+         different detectors. Both AIDA and Root are supported. 
+	 It is possible to have more than one output class
+         per detector. 
+	 Also contains the <filename>MGLogger</filename> class 
+         that handles terminal
+         output and error messages. See <xref linkend="IO"/>
+        </para>
+      </glossdef>
+      </glossentry>
+
+      <glossentry><glossterm>Management</glossterm>
+      <glossdef>
+        <para>
+	   Management classes, including 
+           <filename>MaGe/management/MaGe.cc</filename> that contains the 
+           <computeroutput>main()</computeroutput>. See 
+           <xref linkend="Structure_Implement"/> for more information on the 
+           management 
+           classes.
+        </para>
+      </glossdef>
+      </glossentry>
+
+      <glossentry><glossterm>Materials</glossterm>
+      <glossdef>
+        <para>
+           These classes automatically build requested materials from elements
+           that are in turn build from isotopes. All material, elemental and
+           isotopic data are stored in the database. All new materials
+           have to be added to the database. See <xref linkend="Geometry"/>
+        </para>
+      </glossdef>
+      </glossentry>
+
+      <glossentry><glossterm>Processes</glossterm>
+      <glossdef>
+        <para>
+           User-selectable Geant 4 physics lists for specific simulations, ie. 
+           double-beta decay studies requires different physics process than
+           dark matter studies. See <xref linkend="Physics"/>.
+        </para>
+      </glossdef>
+      </glossentry>
+
+      <glossentry><glossterm>Waveform</glossterm>
+      <glossdef>
+        <para>
+           Waveform simulation package. Can be run independently from Geant 4. 
+           Not yet implemented. See <xref linkend="Waveforms"/>.
+        </para>
+      </glossdef>
+      </glossentry>
+  </glosslist>
+</section>
+
+<section id="Structure_Implement"><title>How Everything is Implemented and 
+Fits Together.</title>
+   <para>
+      In the <filename>main()</filename> function a collection
+      of "management" classes are instantiated. These classes control specific
+      components of the framework. Classes can communicate with each other
+      via the singleton <filename>MGManager</filename> class. The 
+      <filename>MGManager</filename> class is instantiated 
+      in the file <filename>MG/management/MaGe.cc</filename>, and is 
+      a collection of pointers to all the management classes.
+      By using the <filename>MGManager</filename> class, global variables are
+      avoided.  
+   </para>
+   <para>
+      The management class are listed below in the order they are instantiated:
+   </para>
+
+   <glosslist>
+   <glossentry>
+      <glossterm><filename>MGGeometryDetectorConstruction</filename></glossterm>
+      <glossdef><para>
+         Selects detector geometry via Geant 4 messenger and constructs it
+         in Geant 4. Also constructs all required materials from the database,
+	 if requested by the selected detector.
+         See <xref linkend="Geometry"/>. Accessed via:
+         <computeroutput>MGManager::GetMGGeometryDetectorConstruction()</computeroutput>
+       </para></glossdef>
+     
+   </glossentry>
+   <glossentry>
+      <glossterm><filename>MGProcessesList</filename></glossterm>
+      <glossdef><para>
+         Geant 4 physics list. User can select different physics packages
+         via Geant 4 messengers. See <xref linkend="Physics"/>. Accessed via:
+         <computeroutput>MGManager::GetMGProcessesList()</computeroutput>
+      </para></glossdef>
+   </glossentry>
+
+   <glossentry>
+      <glossterm><filename>MGManagementVisualization</filename></glossterm>
+      <glossdef><para>
+         Registers Geant 4 visualization packages. Performs no other actions.
+      </para></glossdef>
+   </glossentry>
+
+   <glossentry>
+      <glossterm><filename>MGGeneratorPrimary</filename></glossterm>
+      <glossdef><para>
+         Selects and manages event generators. See <xref linkend="Physics"/>.
+	 Accessed via:
+         <computeroutput>MGManager::GetMGGeneratorPrimary()</computeroutput>
+      </para></glossdef>
+   </glossentry>
+
+   <glossentry>
+      <glossterm><filename>MGManagementRunAction</filename></glossterm>
+      <glossdef><para>
+         Performs pre- and post run actions by 
+         executing <computeroutput>BeginOfRunAction()</computeroutput>
+	 and <computeroutput>EndOfRunAction()</computeroutput> methods 
+         of output
+         classes. Derived from <filename>G4UserRunAction</filename>.
+	 Accessed via:
+         <computeroutput>MGManager::GetMGRunAction()</computeroutput>
+      </para></glossdef>
+   </glossentry>
+
+   <glossentry>
+      <glossterm><filename>MGManagementEventAction</filename></glossterm>
+      <glossdef><para>
+         Performs pre- and post event actions by 
+         Executing <computeroutput>BeginOfEventAction()</computeroutput>
+	 and <computeroutput>EndOfEventAction()</computeroutput> methods 
+         of output
+         classes. Selects and contains pointer to Root output class 
+         (<xref linkend="IO"/>). 
+         Derived from <filename>G4UserEventAction</filename>.
+	 Accessed via:
+         <computeroutput>MGManager::GetMGEventAction()</computeroutput>
+      </para></glossdef>
+   </glossentry>
+
+   <glossentry>
+      <glossterm><filename>MGManagementSteppingAction</filename></glossterm>
+      <glossdef><para>
+         Performs actions during each step of Geant 4 tracking by  
+         executing <computeroutput>UserSteppingAction()</computeroutput>
+         method of root output classes.
+	 Derived from <filename>G4UserSteppingAction</filename>.
+	 Accessed via:
+         <computeroutput>MGManager::GetMGSteppingAction()</computeroutput>
+      </para></glossdef>
+   </glossentry> 
+
+   </glosslist>
+
+   <para>
+      A pointer to the <computeroutput>MGManager</computeroutput> singleton 
+      class is accessible via the 
+   <computeroutput>MGManager::GetMGManager()</computeroutput> method.
+      The Geant 4 visualization and run manager are also accessible via:
+      <computeroutput>MGManager::GetG4RunManager()</computeroutput> and
+      <computeroutput>MGManager::GetG4VisManager()</computeroutput> methods.
+   </para>
+   <para>
+      There are two packages that are not accessible via the 
+      <computeroutput>MGManager</computeroutput>. The first is the Waveform
+      package that is not implemented yet. It will be accessible via 
+      <computeroutput>MGManager</computeroutput> when it is implemented. 
+      The other
+      is the database. For historical reasons, it is accessed via it's own
+      singleton control class: <computeroutput>MGDatabase</computeroutput>. See
+      <xref linkend="Database"/>.
+   </para>
+</section>
+
+<section> <title>Programming Guidelines and Naming Conventions</title>
+<para>
+  MaGe requires the use of good object-oriented programming techniques.
+  We strongly discourage the use of "Fortranized" C++. Our coding conventions
+  are based on modified  
+  <ulink url="http://root.cern.ch/root/Conventions.html">Root</ulink> and 
+  <ulink url="http://pcroot.cern.ch/TaligentDocs/TaligentOnline/DocumentRoot/1.0/Docs/books/WM/WM_3.html">
+  Taligent guides </ulink>. Enforcing too rigid 
+  programming rules are not feasible, although we require the following 
+  reasonable conventions:
+</para>
+
+<itemizedlist>
+   <listitem>
+      <para>
+          All class names begin with <computeroutput>GE, MG</computeroutput>,
+	  or <computeroutput>MG</computeroutput>. 
+	  <computeroutput>GE</computeroutput> is reserved for classes specific
+	  to the Gerda simulation, such as geometries. 
+	  <computeroutput>MJ</computeroutput> is specfically for Majorana 
+	  classes. Common classes, such as management, start with 
+	  <computeroutput>MG</computeroutput>. If in doubt, use 
+	  <computeroutput>MG</computeroutput>.
+      </para>
+   </listitem>
+   <listitem>
+      <para>
+          All virtual base class names begin with 
+          <computeroutput>MGV, MGV, GEV</computeroutput>.
+      </para>
+   </listitem>
+   <listitem>
+      <para>
+          All class member variables names begin with 
+          <computeroutput>f</computeroutput>
+      </para>
+   </listitem>
+   <listitem>
+      <para>
+          All local automatic variables names must begin with a lowercase, ie 
+          <computeroutput>someLocalRandomNumber</computeroutput>
+      </para>
+   </listitem>
+   <listitem>
+      <para>
+         All variable, class names, etc. should have descriptive, 
+         written out names. Think carefully about naming and avoid ambiguity.
+      </para>
+   </listitem>
+   <listitem>
+      <para>
+         All unitialized pointers should be set to 0 or 
+	 <computeroutput>NULL</computeroutput>.
+      </para>
+   </listitem>
+   <listitem>
+      <para>
+         All terminal output should be done via the 
+	 <filename>MGLogger</filename> class, if possible. 
+	 See <xref linkend="IO_MGLogger"/>. 
+      </para>
+   </listitem>
+   <listitem>
+      <para>
+         Code should be indented 3 spaces per nesting level. 
+      </para>
+   </listitem>
+   <listitem>
+      <para>
+         Lines longer than 80 columns should be wrapped with a carriage return.
+      </para>
+   </listitem>
+   <listitem>
+      <para>
+         The use of a separator between methods, ie.
+      </para>
+<screen>
+//---------------------------------------------------------------------------//
+</screen>
+      <para>
+         is strongly encouraged.
+      </para>
+   </listitem>
+</itemizedlist>
+
+<para>
+   Some of the older code in the <filename>MaGe</filename>
+   package do not follow these rules, since they were written before the rules 
+   were made explicit. Please do not follow their conventions. If you 
+   encounter any cases not covered here, use the Root/Taligent guideline, 
+   use you best judgment, or contact Reyco Henning (Majorana) or 
+   Xiang Liu (Gerda).
+</para>
+
+<important>
+   <para>
+      <emphasis>
+         Remember that you are not coding for yourself! Many others will have 
+         to read you code. Write the code the way you would like to read it!
+      </emphasis>
+   </para>
+</important>
+
+</section>
+</chapter>

@@ -1,0 +1,23 @@
+# =========================== 
+# Draws Siegfried teststand 
+# =========================== 
+
+# Geometry setup 
+/MG/geometry/detector MunichTestStand
+/MG/geometry/teststand/teststandtype siegfried
+/MG/geometry/database false
+
+# Initialize run 
+/run/initialize
+
+# visualization
+/vis/scene/create
+#/vis/open DAWNFILE
+#/vis/open OGLIX
+/vis/open HepRepFile
+#/vis/viewer/set/viewpointThetaPhi 110 110 deg
+#/vis/viewer/zoom 1.0
+
+#/vis/drawVolume
+
+/vis/viewer/flush 

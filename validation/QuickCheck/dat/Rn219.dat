@@ -1,0 +1,7 @@
+# identifier	type (0=gamma, 1=electron, 2=alpha)	energy [keV]	intensity [%]
+
+XX:Rn219_alpha6819keV:XX	2	6819.1	0.3	79.4	1.0
+
+XX:Rn219_Auger8.3keV:XX	3	8.33	0.08	1.53	0.15
+XX:Rn219_ConversionElectron178keV:XX	3	178.125	0.011	1.27	0.1
+

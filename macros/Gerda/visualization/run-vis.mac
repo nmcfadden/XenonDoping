@@ -1,0 +1,23 @@
+# build gerda geometry
+/control/execute ../load-phaseII.mac
+
+# open viewer. Other options: DAWNFILE, HepRep, HepRepXML, RayTracer, RaytracerX ...
+/vis/open OGLIX
+/vis/scene/create
+
+# add here the volumes (commands stored in auxiliary files)
+/control/execute ge.mac
+#/control/execute ms.mac
+#/control/execute holder.mac
+#/control/execute cables.mac
+#/control/execute lar.mac
+#/control/execute other.mac
+
+/vis/scene/add/axes
+/vis/sceneHandler/attach
+/vis/viewer/refresh # or flush for DAWNFILE
+
+# you can now customize your view, check the official docs
+# https://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides/ForApplicationDeveloper/html/ch08s04.html
+/vis/viewer/set/viewpointThetaPhi 120 -90
+/vis/viewer/set/style surface

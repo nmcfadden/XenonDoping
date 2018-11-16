@@ -1,0 +1,93 @@
+This note is addressed to new users of the \gerda\ Monte Carlo
+software \mage\ and those users who would like to become software
+developers. It is written with the intention to (1) teach non-experts
+how to install and run \mage\ and, for developers, to (2) introduce
+the guidelines and structure of the C++ code. For non-experts, only a
+basic knowledge of \rootv and C++ is needed in order to interpret the
+data created with the Monte Carlo package. Developers are assumed to
+be familiar with C++ and object-oriented programming. \\ 
+
+The \mage\ software is developed and used by \majorana\ and \gerda.
+This note is focused on the \gerda\ parts of the software and the
+parts common to both experiments. \\
+
+The simulation of physics processes is motivated by several needs. The
+most important one addressed before the actual start of the experiment
+are an estimate on the experimental situation to be encountered. For
+\gerda\ this includes e.g. the evaluation of the background index and
+the calculation of the sensitivity. In addition, the simulation can
+guide the design of detector components. After data becomes available
+the simulation of the experimental setup has to be verified and can,
+in a second step, be used to interpret these data. This holds true for
+\gerda\ and for the test stands associated with it. It is these three
+requirements which led to development of the software package
+\mage. \\
+
+The choice of the framework within which the \gerda\ Monte Carlo
+simulation is realized is \geant~\cite{Agostinelli:2002hh}. It is a
+well established simulation code with a large user community and a
+broad range of physics applications~\cite{Allison:2006ve}. The
+software features the full chain of simulation, from the generation of
+particles to tracking and read-out. The physics processes implemented
+in \geant\ are validated and/or
+parameterized~\cite{geant4physics,Amako:2005xf,Amako:2006nb}. As it
+provides full flexibility due to object-oriented C++-programming it
+meets the technical requirements for the realization of the needs
+described earlier. \\
+
+The \mage\ software is based on \geant\ libraries and was initially
+written by the \majorana\ Monte Carlo group. It is now developed and
+maintained by both, the \gerda\ and \majorana\ Monte Carlo groups. As
+both collaborations aim at a measurement of neutrinoless double
+beta-decay of $^{76}$Ge, the physics processes encountered in the
+experiments are the same. With a common Monte Carlo software a
+duplication of work is minimized.The maintainance of the code through 
+more developers and the physics validation is made easier as more
+data is and will be available. On the other hand, the \mage\ software
+is flexible enough to provide both collaborations with their
+particular needs like the geometries, physics processes, etc. \\
+
+\mage\ features a non-expert mode of running via macros maintaining a
+maximum of flexibility. Geometries, physics processes or the output
+scheme are individually adjustable without recompiling the code. On the
+other hand, due to the object-oriented structure, it is easy for
+developers to add patches such a new test stand geometries, additional
+physics lists, etc. \\
+
+Part~I of this note is addressed to the non-experts. The installation of
+\mage\ (chapter~\ref{chapter:installation}) and the documentation
+system (chapter~\ref{chapter:documentation}) are described. Also, the
+running of simple macros to simulate events or to display the selected
+geometry are introduced (chapter~\ref{chapter:macros}). The generation
+of events which are needed as input parameters for the simulation is
+discussed in chapter~\ref{chapter:generators}. \\
+
+Part~II is is addressed to \mage\ developers. It starts with the basics
+common to \majorana\ and \gerda\ such as compiling the code
+(chapter~\ref{chapter:compiling}) and the implemented physics lists
+(chapter~\ref{chapter:physics}). This is followed by the \gerda\
+specific parts like the description of the different I/O schemes
+available (chapter~\ref{chapter:io}) and the \gerda\ detector
+components (chapter~\ref{chapter:detector}). The implementation of
+test stand environments is explained in
+chapter~\ref{chapter:teststands}. \\
+
+As mentioned earlier, \mage\ is developed by people in Europe and the
+U.S. It is therefore important to obey some defined rules when it
+comes to coding. The three most important ones are
+%
+\begin{itemize} 
+\item Each developer is responsible for his or her code. If questions 
+arise or bugs are reported it is their duty to maintain and, if
+necessary, modify the code.
+% 
+\item Each developer is asked to document his or her changes made to 
+the code. This includes comments in the code itself (header and
+in-line) and a description in the documentation system. 
+% 
+\item There are three parts which are separated and marked with prefixes. 
+These are the common part (MG), the \majorana\ part (MJ) and the
+\gerda\ part (GE). It is understood that only the experiment specific
+(here: \gerda) code is to be edited independently. For changes to the
+common part both Monte Carlo groups have to be informed. 
+\end{itemize} 

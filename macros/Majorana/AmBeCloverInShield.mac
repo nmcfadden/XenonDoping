@@ -1,0 +1,76 @@
+/MG/manager/mglog routine 
+#/MG/manager/mglog trace 
+#/MG/manager/mglog debugging
+
+#/run/verbose 1
+#/event/verbose 1
+#/tracking/verbose 1 
+
+/MG/processes/lowenergy true 
+/MG/processes/qgsp_hadron_list true
+
+/MG/generator/select AmBe
+/MG/geometry/detector cloverInShield
+/MG/geometry/cloverInShield/useAmBeHousing false 
+/MG/geometry/WorldMaterial Vacuum
+/MG/geometry/cloverInShield/shieldThickness 10.16 cm  
+
+# generator and housing position x coordinate should be 11.13 cm + 
+# moderator thickness + distance from shield to source, y and z coords 
+# should be 0.0 cm 
+
+# 4 inch (10.16 cm) moderator:
+#/MG/geometry/cloverInShield/moderatorThickness 10.16 cm 
+#/MG/generator/position 22.29 0.0 0.0 cm 
+#/MG/geometry/AmBeHousing/position 22.29 0.0 0.0 cm 
+
+# 6 inch (15.24 cm) moderator:
+/MG/geometry/cloverInShield/moderatorThickness 15.24 cm 
+/MG/generator/position 28.37 0.0 0.0 cm 
+#/MG/geometry/AmBeHousing/position 27.37 0.0 0.0 cm 
+
+
+/MG/eventaction/rootschema LANLCloverNoPS
+/MG/eventaction/rootfilename AmBe1M_1ms_repos.root
+/MG/eventaction/reportingfrequency 100
+
+/run/initialize
+
+#/tracking/storeTrajectory 1
+#/vis/open OGLIXm
+#/vis/open OGLIX
+
+#/vis/drawVolume
+#/vis/scene/add/trajectories
+#/vis/viewer/reset
+#/vis/viewer/set/upThetaPhi  90 0 deg
+#/vis/viewer/zoom 5.0
+#/vis/viewer/flush
+
+# VISUALIZATION:
+#/vis/scene/create
+#/tracking/storeTrajectory 1
+#/vis/scene/add/trajectories
+#/vis/viewer/flush
+#/vis/open DAWNFILE
+#/vis/viewer/zoom 7.0
+#/vis/drawVolume
+#/vis/viewer/flush
+
+#/geometry/test/run true
+#/MG/manager/heprandomseed 92348
+
+# use for event dump & saving random # status of dumped event,  
+# don't use when resetting rndm engine: (0)  
+#/MG/eventaction/dumpEvent 253443  
+#/random/setSavingFlag
+/MG/manager/seedWithDevRandom
+#/run/storeRandomNumberStatus
+#/run/beamOn 1000000 
+
+
+# use after event has been dumped, to reset random engine: (1)
+#/tracking/verbose 3 
+#/random/resetEngineFrom run0evt253443.rndm
+/run/beamOn 3 
+

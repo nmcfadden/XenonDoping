@@ -1,0 +1,52 @@
+/MG/manager/mglog routine
+/MG/eventaction/reportingfrequency 100
+/MG/manager/seedWithUUID
+/MG/processes/realm BBdecay
+/MG/processes/lowenergy true
+
+
+/MG/geometry/WorldMaterial Vacuum
+/MG/geometry/detector PopTop
+
+
+
+/MG/geometry/MJGeometryPopTop/SourcePosition 0 0 25 cm
+/MG/geometry/MJGeometryPopTop/CrystalOffset 4 mm
+#/MG/geometry/MJGeometryPopTop/LoadCrystalFromFile macros/Majorana/crystalgeom_dummyPPC.dat
+/MG/geometry/MJGeometryPopTop/CryostatType 2
+/MG/geometry/MJGeometryPopTop/CrystalDiameter 68.9 mm
+/MG/geometry/MJGeometryPopTop/CrystalLength 52 mm
+/MG/geometry/MJGeometryPopTop/CrystalDimpleRadialOffset 0 mm
+/MG/geometry/MJGeometryPopTop/CrystalDimpleNominalBoreRadius 3 mm
+/MG/geometry/MJGeometryPopTop/CrystalDimpleDepth 2 mm
+/MG/geometry/MJGeometryPopTop/CrystalDimpleDiameter 3.2 mm
+/MG/geometry/MJGeometryPopTop/UseSourceHolder true
+
+
+/MG/eventaction/rootschema MCRun
+/MG/eventaction/rootfilename popTopTest.root
+/MG/io/MCRun/SetSensitiveIDLabelScheme askGeom
+/MG/io/MCRun/setRunID 5054
+/MG/io/MCRun/useTimeWindow true
+/MG/io/MCRun/setTimeWindow 86400 second
+/run/initialize
+/MG/generator/select RDMiso
+/gun/energy 0 KeV
+/grdm/ion 60 27 0
+
+
+
+/MG/generator/confine volume
+/MG/generator/volume AcrylicSourceActivity_Physical
+
+
+
+/vis/open HepRepFile
+/vis/drawVolume worlds
+/vis/viewer/flush
+/vis/scene/add/trajectories
+/vis/scene/add/hits
+/vis/scene/endOfEventAction accumulate
+
+
+/run/beamOn 20000

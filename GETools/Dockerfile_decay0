@@ -1,0 +1,33 @@
+FROM centos:6
+
+LABEL maintainer="luigi.pertoldi@pd.infn.it"
+
+USER root
+
+RUN yum install -y gfortran wget csh tcsh ed sed awk grep gunzip tar imake \
+                   makedepend blas-*3* lapack-*3* openmotif-devel
+
+WORKDIR /cern
+RUN wget -O- http://www-zeuthen.desy.de/linear_collider/cernlib/new/cernlib-2005-all-new.tgz | tar -xz -C "/cern/" && \
+    wget http://www-zeuthen.desy.de/linear_collider/cernlib/new/cernlib.2005.corr.2014.04.17.tgz -O /cern/cernlib.2005.corr.tgz && \
+    wget -O- http://www-zeuthen.desy.de/linear_collider/cernlib/new/cernlib.2005.install.2014.04.17.tgz | tar -xz -C "/cern/"
+
+RUN ./Install_cernlib
+
+ENV CERN="/cern" \
+    CERN_LEVEL="2005" \
+    CERN_ROOT="$CERN/$CERN_LEVEL" \
+    CERNLIB="$CERN_ROOT/lib" \
+    CERNLIBDIR="$CERNLIB" \
+    CERNPATH="$CERNLIB" \
+    PATH="$CERN_ROOT/bin:$PATH" \
+    LD_LIBRARY_PATH="$CERNLIB:$LD_LIBRARY_PATH"
+
+WORKDIR /decay0
+COPY MaGe/GETools/decay0.for ./decay0.for
+
+RUN gfortran -ffixed-line-length-80 -c decay0.for -O && \
+    gfortran decay0.o -o decay0 -O -L/cern/2005/lib -lgraflib -lpacklib -lmathlib -lkernlib && \
+    rm -f core *.o
+
+CMD /decay0/decay0

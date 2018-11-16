@@ -1,0 +1,14 @@
+# identifier	type (0=gamma, 1=beta, 2=alpha, 3=secondaryelectron)	energy [keV]	intensity [%]
+
+XX:As73_Auger1.19keV:XX	3	1.19	0.01	317.9	0.8
+XX:As73_Auger8.56keV:XX	3	8.56	0.08	86.5	0.8
+XX:As73_ConversionElectron2keV:XX	3	2.182	0.007	27.921	0.01
+XX:As73_ConversionElectron12keV:XX	3	11.8702	0.0017	60.303	0.01
+XX:As73_ConversionElectron13keV:XX	3	13.2845	0.0015	8.921	0.01
+XX:As73_ConversionElectron42keV:XX	3	42.334	0.011	75.0776	0.01
+XX:As73_ConversionElectron52keV:XX	3	52.023	0.009	10.962	0.01
+
+XX:As73_gamma13keV:XX	0	13.2845	0.0015	0.089	0.009
+XX:As73_gamma53keV:XX	0	53.437	0.009	10.3	1.0
+
+XX:As73_halflife_literature:XX 101 6938000

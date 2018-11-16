@@ -1,0 +1,63 @@
+$Id: README,v 1.1 2008-04-07 08:29:42 jliu Exp $
+
+History
+=======
+
+2008.04.07 	created. Jing
+2010.09.04 	added patches about gdml
+
+General Info
+============
+
+The directory contains patches on Geant4 source codes. The basic usage is:
+
+  $ patch someG4sourceFiles < somePatch
+
+If you change some *.cc files do be sure to recompile the relative G4 libs.
+And you'll have to recompile MaGe if you use static G4 libs. If you only
+change some *.hh files you don't have to recompile G4 libs but don't forget
+to copy the changed header files to $G4INCLUDE directory.
+
+File list
+=========
+
+* bug956patch
+-------------
+
+     patch to fix G4 bug #956, i.e. "meta stable states are missing". After the
+     patch 95% of the neutron capture process, n + 76Ge, will create the meta
+     stable state of 77Ge. Data for other meta stable states are not available
+     and are not applied here.
+
+     usage:
+
+       $ patch g4sourceDir/processes/hadronic/models/neutron_hp/src/G4NeutronHPCaptureFS.cc < bug956patch
+       $ cd g4sourceDir/
+       $ source env.sh or env.csh
+       $ export G4WORKDIR=... (optional)
+       $ cd g4sourceDir/processes/hadronic/models/neutron_hp/
+       $ make
+
+     recompilation of MaGe is needed afterwards. The patch works for all G4.9.x
+     till now.
+
+* Geant4.9.2p02-gdml.patch
+* Geant4.9.3-gdml.patch
+
+     Choose your patch according to your version, otherwise it might not work.
+     Or, look at these patches and replace according strings: 3 necessary plus
+     some comments (change them on your own)
+
+     The patch concerning gdml writing [to external .gdml files]. This patch CAN be
+     applied (but not necessarily) if you want to name the output files according
+     to their logical volumes. Otherwise it will be named as
+
+       --  depth3_module5.gdml   etc.
+
+     Usage:
+
+       $ patch g4sourceDir/persistency/gdml/src/G4GDMLWrite.cc < Geant4.9.2p02-gdml.patch
+       or
+       $ patch g4sourceDir/persistency/gdml/src/G4GDMLWrite.cc < Geant4.9.3-gdml.patch
+
+       The rest steps are as in the previous patch. Do not forget to recompile MaGe!

@@ -1,0 +1,43 @@
+# mageMacro.mac
+# This macro excerises several basic areas of the MJ code in MaGe.
+
+# Management 
+/MG/manager/mglog routine
+/MG/manager/seedWithUUID
+
+# Process List
+/MG/processes/realm BBdecay
+#/MG/processes/lowenergy true
+
+# Configure Detector.
+/MG/geometry/detector MJDemonstrator
+/MG/geometry/WorldMaterial Vacuum
+
+# ROOT output schema
+/MG/eventaction/rootschema MCRun
+/MG/eventaction/rootfilename mjdemoCalTestOutput.root
+/MG/io/MCRun/SetSensitiveIDLabelScheme askGeom 
+/MG/io/MCRun/setRunID 1
+/MG/io/MCRun/useTimeWindow true
+/MG/io/MCRun/setTimeWindow 86400 second
+/MG/io/MCRun/killAlphas true
+/MG/io/MCRun/killBetas true
+/MG/io/MCRun/stopNuclei true
+
+# Initialize Geant4 and geometry
+/run/initialize
+
+# Set to use the MJDCalibration generator, a helix that mimics the calibration source
+/MG/generator/select MJDCalibration
+/MG/generator/MJDCalibration/setA 214
+/MG/generator/MJDCalibration/setZ 82
+#setting the nuclear decay limits, effectively killing daugters
+# Command is /grdm/nucleusLimits Amin Amax Zmin Zmax
+/grdm/nucleusLimits 214 214 82 83
+
+#/MG/generator/MJDCalibration/origin 0 0 0
+
+# Run 3k events, reporting every 100th event
+/MG/eventaction/reportingfrequency 100
+/run/beamOn 3000
+

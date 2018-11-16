@@ -1,0 +1,68 @@
+# charStandGeometry.mac
+# This macro demonstrates the use of the characterization stand geometry
+# found in /mjdemonstrator/src/MJGeometryCharacterization.cc
+# The position of the collimated source and the placement of various pieces
+# can all be changed from macro commands.
+
+# Management 
+/MG/manager/mglog routine
+/MG/manager/seedWithUUID
+
+# Process List
+/MG/processes/realm BBdecay
+/MG/processes/lowenergy true
+/MG/processes/useNoHadPhysics true
+
+# Configure Detector.
+/MG/geometry/detector MJCharacterization
+/MG/characterization/cavernOn false
+/MG/characterization/standOn true
+/MG/characterization/cryostatOn true
+/MG/characterization/cryostat STC				
+/MG/characterization/stringOn false
+/MG/characterization/sourceAngle 0.0 deg
+/MG/characterization/sourceRadius 30.0 cm
+/MG/characterization/sourceZ -15.0 cm
+# the choice of source material does NOT affect the decay chain chosen for simulations		     
+/MG/characterization/sourceMaterial Barium-133
+/MG/geometry/WorldMaterial Vacuum
+
+# For running simulations, place the string with /MG/characterization/stringOn true
+# then uncomment the macro commands for ROOT output.
+# Note that heprep will crash when trying to visualize the string, 
+# as the current string assembly needs to be fixed.
+#/MG/eventaction/rootschema MCRun
+#/MG/eventaction/rootfilename charStandOutput.root
+#/MG/io/MCRun/SetSensitiveIDLabelScheme manual
+#/MG/io/MCRun/AddSensitiveVolnameID StringAssembly_001_CrystalAssembly_001_ActiveCrystal_001 1
+#/MG/io/MCRun/AddSensitiveVolnameID StringAssembly_001_CrystalAssembly_002_ActiveCrystal_001 2
+#/MG/io/MCRun/AddSensitiveVolnameID StringAssembly_001_CrystalAssembly_003_ActiveCrystal_001 3
+#/MG/io/MCRun/AddSensitiveVolnameID StringAssembly_001_CrystalAssembly_004_ActiveCrystal_001 4
+#/MG/io/MCRun/AddSensitiveVolnameID StringAssembly_001_CrystalAssembly_005_ActiveCrystal_001 5
+#/MG/io/MCRun/setRunID 1
+#/MG/io/MCRun/useTimeWindow true
+#/MG/io/MCRun/setTimeWindow 86400 second
+
+# Initialize Geant4 and geometry
+/run/initialize
+
+# Set to run 133Ba chain in the button source using Geant4 RDM generator 
+/MG/generator/select RDMiso
+/grdm/ion 133 56 0
+/MG/generator/confine volume
+/MG/generator/volume StandAssembly_001_ButtonSourceAssembly_001_ButtonSource_001
+
+# visualization with heprep
+/vis/open HepRepFile
+/vis/heprep/setFileName charStand
+/vis/scene/create
+/vis/scene/endOfEventAction accumulate 20
+/vis/scene/add/volume
+/vis/sceneHandler/attach
+/vis/viewer/flush
+/vis/scene/add/trajectories
+/vis/scene/add/hits
+/MG/eventaction/reportingfrequency 1
+/run/beamOn 10
+/vis/drawVolume
+/vis/viewer/flush

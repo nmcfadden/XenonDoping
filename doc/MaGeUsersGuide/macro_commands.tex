@@ -1,0 +1,617 @@
+%$Id: macro_commands.tex,v 1.16 2009-07-08 13:06:54 avauth Exp $
+\label{chapter:MacroCommands}
+
+
+The \mage \ package is a single executable program that is configured and run by
+using macro files.  The usage is simple:  \mage \ is run by typing at the
+command prompt 
+\begin{lstlisting}
+ /path/to/MaGeExecutable/MaGe /path/to/macros/SampleMacro.mac
+\end{lstlisting}
+\noindent where /path/to/MaGeExecutable/ is the directory of the \mage \
+executable and \hbox{/path/to/macros/} is the directory of the sample macro.  Of
+course this assumes you already have a macro containing your required
+configurations for \mage.\\
+You can also run a macro file in the \mage \ interactive mode. 
+This provides the possibility to put the commands from the macro in one by one. 
+This is very helpful for understanding the way the commands work and for debugging a macro script. 
+Furthermore, you can implement additional commands inbetween the macro commands (e.g. if you want to change a command, but don't want to rewrite the macro).
+You start the interactive mode by typing:
+\begin{lstlisting}
+/path/to/MaGeExecutable/MaGe 
+\end{lstlisting}
+Whenever \mage \ shows ``PreInit$>$'' or ``Idle$>$'', you may add new commands. There are commands which can only be given after the ``PreInit$>$''-prompt and some which require the ``Idle$>$''-prompt.\\
+
+This chapter is all about understanding and creating
+macro files so you can get \mage \ to do what you want it to do.
+
+
+This chapter attempts to cover many of the macro commands one might use while
+running \mage. Many are also covered in other chapters, with varying levels of
+detail.  The appendix \ref{App:MacroList}
+%%FIXME put in \ref and \label when appendix is written
+contains a list of all messenger commands for inclusion into macro files that
+have been created for use in \mage, along with explanations.  The complete list of
+messenger commands native to \geant \ that one can also use is beyond the scope
+of this manual.
+
+\section{The Structure of a Macro File}
+\label{sec:MacroStructure}
+
+A macro file contains all the important messenger commands that \mage \ needs in
+order to run a simulation.  Some of these parameters have ``default" values and
+don't necessarily need to be set.  The bare minimum requires you to specify a
+geometry, initialize the run manager, set up a primary generator of particles,
+and press ``go." %%FIXME make sure this is all one needs
+This would be a boring run, and you will in all likelihood want to specify much
+more than this, including how the simulated data is processed and written to files.  
+The structure of a macro file is divided into two parts, as follows:
+
+\begin{itemize}
+\item Set up any special manager commands \hbox{(/MG/manager/)}
+\item Specify what sort of physical processes / lists you want
+\hbox{(/MG/processes/)}
+\item Define the geometry you want to use \hbox{(/MG/geometry/)}
+\item Specify the event action commands, such as how the data are processed and
+written \hbox{(/MG/eventaction/)}
+\item Specify what type of primary event generator you want to use
+\hbox{(/MG/generator/)}
+\end{itemize}
+
+\noindent At this point, you've told \mage \ all about the geometry setup, the
+physics you're interested in, how you want the data managed and written, and
+what generator to use.  Now you need to initialize the \geant \ kernel with the
+messenger command 
+\begin{lstlisting}
+ /run/initialize
+\end{lstlisting}
+
+\noindent This tells \mage/\geant \ that it's time to build the geometry and
+calculate cross sections for the physics processes you've told \mage \ to care
+about.\\
+You will notice that the prompt changes from ``PreInit$>$'' to ``Idle$>$'' with this initialization.\\
+The structure of the macro file continues:
+
+\begin{itemize}
+\item Specify which particles you want to use, and their attributes
+\item Set up any visualization scheme you want to use
+\end{itemize}
+
+\noindent Now it's time to start the run with the command
+
+\begin{lstlisting}
+ /run/beamOn n
+\end{lstlisting}
+
+\noindent where ``n" is the number of events you want to run.
+
+This list isn't inclusive of all the types of commands you can give by macro,
+but it includes all the most important ones. More information about the commands, the choice of values and the default values can be found by going into interactive MaGe mode (as indicated in the introduction of this chapter) and typing:
+\begin{lstlisting}
+PreInit> cd /MG/
+PreInit> ls
+\end{lstlisting}
+You can follow the directory tree to the last leaves, the macro commands. Information about these can be obtained by:
+\begin{lstlisting}
+PreInit> help [macrocommand]
+\end{lstlisting}
+The next few sections will go into the commands in more detail.
+
+\section{MGManager Messengers}
+
+The manager messengers allow you to do two basic things.  You can set the
+verbosity of the log you want from the output:
+\begin{lstlisting}
+ /MG/manager/mjlog [fatal] [error] [warning] [routine] [trace] [debugging]
+\end{lstlisting}
+\noindent ``Fatal" is the least verbose, while ``debugging" is the most.  It is
+worth noting that these logs are specific to \mage.  You can also fiddle with
+native \geant verbosity messengers like
+\begin{lstlisting}
+ /run/verbose j
+ /event/verbose k
+ /tracking/verbose l
+\end{lstlisting}
+
+\noindent where increasing integers of j, k, and l lead to increasingly detailed output
+about the run, event, and tracking.  The default is 0 for silent, with maximum
+output for run and event at 2 and maximum output for tracking at 5.  Be warned,
+setting tracking above 2 is like drinking from a firehose, so think about how many
+events you really want to run.
+
+You can also specify what sort of random number generator seed you want.  Your
+best bet is probably 
+\begin{lstlisting}
+ /MG/manager/seedWithDevRandom
+\end{lstlisting}
+
+\noindent which reads a seed from /dev/random.  The other options are
+
+\begin{lstlisting}
+ /MG/manager/heprandomseed [integer]
+ /MG/manager/useInternalSeed [integer]
+\end{lstlisting}
+
+
+\section{MGProcesses Messenger} \label{macros-processes}
+
+%%FIXME RAJ 22FEB2007: haven't looked at this yet.  Perhaps someone with more
+%experience using different processes should have a look?
+
+The MGProcesses Messenger can set the simulation ``realm" to double-{}beta decay, 
+dark matter or cosmic rays.\\ 
+The difference between the realms lies in the
+secondary production cutoff. 
+For the first two realms the distances specified in the code
+are keyed to germanium, and they provide a double-{}beta production
+cutoff of 100 keV and a dark matter production cutoff of 1 keV.
+In the cosmic rays realm, the cuts are different in the volumes 
+belonging to to the ``SensitiveRegion" and the other volumes. In particular, 
+the cuts for the volumes in the sensitive region are the same than for 
+the double-beta realm, while they are more relaxed everywhere else, in 
+order to save CPU time (avoiding the precise tracking of particles in the
+uninteresting parts of the setups). 
+ 
+
+ These cutoffs specify the energy below which no secondaries will
+be created (with a few exceptions, such as if the secondary
+particle would annihilate, such as positrons, or if the particle
+is relatively close to a volume boundary).
+
+
+ The goal of establishing these different realms is to increase the
+speed of the simulation when possible. Since the interesting energy
+range of double-{}beta decays is much greater than that of dark
+matter interactions, the simulation should not have to spend so
+much time tracking secondary particles down to the lower energy
+
+If the  ``SensitiveRegion" is not defined or 
+no logical volume is registered in it, the cut-{}per-{}region 
+approach has no effect in the simulation. The cuts are the same everywhere and 
+correspond to about 140 keV (gammas) and 7.5 MeV (e-) in germanium. 
+The code to register one logical volume in the ``Sensitive Region" is \\
+\begin{lstlisting}
+G4Region* sensitiveRegion =  new G4Region(``SensitiveRegion'');
+sensitiveRegion-->AddRootLogicalVolume(myLogicalVolume);
+\end{lstlisting}
+When a volume is registered to the region, all its daughters are included too.
+Don't forget to \texttt{delete sensitiveRegion;} in the destructor of the 
+geometry class.\\
+The MGProcesses Messenger is used as such:
+ \begin{lstlisting}
+ /MG/processes/realm [BBdecay] [DarkMatter] [CosmicRays]
+\end{lstlisting}
+The default realm is ``BBdecay".
+ 
+Geant4 has the capability to generate and track optical photons, e.g. originated by scintillation or by 
+Cerenkov emission. In the default MaGe Physics List optical photons are not generated. They can be switched 
+on with the messenger command 
+ 
+\begin{lstlisting}
+ /MG/processes/optical [true] [false]
+\end{lstlisting}
+                    that has to be given before the 
+\texttt{/\-r\-u\-n\-/\-i\-n\-i\-t\-i\-a\-l\-i\-z\-e}. In this case, 
+be sure that the geometry definition contains the optical properties of materials (refraction index, absorption 
+length, scintillation yield) and of surfaces (reflection index, etc.).\\
+Geant4 provides two alternative sets of Electromagnetic Processes, called Standard (Std) and Low Energy (LowE). 
+The LowEnergy processes include atomic effects (as fluorescence) and can track gammas, electrons and positrons 
+down to 250 eV; the drawback of LowE processes is that they require a longer computing time. By default, the 
+Electromagnetic processes in the MaGe Physics List are the LowE ones. One can switch to the Standard processes 
+(quicker and less precise) with the messenger command 
+\begin{lstlisting}
+ /MG/processes/lowenergy [true] [false]
+\end{lstlisting}
+It must be given before the 
+\texttt{/\-r\-u\-n\-/\-i\-n\-i\-t\-i\-a\-l\-i\-z\-e}.
+
+\section{MGGeometry Messengers}\label{GeometryMessenger}
+The MGGeometry Messengers are used to specify which detector is to
+be simulated.  The number of geometries in use is growing, and many of them have
+their own bevy of messenger commands.  This chapter won't go into all of them,
+but they can be found in Appendix \ref{App:MacroList}%%FIXME make sure that I work!
+The main messenger commands are:
+
+\hbox{
+\begin{lstlisting}
+ /MG/geometry/detector [clover] [cloverinNaIbarrel] [solidBlock] [GerdaArray]
+                       [idealCoax] [MunichTestStand] [MJ57Banger] [MPIK_LArGe] 
+                       [GS_LArGe] [UWLArGe] [SLACBD] [cloverInShield] 
+                       [MJRDCrystalColumn] [MJRDCryostat] [MJ17A] 
+                       [MJRDBasicShield] [MCNPTest] [CERN_NA55] [WIPPn] 
+                       [LLNL8x5] [GeometryFile] [Corrado]
+ /MG/geometry/addMaterial
+ /MG/geometry/database
+ /MG/geometry/dumpG4materials
+ /MG/geometry/geometryFileName
+ /MG/geometry/setDetectorOffset
+ /MG/geometry/setWorldHalfLen
+ /MG/geometry/WorldMaterial
+ /MG/geometry/EventBias/
+\end{lstlisting}
+} 
+\vspace{5mm}
+
+\begin{lstlisting}
+ /MG/geometry/detector 
+\end{lstlisting}
+is used to select which geometry has to be simulated: the geometry name has to be 
+chosen among the registered ones. There is \emph{not} a default geometry provided. The 
+user hence \emph{must} issue the \texttt{/MG/geometry/detector} command before 
+starting the run initialization. If it is not done, the \textsc{MaGe} executable 
+will crash. \\
+
+\begin{lstlisting}
+ /MG/geometry/database [true] [false] 
+\end{lstlisting}
+allows the user to choose if the 
+material table has to be read from the Majorana database (=true) (default) or from 
+the local class materials/MGGerdaLocalMaterialTable (=false). \\
+%
+
+\begin{lstlisting}	
+ /MG/geometry/dumpG4materials
+\end{lstlisting}
+can be used to print on screen all the defined materials. It works properly only
+after run initialization (namely, in the ``Idle$>$'' state of
+\textsc{Geant4}).  \\
+
+\begin{lstlisting}
+ /MG/geometry/geometryFileName [filename]
+\end{lstlisting}
+\noindent will set the file name for a file-based geometry. \\
+%
+
+\begin{lstlisting}
+ /MG/geometry/setDetectorOffset
+\end{lstlisting}
+\noindent allows you to place the constructed detector at a specific position in
+the WorldVolume.  The default is the origin. \\
+
+\begin{lstlisting}
+ /MG/geometry/setWorldHalfLen
+\end{lstlisting}
+\noindent allows you to set the size of the WorldVolume.  The default is a 50 m
+$\times$ 50 m $\times$ 50 m cube. \\
+
+\begin{lstlisting}
+ /MG/geometry/WorldMaterial
+\end{lstlisting}
+determines the material used to construct the WorldVolume.  The default is air.
+
+\begin{lstlisting}
+ /MG/EventBias/
+\end{lstlisting}
+is a messenger directory with commands allowing the use of event biasing in
+runs.  For example, one may choose to use importance sampling, as well as the
+algorithm to use.
+%%FIXME should point to the EventBias section that Mike Marino has been itching
+%to write.
+
+
+\subsection{Definition of user-specific materials} \label{subsection:materials}
+The command 
+\begin{lstlisting}
+ /MG/geometry/addNewMaterialfilename filename
+\end{lstlisting}
+is used to read a material definition from an external file. It works only 
+if the database is switched off. \\
+The material definition should be as follows: \\
+\emph{First line}: material name, density (g/cm$^3$), number of elemental components \\
+The name of the material cannot contain blank spaces and must be different from 
+the materials already defined in the material table. \\
+The following lines (one for each component) contain: \\
+ Element name, Element symbol, Z (double), A(double) and mass fraction. \\
+The information written in the file is used only if the element table does not 
+already contain an element with the same name. An example of a definition file 
+is the following:
+\begin{lstlisting}
+ TelluriumOxide 5.9 2
+ Oxygen O 8.0 16.000 0.201 
+ Tellurium Te 52.0 127.60 0.799
+\end{lstlisting}
+
+\subsection{Debugging of geometries}
+A command is available to check for overlapping volumes within the geometry.
+\begin{lstlisting}
+Idle> /MG/geometry/CheckOverlaps
+\end{lstlisting}
+The program will report on the screen the overlaps between physical volumes with their mother
+volume and/or with other physical volumes at the same hierarchy level. No information is 
+displayed for those volumes that are correctly placed. Additional verbosity from the 
+CheckOverlaps tool, can be obtained with the command
+\begin{lstlisting}
+Idle> /MG/geometry/OverlapVerbosity true/false
+\end{lstlisting}
+(default is false).
+
+\subsection{GDML-macros} \label{subsection:GDML-macros}
+
+The commands used for GDML are:
+\begin{lstlisting}
+(reading commands, must be executed before initialization:)
+/MG/geometry/GDML/sourceFile [sourcefileName]
+
+(writing commands:)
+/MG/geometry/GDML/schemaPath /path/to/gdml/schema (optional)
+/MG/geometry/GDML/outputName [outputName.gdml] (optional)
+/MG/geometry/GDML/outputFormat [true][false] (optional)
+/MG/geometry/GDML/modularizeLevels [1][2][3]... (optional)
+/MG/geometry/GDML/write (only work after initialization)
+\end{lstlisting}
+You can have a look at the complete set of GDML options in the interactive \mage \ mode by typing:\\
+\begin{lstlisting}
+MaGe
+PreInit> cd /MG/geometry/GDML/
+PreInit> ls
+\end{lstlisting}
+All the commands are displayed now. For more detailed information, type:
+\begin{lstlisting}
+PreInit> help [macrocommand]
+\end{lstlisting}
+Where [macrocommand] is any of the commands displayed.\\
+
+\begin{lstlisting}
+PreInit> /MG/geometry/GDML/sourceFile [sourcefileName] 
+\end{lstlisting}
+\begin{quote}
+  The first command specify the position of the GDML-file.
+\end{quote}
+\begin{lstlisting}
+Idle> /MG/geometry/GDML/schemaPath /path/to/gdml/schema
+\end{lstlisting}
+\begin{quote}
+The second command sets your own GDML schema definition file path. /path/to/gdml/schema is the path to your schema definition. The default value is set to:
+\begin{lstlisting}
+http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_3_0_0/schema/gdml.xsd.xsd
+\end{lstlisting}
+\end{quote}
+\begin{lstlisting}
+Idle> /MG/geometry/GDML/outputName [outputName.gdml]
+\end{lstlisting}
+\begin{quote}
+Where [outputName] is the name of the GDML output file. By default, it is the same as the detector name that you specified using the command:
+\begin{lstlisting}
+Idle> /MG/geometry/detector [Name]
+\end{lstlisting}
+\end{quote}
+\begin{lstlisting}
+Idle> /MG/geometry/GDML/outputFormat [true][false]
+\end{lstlisting}
+\begin{quote}
+Set the format of the GDML output file. Candidates are ``[true][false]''.\\
+true- The names of volumes, materials, etc. in the GDML output file will be concatenated with their logical address in hexadecimal format (save if you have duplicated names).\\
+false - The names will correspond exactly to the ones you have in GEANT4.\\
+By default, true is used.\\
+\end{quote}
+\begin{lstlisting}
+Idle> /MG/geometry/GDML/modularizeLevels [1][2][3]...
+\end{lstlisting}
+\begin{quote}
+Specifies the geometry levels that you want to modularize.\\
+\end{quote}
+\begin{lstlisting}
+Idle> /MG/geometry/GDML/write
+\end{lstlisting}
+\begin{quote}
+Dumps a Geant4 geometry to a corresponding GDML file. Be careful: this command can \textit{only} be used after the ``Idle$>$''-prompt.\\
+\end{quote}
+%
+\subsubsection{Example Macros}
+Have a look at the MaGe macro-directory to find a well commented example for GDML-macros:
+\begin{lstlisting}
+cd /Path/to/MaGe/macros/GDML
+\end{lstlisting}
+The ``GDML''  subdirectory contains the macro files ``g42gdml.mac'' and ``gdml2g4.mac''.\\
+``g42gdml.mac'' is an example macro to show how to dump a \geant \ geometry into a GDML file.
+You run it using the method described in the beginning of chapter \ref{chapter:MacroCommands}, in this case:
+\begin{lstlisting}
+$ \$ $MaGe g42gdml.mac
+\end{lstlisting}
+You want to test what each of the commands in a macro does? Use the interactive mode as described above.\\
+``g42gdml.mac'' is well commented inside the script itself. Nevertheless, some commands and the GDML options will be explained here.\\
+The macro runs with the detector ``Corrado'' (as described above).
+The initialization can be accelerated by not using hadronic processes which corresponds to setting the following variable to ``true'':
+\begin{lstlisting}
+PreInit> /MG/processes/useNoHadPhysics true 
+\end{lstlisting}
+Of course, you have to run the initialization process:
+\begin{lstlisting}
+PreInit> /run/initialize
+\end{lstlisting}
+With the initialization, the prompt in MaGe changes from ``PreInit$>$'' to` ``Idle$>$''.
+The tree structure of the geometry can be obtained by:
+\begin{lstlisting}
+Idle> /vis/open ATree
+Idle> /vis/ASCIITree/verbose 1
+\end{lstlisting}
+This gets the names of the physical and logical volumes which are dumped and printed out by:
+\begin{lstlisting}
+Idle> /vis/drawTree
+\end{lstlisting}
+Now you have the tree structure of your geometry printed out. You may e.g. specify the levels you want to be modularized (see later).
+\begin{lstlisting}
+Idle> /MG/geometry/GDML/schemaPath /path/to/gdml/schema
+\end{lstlisting}
+This sets your own GDML schema definition file path. The default schema introduced above is also used in case of ``g42gdml.mac''.\\
+\begin{lstlisting}
+Idle> /MG/geometry/GDML/outputName somename.gdml
+\end{lstlisting}
+Where ``somename'' is the name of the GDML output file. The default name is ``Corrado.gdml''.\\
+\begin{lstlisting}
+Idle> /MG/geometry/GDML/outputFormat 2
+\end{lstlisting}
+The names of volumes, materials etc. will be the names used in \geant.\\
+\begin{lstlisting}
+Idle> /MG/geometry/GDML/modularizeVolumes Crystal_log Spider_log ...
+\end{lstlisting}
+``Crystal\_log'' and ``Spider\_log'' are the logical volumes contained in ``Corrado.gdml'' that are modularized according to ``g42gdml.mac''. They are daughter volumes of the ``Corrado''-volume.\\
+\begin{lstlisting}
+Idle> /MG/geometry/GDML/modularizeLevels [1][2][3][4]...
+\end{lstlisting}
+Specifies the geometry levels that you want to modularize. If you only use ``2'', only the second level of the tree will be used, not the first one and not the third one.\\
+With:
+\begin{lstlisting}
+Idle> /MG/geometry/GDML/write
+\end{lstlisting}
+the Geant4 geometry is written to a corresponding mother GDML file, ``Corrado.gdml'' and two modularized daughter GDML files, ``Crystal\_log.gdml'' and ``Spider\_log.gdml''.\\
+\vspace{5mm}
+``gdml2g4.mac'' shows exemplarily how to use a GDML file in a \geant \ simulation.\\
+You have to type
+\begin{lstlisting}
+$ \$ $MaGe
+\end{lstlisting}
+to go into the \mage \ interactive mode.
+The command
+\begin{lstlisting}
+PreInit> /MG/geometry/GDML/sourceFile Crystal_log.gdml
+\end{lstlisting}
+specifies ``Crystal\_log.gdml'' as the GDML file that is used. You can replace this file with any GDML-file. If you want \mage \ to use the whole geometry, just insert the mother file of ``Crystal\_log.gdml'', in this case ``Corrado.gdml''.\\
+Initialization is run without hadronic processes:
+\begin{lstlisting}
+PreInit> /MG/processes/useNoHadPhysics true 
+PreInit> run initialize
+\end{lstlisting}
+The geometry is drawn with the visualization driver \textbf{O}pen\textbf{GL S}tored \textbf{X}:
+\begin{lstlisting}
+Idle> /vis/open OGLSX
+Idle> /vis/viewer/set/viewpointVector 0 1 1
+Idle> /vis/drawVolume
+\end{lstlisting}
+The generator used for simulating particles is the \textbf{G}eneral \textbf{P}article \textbf{S}ource. It is described more detailled in section \ref{sec:GPS}. In this case it shoots electrons with an energy of 100\,MeV onto the crystal.
+\begin{lstlisting}
+Idle> /MG/generator/select SPS
+Idle> /gps/particle e-
+Idle> /gps/energy 100 MeV
+Idle> /gps/position 1 1 1
+Idle> /gps/direction 0 1 1
+\end{lstlisting}
+
+\begin{lstlisting}
+Idle> /vis/scene/add/trajectories
+Idle> /run/beamOn 10
+\end{lstlisting}
+Now you should see a detector setup with particle trajectories.\\
+\vspace{5mm}\\
+``g42gdml.mac'' gives out three GDML-files: ``Corrado.gdml'', ``Crystal\_log.gdml'' and ``Spider\_log.gdml''. These can be displayed running the ROOT-macro ``drawGDML.C'':
+\begin{lstlisting}
+$ \$ $ROOT
+ROOT[].x drawGDML.C(``filename.gdml'')
+\end{lstlisting}
+``filename.gdml'' is any of the three files produced by ``g42gdml.mac''.\\
+
+\section{MGOutput Messengers}
+In order to retrieve the relevant information from the simulation, the user should also 
+specify which output scheme has to be used. Output classes can give either a ROOT file 
+or an ASCII file.\\
+The commands to define the output schema and to retrieve the name are:
+\begin{lstlisting}
+ /MG/eventaction/rootschema name
+ /MG/eventaction/getrootschema
+\end{lstlisting}
+A number of alternative output schemes are presently available in \textsc{MaGe}: LANLCloverNoPS, 
+LANLCloverSteps, LANLCloverInNaIBarrel, solidBlock, GerdaArray,
+GerdaArrayWithTrajectory, LArGeNoPS, G4Steps, MCEvent, 
+GerdaTestStand, GerdaTestStandSimple, GerdaArrayOptical, GerdaArrayCalibration, 
+MPIK\_LArGe, GerdaTeststandCoincidence, SLACBD, Shielding, GSS, MCNPTest, 
+CERN\_NA55, GerdaTeststandSiegfried, GerdaTeststandSiegfriedCoincidence, 
+NeutronYield and DetectorEfficiency. \\
+This must be done with care, as the output class can be tied to the detector choice, and 
+there is so far no internal checking to make sure the output class and detector choice.\\
+The name of the output file is also set via messenger, using the command
+\begin{lstlisting}
+ /MG/eventaction/rootfilename filename
+\end{lstlisting}
+The same command works for ROOT and ASCII output file. \\
+\textsc{MaGe} correctly runs (e.g. for testing purposes) even if the output class is 
+not specified.
+
+\begin{lstlisting}
+ /MG/eventaction/reportingfrequency
+\end{lstlisting}
+determines how often the output tells you which event it is processing.
+
+\begin{lstlisting}
+ /MG/eventaction/writeOutFileDuringRun
+ /MG/eventaction/writeOutFrequency
+\end{lstlisting}
+allow for writing to the file during the run.  The default frequency that it
+writes is the same as the reporting frequency.
+
+
+\section{MGGenerator Messengers}
+
+A simulation is only useful if you actually fire particles at things.  Using the
+generator macros is how you set this up.  The only generator messenger you need
+to issue before \texttt{/run/initialize} is
+\begin{lstlisting}
+ /MG/generator/select [PNNLiso] [RDMiso] [TUNLFEL] [G4gun] [decay0] [cosmicrays] 
+                      [musun] [SPS] [neutronsGS] [wangneutrons] [AmBe] 
+                      [MuonsFromFile] [sources4a] [GSS]
+\end{lstlisting}
+which selects the generator engine you will use.  There is much more information
+about these generators in Chapter \ref{chapter:generators}
+
+The other basic messenger commands:
+\begin{lstlisting}
+ /MG/generator/name
+\end{lstlisting}
+returns the name of the generator.
+
+\begin{lstlisting}
+ /MG/generator/position
+\end{lstlisting}
+This command will set the initial particle position (for point distributions
+only) for all the generators.
+
+
+\begin{lstlisting}
+ /MG/generator/confine [noconfined] [volume] [volumelist]
+ /MG/generator/volume [noconfined] [volume] [volumelist]
+ /MG/generator/volumelist
+ /MG/generator/volumelistfrom
+ /MG/generator/volumelistto
+\end{lstlisting}
+allow you to confine primary vertices to within physical volumes in your
+geometry.   For example, a generator that samples a 
+
+\begin{lstlisting}
+ /MG/generator/gsspositionsfile
+ /MG/generator/gsseventnumber
+ /MG/generator/gssoffset
+\end{lstlisting}
+
+
+
+volume
+position
+
+
+
+
+
+\section{Cone Cut for secondary gammes} \label{section:GammaConeCut}
+
+Tracks of any gammas (primary and secondary) can be killed if the momentum vector of the photon does not point 
+towards some position within a certain angle. \\
+This can be used to run the simulation more efficient if the volume 
+in which the gammas are generated is far away from crystal array. \\
+
+Example:
+
+\begin{lstlisting}
+ /MG/output/killGammasOutsideCone true
+ /MG/output/GammaConeCut_ArrayCenter 0 0 19.5 cm
+ /MG/output/GammaConeCut_StartCutRadius 80 cm
+ /MG/output/GammaConeCut_MaxAllowedOpeningAngle 45 deg
+\end{lstlisting}
+
+When the Gamma-Cone-Cut feature is enabled, all gammas not pointing to the position \textit{GammaConeCut\_ArrayCenter} within the angle 
+given by \textit{GammaConeCut\_MaxAllowedOpeningAngle} will be killed, if the primary vertex of the photon 
+is outside a spherical range \textit{GammaConeCut\_StartCutRadius} of this position.
+
+
+
+%%% Local Variables:
+%%% TeX-master: "usersguide"
+%%% End:

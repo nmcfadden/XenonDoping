@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+<define>
+  <position name="CenterOfTheUniverse" unit="m" x="0" y="0.0" z="1.0" />
+</define>
+
+<materials>
+  <material Z="7" formula=" " name="Vacuum" >
+   <D value="1e-10" />
+   <atom value="14.0007" />
+  </material>
+  <material Z="29" formula="Cu" name="Copper" >
+    <D value="8.96" />
+    <atom value="63.55" />
+  </material>
+</materials>
+
+<solids>
+  <box lunit="m" name="TheBox" x="4" y="4" z="4" />
+  <box lunit="m" name="TheWorld" x="10" y="10" z="10" />
+</solids>
+
+<structure>
+  <volume name="Volumina" >
+    <materialref ref="Copper" />
+    <solidref ref="TheBox" />
+  </volume>
+  <volume name="World" >
+     <materialref ref="Vacuum" />
+     <solidref ref="TheWorld" />
+     <physvol>
+       <volumeref ref="Volumina" />
+       <positionref ref="CenterOfTheUniverse" />
+     </physvol>
+  </volume>
+</structure>
+
+<setup name="Default" version="1.0" >
+  <world ref="World" />
+</setup>
+
+</gdml>

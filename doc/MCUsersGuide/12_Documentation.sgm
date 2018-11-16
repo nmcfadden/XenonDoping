@@ -1,0 +1,50 @@
+<chapter id="Documentation">
+   <title>Documentation
+   </title>
+   <para>An important part of any distributed software project is the manual.  This allows new contributers to come up to speed more quickly, and allows users from outside the development team to conduct their own simulations.  To that end, the MJSim development team has written this User's and Developer's Guide (UDG).
+   </para>
+   <para>We have chosen <ulink url="http://www.docbook.org/"><citetitle>DocBook</citetitle></ulink> as our format for the UDG.  <ulink url="mailto:amokhtarani@lbl.gov"><citetitle>Akbar</citetitle></ulink> has graciously installed several tools in our development environment on the PDSF cluster for parsing DocBook code and generating different output formats.  These are:
+      <itemizedlist mark='bullet'>
+         <listitem>
+            <para>db2dvi, for generating <ulink url="http://www.latex-project.org/"><citetitle>LaTex</citetitle></ulink> dvi files
+            </para>
+         </listitem> 
+         <listitem>
+            <para>db2html, for generating html
+            </para>
+         </listitem>
+         <listitem>
+            <para>db2pdf, for generating Adobe pdf files
+            </para>
+         </listitem>
+         <listitem>
+            <para>db2ps, for generating post script files
+            </para>
+         </listitem>
+         <listitem>
+            <para>db2rtf, for generating rich text format documents
+            </para>
+         </listitem>
+      </itemizedlist>
+   </para>
+   <para>To use any of these commands, simply type:<screen>db2??? file.sgm</screen> where <quote>db2???</quote> is the parsing tool you wish to use (determined of course by your desired output format), and <quote>file</quote> is the DocBook sgml file containing the DocBook document declaration.
+   </para>
+   <para><emphasis><quote>But how do I write my DocBook Code?</quote></emphasis> you might ask.  It so happens that <ulink url="mailto:vmg@lanl.gov"><citetitle>Vic</citetitle></ulink> has written a "template chapter" to assist in this, the DocBook code and processed html of which are in the directory <quote>~/MJ/doc</quote>  If you look at the source code for the template chapter and how it turns out in the processed html, this should take you quite a way in writing your own code.  If you would like to know more DocBook markup commands, you can find them at:
+      <itemizedlist mark='bullet'>
+         <listitem>
+            <para><ulink url="http://www.docbook.org/"><citetitle>DocBook.org</citetitle></ulink> (which contains <ulink url="http://www.docbook.org/tdg/en/html/docbook.html"><citetitle>DocBook: The Definitive Guide</citetitle></ulink>)
+            </para>
+         </listitem>
+         <listitem>
+            <para><ulink url="http://nwalsh.com/index.html"><citetitle>NWaslsh.com</citetitle></ulink> - Norman Walsh is the one who wrote most of the common stylesheets and contributed heavily to <ulink url="http://www.docbook.org/tdg/en/html/docbook.html"><citetitle>DocBook, The Definitive Guide</citetitle></ulink>
+            </para>
+         </listitem>
+         <listitem>
+            <para><ulink url="http://www.sagehill.net/docbookxsl/index.html"><citetitle>DocBook XSL: The Complete Guide</citetitle></ulink>)
+            </para>
+         </listitem>
+      </itemizedlist>
+   </para>
+   <para>If you find a Docbook markup that you like that is not already in the template chapter, please <ulink url="mailto:vmg@lanl.gov"><citetitle>email Vic</citetitle></ulink> and tell him so that he can add it to the template chapter.
+   </para>
+</chapter>

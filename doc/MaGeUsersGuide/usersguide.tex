@@ -1,0 +1,307 @@
+%--------------------------------------------------------
+% style 
+%--------------------------------------------------------
+
+\documentclass[11pt, a4paper]{book}
+
+
+\usepackage{ifpdf}
+\ifpdf
+  % here input commands that are pdflatex specific
+  \usepackage[pdftex]{graphicx}
+  \usepackage{epstopdf} 
+\else
+  \usepackage[dvips]{graphicx}
+\fi
+
+
+\ifpdf
+  \usepackage[usenames,dvipsnames]{color}
+\else
+  \usepackage[usenames,dvips]{color}
+\fi
+
+\usepackage{verbatim}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage[dvips]{rotating}
+
+\usepackage{listings}
+\lstset{ 
+  language=sh,
+  frame=tbrl,
+  frameround=tttt,
+  showspaces=false,
+  showtabs=false,
+  basicstyle=\footnotesize,
+% backgroundcolor=\color{Gray},
+% fillcolor=\color{Gray},
+  extendedchars=true
+}            
+\lstloadlanguages{sh,bash,csh,[GNU]C++,[gnu]make,SQL}
+
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\topmargin}{-1cm}
+\setlength{\textheight}{23cm}
+\setlength{\textwidth}{16cm}
+\graphicspath{{figures/}}
+
+\pagestyle{headings}
+\let\subsubsubsection\paragraph
+
+
+\newcommand{\mage}     {{\sc MaGe }}
+\newcommand{\geant}    {{\sc GEANT4}}
+\newcommand{\rootv}    {{\sc ROOT}}
+\newcommand{\gerda}    {{\sc GERDA}}
+\newcommand{\majorana} {{\sc Majorana}} 
+ 
+%--------------------------------------------------------
+\renewcommand{\paragraph}[1]{\subsubsubsection*{#1}}
+\begin{document}
+
+% -------------------------------------------------------- 
+% title 
+% -------------------------------------------------------- 
+
+\begin{titlepage}
+
+\begin{figure}
+\leftline{ \includegraphics[width=0.15\textwidth]{GERDA-Logo}
+\hspace{3.2 cm} 
+GERDA Scientific / Technical Report: GSTR-07-???}
+\end{figure} 
+
+\hspace{10.8cm} \today \\ 
+
+\begin{center}
+
+\vspace{1.0cm}
+
+{\Large MaGe - the \gerda/\majorana\ Monte Carlo framework \\ } 
+
+\vspace{0.5cm} 
+
+{\large A user's and developer's guide for \gerda\ members\\ }
+
+\vspace{1.0cm}
+
+{\large 
+Luciano Pandola$^{a}$,
+Markus Knapp$^{b}$,
+Kevin Kr\"oninger$^{c}$,
+Daniel Lenz$^{c}$,
+Jing Liu$^{c}$,
+Xiang Liu$^{c}$,
+Jens Schubert$^{c}$,
+Manuela Jelen$^{c}$,
+Oleksandr Volynets$^{c}$
+}
+
+\vspace{1.0cm}
+
+{\it 
+$^{a}$ INFN Laboratori Nazionali del Gran Sasso, Assergi (AQ), Italy \\ 
+$^{b}$ Physikalisches Institut, Universit\"at T\"ubingen, Germany \\ 
+$^{c}$ Max-Planck-Institut f\"ur Physik, M\"unchen, Germany
+} 
+\vspace{2.0cm} 
+
+\end{center} 
+
+{\large Abstract} \\ 
+
+The Monte Carlo software \mage, developed and maintained by the
+\majorana\ and \gerda\ Monte Carlo groups, is introduced. The focus is
+on the \gerda\ and common parts of the software. A user's guide for
+non-experts explains the installation and macro-based running of
+\mage. The developer's guide shows the structure of the C++ code
+and covers more technical details. 
+
+\end{titlepage} 
+
+% -------------------------------------------------------- 
+% table of contents 
+% -------------------------------------------------------- 
+
+\pagenumbering{roman}
+
+\tableofcontents
+
+\pagebreak 
+
+% -------------------------------------------------------- 
+% main body 
+% -------------------------------------------------------- 
+
+\pagenumbering{arabic} 
+\setcounter{page}{1} 
+
+% -------------------------------------------------------- 
+% introduction 
+% --------------------------------------------------------  
+
+\chapter{Introduction}
+\label{chapter:introduction}
+\input{introduction.tex}
+
+% -------------------------------------------------------- 
+% part i
+% -------------------------------------------------------- 
+
+\part{User's guide} 
+\label{part:user} 
+
+% -------------------------------------------------------- 
+% installation 
+% --------------------------------------------------------  
+
+\chapter{Installation}
+\label{chapter:installation}
+% {\it Jing, Mike, Alex} \\
+\input{installation.tex}
+
+% -------------------------------------------------------- 
+% getting started 
+% --------------------------------------------------------  
+
+\chapter{Getting Started}
+\label{chapter:start}
+% {\it Jing} \\
+\input{start.tex}
+
+
+% -------------------------------------------------------- 
+% documentation  
+% --------------------------------------------------------  
+
+\chapter{Documentation} 
+\label{chapter:documentation} 
+{\it tba} 
+\input{documentation.tex}
+
+
+% -------------------------------------------------------- 
+% macro commands 
+% --------------------------------------------------------  
+
+\chapter{Macro commands} 
+\label{chapter:macros} 
+{\it all}
+\input{macro_commands.tex}
+
+
+% -------------------------------------------------------- 
+% generators 
+% --------------------------------------------------------  
+
+\chapter{Generators} 
+\label{chapter:generators} 
+{\it Luciano} 
+
+\input{generators.tex}
+
+\chapter{Geometries}
+\label{chapter:geometries}
+
+\input{geometries.tex}
+% -------------------------------------------------------- 
+% analysis tools
+% --------------------------------------------------------  
+
+\chapter{Analysis tools} 
+\label{chapter:tools} 
+{\it Xiang} 
+\input{analysis.tex}
+
+% -------------------------------------------------------- 
+% part ii
+% -------------------------------------------------------- 
+
+\part{Developer's guide} 
+\label{part:developer} 
+
+% -------------------------------------------------------- 
+% compiling
+% --------------------------------------------------------  
+
+\chapter{Compiling \mage} 
+\label{chapter:compiling} 
+% {\it Jing} 
+\input{compiling.tex}
+
+% -------------------------------------------------------- 
+% code structure
+% --------------------------------------------------------  
+
+\chapter{\mage~Code Structure} 
+\label{chapter:codestructure} 
+\input{codestructure.tex}
+
+% -------------------------------------------------------- 
+% physics lists  
+% --------------------------------------------------------  
+
+\chapter{Physics lists}
+\label{chapter:physics}
+{\it Luciano} \\ 
+\input{physicslist.tex}
+
+% -------------------------------------------------------- 
+% I/O 
+% --------------------------------------------------------  
+
+\chapter{I/O scheme and the ROOT interface}
+\label{chapter:io}
+{\it Xiang} \\ 
+\input{io.tex}
+
+% -------------------------------------------------------- 
+% materials  
+% --------------------------------------------------------  
+
+\chapter{Material definitions}
+\label{chapter:materials}
+{\it tba} \\ 
+\input{materials.tex}
+
+
+% -------------------------------------------------------- 
+% detector components  
+% --------------------------------------------------------  
+
+\chapter{Detector components}
+\label{chapter:detector}
+{\it all} \\ 
+\input{detectors.tex}
+
+
+% -------------------------------------------------------- 
+% test stands 
+% --------------------------------------------------------  
+
+\chapter{Test stands}
+\label{chapter:teststands}
+{\it all} 
+\input{teststand.tex}
+
+% -------------------------------------------------------- 
+% bibliography
+% -------------------------------------------------------- 
+
+\clearpage
+\addcontentsline{toc}{chapter}{Bibliography}
+
+\input{biblio.tex}
+
+
+
+%--------------------------------------------------------
+
+\end{document}
+
+%-------------------------------------------------------- 
+ 
+
+

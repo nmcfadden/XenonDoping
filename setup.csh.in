@@ -1,0 +1,53 @@
+setenv G4WORKDIR @G4WORKDIR@
+# the following line is for G4 version >= 9.6
+source @G4INSTALL@/geant4make.csh @G4INSTALL@ @SILENCEG4ENV@
+# uncomment the following two lines for G4 version < 9.5
+# source @G4INSTALL@/env.csh @SILENCEG4ENV@
+# uncomment the following two lines for G4 version = 9.5
+# source @G4INSTALL@/../../../bin/geant4.csh @SILENCEG4ENV@
+# source @G4INSTALL@/geant4make.csh @SILENCEG4ENV@
+# add G4WORKDIR/bin/G4SYSTEM to the front of the path, because stupid G4 adds it
+# to the end, but we want to override the old setting if another G4WORKDIR was
+# being used before MaGe/setup.(c)sh was called
+setenv PATH $G4WORKDIR/bin/${G4SYSTEM}:$PATH
+# G4 doesn't add CLHEP/bin to path; do it for access to clhep-config
+setenv PATH $CLHEP_BASE_DIR/bin:$PATH
+
+if (-e @ROOTSYS@/bin/thisroot.csh) then
+  source @ROOTSYS@/bin/thisroot.csh @ROOTSYS@/bin
+else 
+  setenv ROOTSYS @ROOTSYS@
+  setenv PATH $ROOTSYS/bin:$PATH
+  if ($G4SYSTEM == "Darwin-g++") then
+    if ($?DYLD_LIBRARY_PATH) then
+      setenv DYLD_LIBRARY_PATH $ROOTSYS/lib$DYLD_LIBRARY_PATH
+    else
+      setenv DYLD_LIBRARY_PATH $ROOTSYS/lib
+    endif
+  else 
+    if ($?LD_LIBRARY_PATH) then
+      setenv LD_LIBRARY_PATH $ROOTSYS/lib:$LD_LIBRARY_PATH
+    else
+      setenv LD_LIBRARY_PATH $ROOTSYS/lib
+    endif
+  endif
+  if ($?PYTHONPATH) then
+    setenv PYTHONPATH $ROOTSYS/lib:$PYTHONPATH
+  else
+    setenv PYTHONPATH $ROOTSYS/lib
+  endif
+endif
+
+
+setenv MGDODIR @MGDODIR@
+setenv PATH $MGDODIR/bin:$PATH
+if ($G4SYSTEM == "Darwin-g++") then
+  setenv DYLD_LIBRARY_PATH $MGDODIR/lib:$DYLD_LIBRARY_PATH
+else if ($G4SYSTEM == "Darwin-clang") then
+  setenv DYLD_LIBRARY_PATH $MGDODIR/lib:$DYLD_LIBRARY_PATH
+else 
+  setenv LD_LIBRARY_PATH $MGDODIR/lib:$LD_LIBRARY_PATH
+endif
+
+setenv MAGEDIR @MAGEDIR@
+setenv MGGENERATORDATA $MAGEDIR/generators/data

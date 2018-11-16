@@ -1,0 +1,645 @@
+<chapter id="Results">
+   <title>Selected Results
+   </title>
+   <para> This section contains selected results and examples 
+of the simulation.
+   </para>
+   
+   <section> <title> The Los Alamos Clover Detector </title>
+   <section> <title> Combined <superscript>60</superscript>Co and 
+     <superscript>57</superscript>Co source</title>
+ 
+   <section> <title> Simulation Setup </title>
+   <para>
+   The geometry, output classes and event generators for the 
+   Los Alamos Clover detector are described in the earlier sections (TBD).
+   </para>
+   
+   <para>
+   A simulation of a combined <superscript>57</superscript>Co and 
+<superscript>60</superscript>Co point source located 1.5 inches 
+ in front of the detector face was performed and compared to data.
+ The MJ simulation package, version 1.0 was used.  
+ One million decays were generated for each Co isotope 
+ and the root trees were saved at 
+<computeroutput>/auto/majorana1/MJ/data/LANLClover/mcdata/
+</computeroutput> on PDSF.
+The following script was run twice with different 
+ random number seeds and output files to generate the 
+ <superscript>57</superscript>Co events:
+ </para>
+ <screen> /MG/manager/mjlog routine
+ /MG/manager/heprandomseed 92348
+ /MG/geometry/detector clover
+ /MG/eventaction/rootschema LANLCloverNoPS
+ /MG/eventaction/rootfilename /auto/majorana1/MJ/data/LANLClover/mcdata/Co57_1.root
+ /MG/generator/select PNNLiso
+ /MG/generator/PNNL/init /auto/majorana1/MJ/database/generators/PNNL/Co57_Source.dat
+ /MG/generator/PNNL/setsourceage 0.0
+ /MG/generator/PNNL/reportingfrequency 1000
+ /MG/generator/PNNL/position 0.0 0.0 14.8
+ /run/initialize
+ /run/beamOn 500000</screen>
+ <para>
+ The <superscript>60</superscript>Co events were generated with 4 versions
+of the following script:
+</para>
+<screen>/MG/manager/mjlog routine
+/MG/manager/heprandomseed 5425322
+/MG/geometry/detector clover
+/MG/eventaction/rootschema LANLCloverNoPS
+/MG/eventaction/rootfilename /auto/majorana1/MJ/data/LANLClover/mcdata/Co60_1.root
+/MG/generator/select PNNLiso
+/MG/generator/PNNL/init /auto/majorana1/MJ/database/generators/PNNL/Co60_Source.
+dat
+/MG/generator/PNNL/setsourceage 0.0
+/MG/generator/PNNL/reportingfrequency 1000
+/MG/generator/PNNL/position 0.0 0.0 14.8
+/run/initialize
+/run/beamOn 250000</screen>
+
+ </section>
+ <section> <title> Simulation Results </title> 
+ <para> The PNNL generator generated the following isotropic 
+ gamma ray spectrum for
+ the <superscript>57</superscript>Co isotope. </para>
+ <figure> <title> <superscript>57</superscript>Co Generated Gammas </title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/Co57Generated.gif"/>
+     </imageobject>
+   </mediaobject>
+ </figure>
+
+ <para> It also generated the following isotropic spectra for the
+   <superscript>60</superscript>Co isotope.</para>
+ <figure> <title> <superscript>60</superscript>Co Generated Gammas </title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/Co60Generated.gif"/>
+     </imageobject>
+   </mediaobject>
+ </figure>
+
+<para> One observes that even low branching ratio gammas are generated. The
+PNNL generator does not generate betas at this time. </para>
+
+<para> The following plot shows the sum of the energy deposits in all four
+crystals, as computed by the Monte Carlo. Detector response has not been 
+folded in. The relative normalization of the two spectra is discussed 
+below. 
+</para>
+
+ <figure> <title> Summed energy </title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/SummedE4Xtals.gif"/>
+     </imageobject>
+   </mediaobject>
+ </figure>
+
+ <para> The next plot shows the low energy region of the previous plot. 
+ Several features are tentatively identified. </para>
+
+ <figure> <title> Summed energy, low energy region </title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/Co57SummedMC.gif"/>
+     </imageobject>
+   </mediaobject>
+ </figure>
+
+ <para> The simulated spectra were compared with data from the LANL clover. 
+  Gaussian fluctuations were added to the simulated energy 
+ measurements and the simulated 
+ energy was converted to channel numbers using calibration
+ constants from the LANL clover calibration document:
+  (<ulink url="http://lanldb1.lanl.gov/Majorana/analysis.nsf/URL/LANL-5XBV8H">
+  http://lanldb1.lanl.gov/Majorana/analysis.nsf/URL/LANL-5XBV8H</ulink>). 
+The simulated spectra in a single
+  crystal (# 1) is compared to the true spectra in the next plot. </para>
+
+ <figure> <title> Spectra comparison, Crystal 1</title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/FullSpectra.gif"/>
+     </imageobject>
+   </mediaobject>
+ </figure>
+
+ <para>
+ The measured spectrum is from the E1 channel and shows good agreement 
+with the simulation, except in the low energy region. This is even
+ more evident in this zoom of the low energy region: </para>
+
+ <figure> <title> Spectra comparison 2 </title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/PrimarySpectra.gif"/>
+     </imageobject>
+   </mediaobject>
+ </figure>
+
+<para>The paucity of events in the backscatter region of the simulation 
+is likely due to the
+simulated geometry of the lead shield. The simulated lead shield was much
+further away than the shield used during the measurement. This leads to 
+the relative reduction  of the simulated
+flux of backscatter and Pb K-shell X-Ray events. The shield geometry 
+will be  corrected in the next version of the simulation.</para>
+
+<para> The following plots show zooms of the peak regions for the two sources.
+The Monte Carlo data was normalized to the background subtracted 
+surface area under the two dominant peaks for each source. Each source was 
+normalized separately.  
+</para>
+
+ <figure> <title> <superscript>57</superscript>Co Peaks </title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/Co57Peaks.gif"/>
+     </imageobject>
+   </mediaobject>
+ </figure>
+
+ <figure> <title> <superscript>60</superscript>Co Peaks </title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/Co60Peaks.gif"/>
+     </imageobject>
+   </mediaobject>
+ </figure>
+<para>
+The <superscript>60</superscript>Co isotope shows inconsistency in the 
+width of the gamma peaks between the simulated and measured spectra. This 
+is probably due to inaccuracies in the calibration constants applied to the
+simulated data and is easily fixed in the next simulation release.
+</para>
+
+<para>
+The qualitative analysis of the simulation of the clover detector 
+presented here agrees 
+well with the data; however, a more detailed quantitative analysis is
+warranted. More 
+simulation with different sources, as well as waveforms, are also 
+planned.
+The current simulation generates charge measurements for the E1, E2, E3, 
+E4, L, M, and R channels. Only the E1 channel is shown here.  
+</para>
+</section>
+
+<section><title> Benchmarking </title>
+<para>
+The simulation was run on PDSF at NERSC using the LSF batch-queuing 
+system. The following information was extracted from the generated log 
+files. 500 000 <superscript>57</superscript>Co events were run on a PDSF
+node with the following characteristics:</para>
+<screen>
+1.725GHz/Athlon AMD Dual CPU (only one CPU used by MaGe)
+2GB Memory
+RH 7.2
+Processing time per event: 6.3 msec.
+</screen>
+<para>
+500 000 <superscript>57</superscript>Co events were run on a different
+PDSF node with the following characteristics:
+</para>
+<screen>
+2.133GHz/Athlon AMD Dual CPU (only one CPU used by MaGe)
+2GB Memory
+RH 7.2
+Processing time per event: 5.2 msec.
+</screen>
+<para>
+All of the one million <superscript>60</superscript>Co events were run on
+similar machines with the following characteristics:
+</para>
+<screen>
+1.725GHz/Athlon AMD Dual CPU (only one CPU used by MaGe)
+2GB Memory
+RH 7.2
+Processing time per event: 106 msec.
+</screen>
+<para>
+The use of the <superscript>60</superscript>
+Co source increases the CPU time per event by a factor of 17, due to the 
+higher energy involved. It may be possible to reduce the CPU time by 
+fine-tuning the Geant 4 physics list.
+</para>
+</section>
+</section>
+</section>
+
+<section><title> Ionization tracks from electrons in Germanium</title>
+
+<section><title> Simulation setup </title>
+<para>
+A simulation of the propagation and energy loss of 1.02 MeV electrons in 
+natural Ge 
+was performed. The goal was to understand the spatial extent of the 
+ionization from the electron for pulse-shape studies. The simulation was
+performed on PDSF with the following script, using version 1.3 of 
+<filename>MaGe</filename>:
+</para>
+<screen>
+/MG/manager/mjlog routine
+/MG/geometry/detector solidBlock
+/MG/eventaction/reportingfrequency 200          
+/MG/eventaction/rootschema solidBlock
+/MG/eventaction/rootfilename /auto/majorana1/users/rhenning/testion.root
+/MG/generator/select G4gun
+/gun/number 1
+/gun/particle e-
+/gun/position 0 0 0 cm
+/gun/direction 0 0 1
+/gun/energy 1.02 MeV
+/run/initialize
+/run/beamOn 10000
+</screen>
+</section>
+
+<section><title> Simulation Results </title>
+<para>
+We present some initial results from this simulation that allows us to
+better understand the nature of the ionization electron cloud created by 
+1.02 MeV electrons. </para>
+
+<section><title> Electron trajectory </title>
+<para>
+The plot below shows a typical electron track from the simulation, projected
+onto 2 dimensions, where the arrow indicates the initial position and
+direction of the electron. 
+The size of the squares is proportional to the energy
+deposit in the column. The torturous trajectory of the electron is
+apparent. </para>
+
+<figure> <title> Energy deposit spatial distribution</title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/SampleTrack.gif"/>
+     </imageobject>
+   </mediaobject>
+</figure>
+</section>
+
+<section><title> Average spatial energy deposit distribution</title>
+
+<para>
+The energy deposits for 10000 simulated electrons were averaged and projected
+onto a 2-D plane. The arrow indicates the initial position and direction of
+the primary electrons. It is obvious that the average energy deposit is
+spatially uniform over a large region 
+and that individual electron trajectories vary a lot. 
+Pulse-shape and segmentation analysis would require a resolution of at least
+0.4 mm, probably better, to resolve structure in the electron's track.
+The slight offset in the energy deposit from the arrow
+is due to binning, where the binsize was 0.01mm. 
+</para>
+
+<figure> <title> Energy deposit spatial distribution</title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/SumEdep2D.gif"/>
+     </imageobject>
+   </mediaobject>
+</figure>
+
+<para> 
+The distance from the electron's initial position to the end of its path is
+shown below. Although some of the 10000 simulated electrons travel up to 1 mm 
+from their initial position, most are limited to 0.5 mm from the initial 
+position.
+</para>
+
+<figure> <title> Distance from initial position to end of track</title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/DistanceFromVertex.gif"/>
+     </imageobject>
+   </mediaobject>
+</figure>
+
+<para> 
+As a consistency check for the simulation, the total path length (sum
+of distances traveled at each simulation step) was compared to the tabulated 
+average stopping range for electrons. For a 1.0 MeV electron, 
+the tabulated stopping range is 1.23 mm 
+(see ICRU Report 37 "Stopping Powers for Electrons and Positrons", 1984)
+Below is the plot of the path-length for the 10000 1.02 MeV 
+simulated electrons. 
+The average simulated total path-length is 1.30 mm. The simulation and
+tabulated data agree well, 
+considering the very different approaches. A more detailed analysis to
+understand the small differences and estimate errors will be performed. 
+</para>
+
+<figure> <title> Distance from initial position to end of track</title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/TotalDistance.gif"/>
+     </imageobject>
+   </mediaobject>
+</figure>
+
+<para>
+The last plots show the number of tracking steps Geant 4 performed in 
+tracking the electron. The mean is 123, confirming that the trajectory is 
+well-sampled. 
+</para>
+
+<figure> <title> Number of G4 tracking steps.</title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/NumberOfSteps.gif"/>
+     </imageobject>
+   </mediaobject>
+</figure>
+
+</section>
+<section><title> Conclusion and Discussion </title>
+<para>
+This initial study shows that Geant 4 can be used to compute the trajectories
+of 1.02 MeV electrons. It showed that to resolve trajectory structure, 
+a resolution of at least 0.4 mm is required. 
+Much more work remains to be done, including:
+</para>
+
+<itemizedlist>
+<listitem>
+<para>
+Studying the spatial difference in the electron clouds of a neutrinoless
+double-beta decay and a single 2.04 MeV electron. 
+</para>
+</listitem>
+<listitem>
+<para>
+Understanding the effect of improving the position resolution of the 
+pulse-shape and segmentation analysis on discerning double-beta decay events.
+Ie. If my resolution is X, what does it buy me?
+</para>
+</listitem>
+<listitem>
+<para>
+Incorporating waveform simulations.
+</para>
+</listitem>
+<listitem>
+<para>
+Some energy deposits were observed much further away, probably due to 
+radiative losses. A study of these radiative losses is forthcoming. 
+</para>
+</listitem>
+</itemizedlist>
+</section>
+</section>
+
+<section><title> Benchmarking </title>
+<para>
+No detailed benchmarking was performed. 
+The 10000 events took several minutes to generate on an AMD 2.13GHz machine. 
+</para>
+</section>
+</section>
+
+<section><title> FEL Source with LANL Clover </title>
+<para>
+A simulation of the production of double escape events in the LANL clover with
+a segmented NaI veto barrel at the TUNL free-electron laser (FEL) was 
+performed. 
+</para>
+
+<section><title> Simulation Setup </title>
+<para>
+One million FEL events were generated with five versions of the following 
+script. Each script had a different random number seed and output file name. 
+</para>
+
+<screen>
+/MG/manager/mjlog routine
+/MG/manager/heprandomseed 345542
+/MG/geometry/detector cloverinNaIbarrel
+/MG/eventaction/reportingfrequency 1000         
+/MG/eventaction/rootschema LANLCloverInNaIBarrel
+/MG/eventaction/rootfilename /auto/majorana1/users/rhenning/testFEL30_1.root
+/MG/generator/select TUNLFEL
+/MG/generator/TUNLFEL/energysigma 12 keV
+/MG/generator/TUNLFEL/meanenergy 3.04 MeV
+/MG/generator/TUNLFEL/majorsigma 0.6 cm
+/MG/generator/TUNLFEL/minorsigma 0.6 cm
+/MG/generator/TUNLFEL/origin 1.0 1.0 200.0 cm
+/MG/generator/TUNLFEL/rho 0.0
+/run/initialize
+/run/beamOn 200000
+</screen>
+
+<para>
+The script was run with a customized version of <filename>MaGe</filename> that
+will be released as ver 1.3. It used the newly implemented double-beta decay 
+physics processes list that is the default. The jobs were run on 9/21/2004.
+</para>
+</section>
+
+<section><title> FEL Generator Verification </title>
+<para>
+The FEL generator generates a
+beam of gamma rays with Gaussian distributions of  momentum and spatial 
+cross-section. Plotted below are the distributions of the generated 
+momentum and positions of the gammas. The gammas were generated with
+a mean energy of 3.04 MeV, energy-momentum RMS of 12 keV along the z-axis, and
+a vertex position RMS of 0.6 cm on the x-y plane. The plots below confirm 
+that the generator 
+works as expected. The FEL beam was directed along the +z direction, slightly
+offset from the z-axis such that the beam illuminated the front face of the 
+LANL clover at the location with the most sensitive material in the beam's 
+path. 
+</para>
+
+<figure> <title> Generated Momentum component along z-axis</title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/OriginalPz.gif"/>
+     </imageobject>
+   </mediaobject>
+</figure>
+
+<figure> <title> Generated vertex positions</title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/BeamProfile.gif"/>
+     </imageobject>
+   </mediaobject>
+</figure>
+
+<figure> <title> Generated vertex positions projected onto x-axis</title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/BeamProfileProj.gif"/>
+     </imageobject>
+   </mediaobject>
+</figure>
+
+</section>
+
+<section><title> Analysis results </title>
+<para>
+Shown below is the summed energy deposit in all four clover crystals for all
+events. The detector resolution of the clover 
+was not considered in this analysis, since it is
+much better than the energy RMS of the FEL beam. 
+The main peak at 3.04 MeV, as well as the 
+Compton edge, single escape and double escape peaks are visible. The 511 Kev
+annihilation line is also visible. 
+</para>
+
+<figure> <title> Simulated energy deposit from all four clover crystals</title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/EdepMC.gif"/>
+     </imageobject>
+   </mediaobject>
+</figure>
+
+<para>
+The next plot shows the interaction probability of gammas with the Ge in the
+detector. 32 percent of the generated gammas deposit energy in the Ge, while 
+the rest did not deposit energy in the Ge.
+</para>
+<figure> <title> Interaction efficiency of gammas</title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/InteractionRates.gif"/>
+     </imageobject>
+   </mediaobject>
+</figure>
+
+<para>
+The following set of plots describes the veto performance of the NaI barrel. 
+The event-by-event distribution of the sum of the energy deposit in all 16 
+segments of the NaI barrel is shown next. The 511keV and 1022keV lines from
+SEP and DEP events in the detector are clearly visible. 
+</para>
+<figure> <title> Summed energy deposit in NaI barrel</title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/TotEdepNaIMC.gif"/>
+     </imageobject>
+   </mediaobject>
+</figure>
+
+<para>
+NaI detectors have much lower energy resolution than Ge detectors. Gaussian
+fluctuations were added to the NaI detectors energy deposits on an 
+event-by-event basis. The fluctuations were estimated  using the formula 
+for NaI detectors from Knoll, "Radiation Detection and 
+Measurement", 3rd ed. p. 330. The RMS of the added energy fluctuations at a 
+given energy E is given by: FWHM(E) = E * exp(-2 -0.5 * log(E/511.0)),
+where E is in keV. Shown below is the previous distribution with added 
+fluctuations. 
+One notices that the DEP is almost lost once the fluctuations are added. 
+</para>
+<figure> <title> Summed energy deposit in NaI barrel with statistical noise
+added.</title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/TotEdepNaIBarrelwNoise.gif"/>
+     </imageobject>
+   </mediaobject>
+</figure>
+
+<para>
+The purpose of the segmented NaI barrel is to detect DEP events via the two
+annihilation gammas that interact in opposite segments
+(180<superscript>o</superscript> apart). The distributions of number of 
+segments hit per event and events that have hits in opposite 
+segment pairs are shown below. For all the following  
+events a threshold of 10 keV in a segment was required for it to be considered
+a "hit." 
+</para>
+<figure> <title> Number of segments hit.</title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/NSegmentsHits.gif"/>
+     </imageobject>
+   </mediaobject>
+</figure>
+<figure> <title> Number of opposite segment pairs hit.</title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/NVetoHits.gif"/>
+     </imageobject>
+   </mediaobject>
+</figure>
+
+<para>
+If we apply the following cuts:
+<itemizedlist>
+<listitem><para> Number of segments with energy deposit > 10keV == 2 
+</para></listitem>
+<listitem><para> Number of opposite segment pairs hit == 1, 
+0</para></listitem>
+</itemizedlist>
+we obtain the following energy spectra from the clover and the barrel:
+</para>
+<figure> <title> Energy deposit in Ge with cuts.</title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/EdepwCuts1.gif"/>
+     </imageobject>
+   </mediaobject>
+</figure>
+<figure> <title> Energy deposit in NaI with cuts.</title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/EdepNaIwCuts1.gif"/>
+     </imageobject>
+   </mediaobject>
+</figure>
+
+<para>
+The DEP is now much more prominent in both the Ge and NaI spectra. As a 
+final cut, require that the NaI energy deposit summed over all
+segments satisfies 900keV &lt; Edep &lt; 1100keV. With this final cuts we obtain the
+following spectrum in the clover:
+</para>
+<figure> <title> Energy deposit in clover with all cuts.</title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/EdepwCuts2.gif"/>
+     </imageobject>
+   </mediaobject>
+</figure>
+
+</section>
+
+<section><title> Discussion and Conclusions</title>
+<para>
+From this simple analysis, we observe that  770 events of the initial 1 
+million remain in the DEP region. This is in agreement
+with the initial SEGA proposal estimates of 5 million beam events to generate
+1000 DEP events, since simulation of the barrel is very optimistic and does
+not include seams between NaI segments. The simulation also does not factor in 
+other detector effects such as dead time.
+</para>
+<figure> <title> Energy deposit in Ge with all cuts.</title>
+   <mediaobject>
+     <imageobject>
+        <imagedata fileref="figures12/EdepwCuts2Zoom.gif"/>
+     </imageobject>
+   </mediaobject>
+</figure>
+
+<para>
+Some other observations:
+<itemizedlist>
+<listitem><para> We observe a long tail to higher energy for the selected DEP
+events. This is probably due to DEP gammas undergoing a small angle Compton
+scatter before exiting the Ge.</para></listitem>
+<listitem> <para> The cuts applied were crude and more sophisticated cuts, ie. 
+a cut that takes into account gamma-rays scattering into adjacent NaI 
+segments, could increase the DEP event detection efficiency</para></listitem>
+</itemizedlist>
+</para>
+</section>
+</section>
+
+</chapter> 

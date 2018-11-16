@@ -1,0 +1,45 @@
+# ====================== #
+# Draws simple teststand #
+# ====================== # 
+
+#
+# Geometry setup 
+#
+
+/MG/geometry/detector MunichTestStand
+/MG/geometry/teststand/teststandtype milchkanne
+/MG/geometry/database false
+/MG/processes/useNoHadPhysics true
+
+#
+# Geometry modifications 
+#
+
+#
+# Initialize run 
+#
+
+/run/initialize
+
+#
+# visualization
+#
+
+/vis/scene/create
+#/vis/open OGLSX
+/vis/open HepRepFile
+/vis/viewer/set/viewpointThetaPhi 110 110 deg
+/vis/viewer/zoom 10.0
+
+/vis/drawVolume 
+
+/vis/viewer/flush 
+
+
+
+
+
+
+
+
+

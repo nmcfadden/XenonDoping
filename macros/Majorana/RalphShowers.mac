@@ -1,0 +1,23 @@
+# Management
+/MG/manager/mglog routine
+/MG/manager/seedWithUUID
+
+# Process List
+/MG/processes/realm BBdecay
+/MG/processes/lowenergy true
+
+# Configure Detector
+/MG/geometry/detector MJDemonstrator
+/MG/geometry/WorldMaterial Vacuum
+
+
+/MG/generator/select ShowersFromFile
+/MG/generator/ShowersFromFile/onlyMuons false
+
+/MG/eventaction/rootschema MCRun
+/MG/eventaction/reportingfrequency 10
+/MG/io/MCRun/SetSensitiveIDLabelScheme askGeom
+/MG/eventaction/rootfilename test.root
+/run/initialize
+
+/run/beamOn 10

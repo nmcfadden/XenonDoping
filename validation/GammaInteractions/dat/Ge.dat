@@ -1,0 +1,33 @@
+
+# material density [g/cm^3] 
+XX:Ge_density:XX	10	5.323
+
+XX:Ge_attenuation_gamma0.01MeV:XX	11	0.01	37.42
+XX:Ge_attenuation_gamma0.015MeV:XX	11	0.015	91.52
+XX:Ge_attenuation_gamma0.02MeV:XX	11	0.02	42.22
+XX:Ge_attenuation_gamma0.03MeV:XX	11	0.03	13.85
+XX:Ge_attenuation_gamma0.04MeV:XX	11	0.04	6.207
+XX:Ge_attenuation_gamma0.05MeV:XX	11	0.05	3.335
+XX:Ge_attenuation_gamma0.06MeV:XX	11	0.06	2.023
+XX:Ge_attenuation_gamma0.08MeV:XX	11	0.08	0.9501
+XX:Ge_attenuation_gamma0.1MeV:XX	11	0.1	0.555
+XX:Ge_attenuation_gamma0.15MeV:XX	11	0.15	0.2491
+XX:Ge_attenuation_gamma0.2MeV:XX	11	0.2	0.1661
+XX:Ge_attenuation_gamma0.3MeV:XX	11	0.3	0.1131
+XX:Ge_attenuation_gamma0.4MeV:XX	11	0.4	0.09327
+XX:Ge_attenuation_gamma0.5MeV:XX	11	0.5	0.08212
+XX:Ge_attenuation_gamma0.6MeV:XX	11	0.6	0.07452
+XX:Ge_attenuation_gamma0.8MeV:XX	11	0.8	0.06426
+XX:Ge_attenuation_gamma1.0MeV:XX	11	1	0.05727
+XX:Ge_attenuation_gamma1.25MeV:XX	11	1.25	0.05101
+XX:Ge_attenuation_gamma1.5MeV:XX	11	1.5	0.04657
+XX:Ge_attenuation_gamma2MeV:XX	11	2	0.04086
+XX:Ge_attenuation_gamma3MeV:XX	11	3	0.03524
+XX:Ge_attenuation_gamma4MeV:XX	11	4	0.03275
+XX:Ge_attenuation_gamma5MeV:XX	11	5	0.03158
+XX:Ge_attenuation_gamma6MeV:XX	11	6	0.03107
+XX:Ge_attenuation_gamma8MeV:XX	11	8	0.03103
+XX:Ge_attenuation_gamma10MeV:XX	11	10	0.03156
+XX:Ge_attenuation_gamma15MeV:XX	11	15	0.0334
+XX:Ge_attenuation_gamma20MeV:XX	11	20	0.03528
+

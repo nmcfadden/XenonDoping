@@ -1,0 +1,106 @@
+# ============================================= #
+# Draws detector with standard geometry 	#
+# ============================================= # 
+
+
+#General Setup
+/MG/manager/mglog trace 
+#/MG/manager/heprandomseed 92348
+
+/MG/processes/realm BBdecay
+/MG/eventaction/reportingfrequency 1000
+/MG/processes/useNoHadPhysics true
+
+/MG/eventaction/rootschema Crystal
+#/MG/eventaction/Crystal/save tracks
+/MG/eventaction/Crystal/save hits
+/MG/eventaction/rootfilename 10to8Eu152_top_seg_3mm.root
+
+#old output needs old Sigfried, now commented out in the source code
+#/MG/eventaction/rootschema GerdaTestStandEnergyHitsTrajectories
+#/MG/eventaction/rootschema G4Steps
+#/MG/io/G4Steps/setWriteSensitiveOnly false
+#/MG/eventaction/rootfilename test.root
+
+#
+# Geometry setup 
+/MG/geometry/detector MunichTestStand
+/MG/geometry/teststand/teststandtype galatea
+/MG/geometry/database false
+
+################################################################################
+#        Geometry modifications:                                               #
+#                                                                              #
+# inner radius of collimator:                                                  #
+################################################################################
+ 
+/MG/geometry/teststand/collimatorinnerradius        1.5 mm
+#default 1.0 mm
+
+/MG/geometry/teststand/collimatorhalflength         15 mm
+# default 25 mm
+
+################################################################################
+#Two different positions for the collimator: 1= on the top pointing            #
+#at the detector from above, 2 pointing to the det. from the side:             #
+################################################################################
+/MG/geometry/teststand/collimatorposition           1
+#default 1
+
+################################################################################
+#radial distance from center in both cases (internal par. CollimatorSystemR)   #
+# safe parameters for the two cases:                                           #
+#/MG/geometry/teststand/collimatordelta              10.0 cm	#side          #
+#/MG/geometry/teststand/collimatordelta              2.0 cm	#top           #
+################################################################################
+
+/MG/geometry/teststand/collimatordelta              2.0 cm
+
+################################################################################
+#collimatorsystemrotation will be explained here 
+################################################################################
+
+/MG/geometry/teststand/collimatorsystemrotation     90.0 deg
+
+################################################################################
+#vertical coll. pos. relative to the crystal. for collimatorposition = 2 only  #
+# if 0, coll. center will be at the base of the crystal                        #
+# for a 7 cm tall crystal 11.66, 35. , 58.3 are the midle of the 3 segments    #
+# for example you want the coll. facing the midle of the top segment:          #
+#/MG/geometry/teststand/collimatorlowerheight       58.3 mm                    #
+################################################################################
+#/MG/geometry/teststand/collimatorlowerheight       58.3 mm
+
+#
+# Initialize run 
+#
+
+/run/initialize
+
+#/vis/open ATree
+#/vis/ASCIITree/verbose 1
+#/vis/drawTree
+
+#source in the Source volume
+/MG/generator/confine volume
+/MG/generator/volume Source
+/MG/generator/select G4gun
+/gun/particle ion
+#Eu152
+/gun/ion 63 152 0
+#Co60
+#/gun/ion 27 60 0
+#Am241
+#/gun/ion 95 241 0
+#Ge68
+#/gun/ion 32 68 0
+/gun/energy 0.0 keV
+/tracking/verbose 0
+/run/beamOn 100000000
+
+#standard particle gun 
+#/gun/particle gamma
+#/gun/energy 600. keV
+#/gun/direction 0. -1. 0.
+#/tracking/verbose 0
+#/run/beamOn 1000

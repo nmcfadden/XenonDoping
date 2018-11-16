@@ -1,0 +1,52 @@
+# identifier	type (0=gamma, 1=electron, 2=alpha)	energy [keV]	intensity [%]
+
+XX:Co60_beta318keV:XX	1	317.9	1.0	99.88	0.03
+XX:Co60_beta1491keV:XX	1	1492	20	0.12	0.03
+
+XX:Co60_gamma347keV:XX	0	347.14	0.07	0.0075	0.0004
+XX:Co60_gamma826keV:XX	0	826.1	0.03	0.0076	0.0008
+XX:Co60_gamma1173keV:XX	0	1173.228	0.003	99.85	0.03
+XX:Co60_gamma1332keV:XX	0	1332.492	0.004	99.9826	0.0006
+XX:Co60_gamma2159keV:XX	0	2158.57	0.03	0.0012	0.0002
+
+XX:Co60_Auger0.8keV:XX	3	0.84	0.01	0.0366	0.0012
+XX:Co60_Auger6.5keV:XX	3	6.54	0.05	0.0154	0.0005
+XX:Co60_ConversionElectron1165keV:XX	3	1164.895	0.003	0.0151	0.0007
+XX:Co60_ConversionElectron1324keV:XX	3	1324.159	0.004	0.0115	0.0005
+
+# Fermi Function
+XX:Co60_FermiFunction:XX	100	1492
+0.0	1.705
+0.1	1.703
+0.2	1.700
+0.3	1.708
+0.4	1.732
+0.5	1.768
+0.6	1.807
+0.7	1.846
+0.8	1.883
+0.9	1.915
+1.0	1.944
+1.2	1.991
+1.4	2.024
+1.6	2.049
+1.8	2.066
+2.0	2.078
+2.2	2.086
+2.4	2.092
+2.6	2.096
+2.8	2.098
+3.0	2.099
+3.5	2.099
+4.0	2.096
+4.5	2.092
+5.0	2.087
+6.0	2.077
+7.0	2.068
+8.0	2.058
+9.0	2.050
+13.0	2.021
+15.0	2.010
+# end Fermi function data
+
+XX:Co60_halflife_literature:XX 101 166340000

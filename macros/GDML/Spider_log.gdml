@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd" >
+ <define>
+  <position name="SpiderScrewIn3inSpider_logp" unit="mm" x="0" y="-34.5" z="0" />
+  <position name="SpiderScrewIn2inSpider_logp" unit="mm" x="-29.9" y="17.25" z="0" />
+  <position name="SpiderScrewIn1inSpider_logp" unit="mm" x="29.9" y="17.25" z="0" />
+ </define>
+ <materials>
+  <element Z="9" formula="F" name="Fluorine" >
+   <atom value="19" />
+  </element>
+  <element Z="6" formula="C" name="Carbon" >
+   <atom value="12.011" />
+  </element>
+  <material formula=" " name="Teflon" >
+   <D value="2.165" />
+   <fraction n="0.76" ref="Fluorine" />
+   <fraction n="0.24" ref="Carbon" />
+  </material>
+  <material Z="13" formula=" " name="MetalAluminium" >
+   <D value="2.702" />
+   <atom value="26.98" />
+  </material>
+  <material Z="29" formula=" " name="MetalCopper" >
+   <D value="8.96" />
+   <atom value="63.55" />
+  </material>
+ </materials>
+ <solids>
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="Spider_tubs" rmax="37.5" rmin="12.5" startphi="0" z="13.4" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="SpiderRing_tubs" rmax="14.5" rmin="12.5" startphi="0" z="13.4" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="SpiderScrewIn_tubs" rmax="3" rmin="0" startphi="0" z="13.4" />
+ </solids>
+ <structure>
+  <volume name="SpiderRing_log" >
+   <materialref ref="MetalAluminium" />
+   <solidref ref="SpiderRing_tubs" />
+  </volume>
+  <volume name="SpiderScrewIn_log" >
+   <materialref ref="MetalCopper" />
+   <solidref ref="SpiderScrewIn_tubs" />
+  </volume>
+  <volume name="Spider_log" >
+   <materialref ref="Teflon" />
+   <solidref ref="Spider_tubs" />
+   <physvol>
+    <volumeref ref="SpiderScrewIn_log" />
+    <positionref ref="SpiderScrewIn3inSpider_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="SpiderScrewIn_log" />
+    <positionref ref="SpiderScrewIn2inSpider_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="SpiderScrewIn_log" />
+    <positionref ref="SpiderScrewIn1inSpider_logp" />
+   </physvol>
+   <physvol>
+    <volumeref ref="SpiderRing_log" />
+   </physvol>
+  </volume>
+ </structure>
+ <setup name="Default" version="1.0" >
+  <world ref="Spider_log" />
+ </setup>
+</gdml>

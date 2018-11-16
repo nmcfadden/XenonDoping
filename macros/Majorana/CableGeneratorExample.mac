@@ -1,0 +1,37 @@
+# Sample macro for generating sources in cables
+
+# Management 
+/MG/manager/mglog routine
+/MG/manager/seedWithUUID
+
+# Process List
+/MG/processes/realm BBdecay
+#/MG/processes/lowenergy true
+
+# Configure Detector.
+/MG/geometry/detector MJDemonstrator
+/MG/geometry/WorldMaterial Vacuum
+
+# ROOT output schema
+/MG/eventaction/rootschema MCRun
+/MG/eventaction/rootfilename CableTest_Signal_Tl208.root
+#/MG/io/MCRun/SetSensitiveIDLabelScheme classic
+/MG/io/MCRun/SetSensitiveIDLabelScheme askGeom 
+/MG/io/MCRun/setRunID 1
+/MG/io/MCRun/useTimeWindow true
+/MG/io/MCRun/setTimeWindow 86400 second
+
+# Initialize Geant4 and geometry
+/run/initialize
+
+/MG/generator/select Cable
+/MG/generator/Cable/setA 208
+/MG/generator/Cable/setZ 81
+# Source type is either S (signal), H (HV), C (Cross Arm), or P (Cold Plate)
+/MG/generator/Cable/setSourceType S
+# Module location, either E or W (currently E not implemented)
+/MG/generator/Cable/setSourcePos W
+
+# Run 100k events, reporting every 1000th event
+/MG/eventaction/reportingfrequency 1000
+/run/beamOn 100000

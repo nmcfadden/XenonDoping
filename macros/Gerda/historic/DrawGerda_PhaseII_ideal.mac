@@ -1,0 +1,38 @@
+# ===================================== #
+# Draws detector with phase II geometry	#
+# ===================================== # 
+
+#
+# Geometry setup 
+#
+
+/MG/geometry/detector GerdaArray
+/MG/geometry/database false
+
+/MG/geometry/detector/geometryfile geometry.dat
+/MG/geometry/detector/matrixfile matrix_phase_ii_ideal.dat
+
+#
+# Geometry modifications 
+#
+
+#
+# Initialize run 
+#
+
+/run/initialize
+
+#
+# visualization 
+#
+
+/vis/scene/create
+#/vis/open OGLSX
+/vis/open DAWNFILE
+/vis/viewer/set/viewpointThetaPhi 50 270 deg
+/vis/viewer/zoom 3.0
+
+/vis/drawVolume 
+
+/vis/viewer/flush 
+ 

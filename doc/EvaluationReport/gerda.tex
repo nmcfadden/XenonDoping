@@ -1,0 +1,788 @@
+
+\documentclass[a4paper,12pt,twoside]{article}
+\usepackage[american]{babel}
+\usepackage{rotating}
+\usepackage{epsfig}
+\usepackage[centertags]{amsmath}
+%\usepackage{amssymb,amscd,./styles/amsatdef}
+\usepackage{amscd}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{supertabular}
+\usepackage{colordvi}
+%axodraw}
+\usepackage{dcolumn}
+%\usepackage{./styles/mcite}
+%\usepackage{./styles/citesort}
+\usepackage{xspace}
+\usepackage{lscape}
+%
+%       File 'zeuspap_def.tex' contains all TeX definitions etc.
+%
+%\input zeus_def/zeuspap_def.tex
+\newcommand{\ptmiss}{{\mbox{$\not\hspace{-.55ex}{P}_T$}}}
+%%\newcommand{\pbi}{{$pb^{-1}$}}
+%\newcommand{\nubar}{{\bar{\nu}}}
+%
+%       File 'zeuspap_fmt.tex' contains all format parameters
+%       like page layout, line spacing etc.
+%
+%\input zeus_def/zeuspap_fmt.tex
+%
+%       Now set draft date...
+%
+\def\drftdate{{\today}}
+%==============================================================================
+%       Here comes the document.
+%==============================================================================
+\begin{document}
+\selectlanguage{american}
+%------------------------------------------------------------------------------
+%       Title page
+%------------------------------------------------------------------------------
+\thispagestyle{empty}
+%--- Here come the title lines indicating conference, abstract number, sessions
+\title{
+%\zeusconfpaphead%
+%--- Name of the conference:
+{}
+%--- Place of the conference:
+{}
+%--- Abstract number:
+{}
+%--- Plenary session line:
+{}
+%--- Parallel session line:
+{}
+\vskip2.2cm
+%--- Here comes the paper title
+{\bf MaGe Evaluation Report }
+}
+
+                    
+\author{Contact: Xiang Liu, Luciano Pandola \\
+                 Version 0.5}
+%--- Use \date{\drftdate} if you want to indicate the date on the title page
+\date{Version 0.0}
+\date{\drftdate}
+\maketitle
+
+\vfill
+\centerline{\bf Abstract}
+\vskip4.mm
+\centerline{
+  \begin{minipage}{15.cm}
+    \noindent
+In this note we report about our evaluation of the Majorana Monte Carlo 
+package called MJ. In particular, we focused on  
+its suitability for the future joint use and development by the 
+Majorana and Gerda MC groups.
+We received a released version of the MJ package 
+by the courtesy of the Majorana MC group. We then made some 
+modifications and implemented a simplified Gerda geometry.
+The updated simulation package for both Collaborations is named ``MaGe''.
+During the work we find that the existing package is well-designed, 
+easy to use and flexible for modifications.\\
+Therefore, we propose that the Gerda Task Group T10 
+(\emph{Simulation and background studies}) should 
+collaborate with the Majorana group for the development of a 
+common Geant4-based MC framework.  
+\end{minipage}
+  }
+\vfill
+
+\thispagestyle{empty}
+%\newpage
+
+
+\clearpage
+\tableofcontents
+\clearpage
+
+\clearpage
+\newpage
+\section{Introduction}
+
+After the Majorana-Gerda MC workshop at Gran Sasso,
+we were assigned the task to evaluate the Majorana package.
+With the help of the Majorana group, we received the source 
+code of the existing MJ package and developed the first 
+version of MaGe, a common MC package for both Collaborations. 
+We are convinced that MaGe is the most viable choice for 
+the Gerda MC group.
+
+The note is arranged in the following parts.
+The recent Gerda MC activities are summarized in Chapter 
+\ref{sec:gerda-mc-ongoing-activity}.
+Chapter~\ref{sec:gerda-mc-needs-a-common-framework} then 
+describes why a common and well-designed framework is needed  
+by the Gerda MC developers for a more efficient work and collaboration. 
+Chapter~\ref{sec:why-majorana-mc-package} summarizes
+the main reasons of our proposal to adopt, extend and develop the 
+existing Majorana framework.
+Details about the framework are given in 
+Chapter~\ref{sec:what-is-in-majorana-mc-package}.
+Chapter~\ref{sec:first-version-of-mage}
+summarizes the work and the contributions made so far in the 
+MaGe package. 
+Chapter~\ref{sec:cvs-and-database-servers} lists
+our suggestions concerning CVS repository and database issues.
+Detailed instructions of how to implement a new geometry
+can be found in the appendix.
+
+
+%\clearpage
+%\newpage
+\section{Gerda MC ongoing activity}
+\label{sec:gerda-mc-ongoing-activity}
+
+A short summary of the ongoing MC activities in the different  
+Institutions of the Gerda Collaboration is presented below.
+They are extracted so far from the presentations given at the LNGS
+MC workshop, so are by no means complete.
+
+\begin{itemize}
+
+\item Luciano Pandola (LNGS)
+General framework designs.
+
+\item Xiang Liu (MPI-Munich)
+Radiopurity requirements for the Gerda
+support structures and front end electronics.
+Suppression of the internal
+and surface background of the Ge detectors.
+Future simulation of the test facilities that will be built 
+in Munich.
+
+\item Michael Bauer (T\"{u}bingen)
+Cosmic-ray-induced neutron and isotope background from the surrounding
+environment. A comparison
+between Geant4 and FLUKA was already accomplished.
+
+\item Stephan Scholl (T\"{u}bingen)
+Low-energy neutron recoil with Geant4; feasibility of dark matter 
+search with Gerda.
+%To study low energy neutron recoil simulations in Geant4, and
+%to study the feasibility of using Gerda setup for
+%dark matter search. 
+%Through this study, we could have 
+%a better understanding of
+%of the background events induced by the inelastic scattering from
+%ambient neutron flux.
+
+\item Hardy Simgen (Heidelberg)
+$^{39}$Ar background in liquid argon; feasibility study
+for dark matter search.
+
+
+\item George Rugel (Heidelberg)
+Simulation of the detector GeMPI-II; the software is presently independent 
+on Geant4. GeMPI-II will be used for the Gerda material screening. 
+If a new Geant4-base simulation is found to be necessary, 
+MaGe can accommodate it.
+
+
+\end{itemize}
+
+%\clearpage
+%\newpage
+\section{Gerda MC needs a common framework }
+\label{sec:gerda-mc-needs-a-common-framework}
+
+\subsection{A common framework}
+
+Geant4\cite{G4ref} is a toolkit for the Monte Carlo simulation of the interaction 
+of particles with matter, based on the Object-Oriented technology. 
+It allows to divide 
+the simulation chain into de-coupled classes: material, 
+geometry, event generator, physics processes, output and 
+visualization.\\
+%The names of these classes are self-explainatory. 
+Users are required to write their own geometry input,
+select the physics processes to be activated and define 
+their own output format.
+Once these are done, the Geant4 interfaces can manage the 
+simulation process and the communications among the different 
+components. \\
+
+Gerda MC Task Group needs a common framework able to
+\begin{enumerate}
+\item provide the complete simulation chain;
+\item facilitate the cooperation among the TG members and 
+allow the distributed development of the software.
+\item make comparisons between different studies possible,
+as the same basic tools are used.
+\end{enumerate} 
+
+A flexible framework providing a suitable set of 
+interfaces and base classes is hence required. In this case the 
+development can proceed in a modular way: each MC 
+developer implements only the specific and concrete classes required for 
+his/her study. The framework ensures the correct 
+``communication'' among several de-coupled modules of the software, 
+so that the interfaces do no need to be re-written from scratch.
+In this way the developers can effectively avoid the duplication of work
+and cooperate efficiently.
+
+\subsection{Gerda subgroups in common framework}
+
+When the common framework for Gerda is ready and the 
+default base classes are defined, the 
+Institutions can develop different specific modules 
+in parallel 
+and contribute to the complete simulation chain without 
+overlaps. This is summarized in Table~\ref{needs_table}.
+
+It will be shown later that the MaGe 
+represents a suitable framework meeting all the 
+requirements of flexibility and modularization 
+described above. 
+
+\subsection{Gerda MC future needs}
+The complete simulation of pulse shapes will also be needed in the
+future. The requirement can be met in two ways:
+\begin{itemize}
+\item with a native (or re-engineered) software integrated in the MaGe
+framework and directly interfaced with the MC tracking;
+\item with a stand-alone software (like the FORTRAN-based one
+developed by the Padua group) which takes as input the output
+file (energy deposit, etc.) of the MC stage.
+\end{itemize}
+%Then the full event information, including energy deposit as function
+%of time, mirror charge etc, can be used for further optimizing
+%detector arrangements and segments.
+
+For the long term, once Gerda starts operating, many more things are needed.
+\begin{itemize}
+\item Online trigger and DAQ simulation.
+\item Database for calibrations of individual Ge crystals,
+including energy scale, geometry, HV, alignment, properties
+for mirror charge and pulse shape.
+\item The format of Output data of each triggered event to be saved.
+\item Off-line analysis tools and access to database.
+\end{itemize}
+
+All these items should be included in the Gerda software package
+so that online and off-line analysis are consistent, and
+data and MC events can also be compared consistently. The issue
+has to be taken jointly by the T9 (\emph{DAQ electronics and
+software}) and T10 Gerda working groups.
+
+
+\begin{landscape}
+\begin{table}[tb]
+\begin{center}
+%%%\begin{tabular}{|c||c|c|c|c|c|}
+\begin{tabular}{|m{2.5cm}||m{3.2cm}|m{3.2cm}|m{3.2cm}|m{3.2cm}|m{3.2cm}|}
+\hline
+     & Material & Geometry & Event generator & Physics process
+     & Output   \\ \hline\hline
+Default             & definition of normal materials and their components
+                    & whole Gerda setup, 
+               including crystal , cryogenics, supporting and shielding.
+                    & Geant4 particle generations with most
+                      radioactive isotopes and their decay chain
+                    & Geant4 simulation of particles interacting
+                      in detector and shielding materials
+                    & Root ntuples with energy deposit information \\ \hline
+LNGS                & default & default
+                    & interface for 0$\nu$- and 2$\nu$- 2$\beta$ 
+                      decays from Decay0 package $\star$
+                    & default & generalize to other analysis tools than ROOT $\star$ \\ 
+\hline
+Background Munich   & materials for supporting structure
+                    & provide default Gerda setup $\star$
+                    & default & default 
+                    & provide trajectories and points $\star$ \\ \hline
+Test-facility Munich & default
+                    & own geometry
+                    & default & default & own output \\ \hline
+Neutron T\"{u}bingen& default      & default
+                    & provide neutron flux 
+                    & study neutron interaction
+                    & default         \\ \hline
+$^{39}$Ar Heidelberg     & special liquid argon if necessary
+                    & liquid Ar cryogenic structure
+                    & default      & optical photon tracking
+                    & default         \\ \hline
+GeMPI-II Heidelberg & new material definition if necessary &  own geometry
+                    & default      & default
+                    & own output      \\ \hline
+To be defined                 & default      & default
+                    & default      & mirror charge and pulse shape simulation
+                    & energy deposit as function of time   \\ \hline
+\end{tabular}
+\caption{Foreseen contributions from the different Institutions to the common
+framework. $\star$ for already accomplished.} \label{needs_table}
+\end{center}
+\end{table}
+\end{landscape}
+
+%\clearpage
+%\newpage
+\section{Why Majorana MC package}
+\label{sec:why-majorana-mc-package}
+We suggest to collaborate with Majorana MC group
+and share one single MC package, MaGe. Our suggestion
+is based on the following considerations.
+
+%---------------------------------------------------------------%
+%Luciano: Here I also try to stress what Majo gains from the collaboration
+%Xiang:   I combined the first and third points as they are essentially same
+%Luciano: Ok, it sounds good.
+%---------------------------------------------------------------%
+
+\begin{itemize}
+\item Gerda needs a common framework and Majorana provides one
+with good organization and enough flexibility. The collaboration   
+is of reciprocal advantage, because Gerda and Majorana
+are studying the same physics process. The development of common 
+tools (e.g. generators, pulse shape simulation) is shared and 
+not-duplicated, while each side takes care independently 
+of the specific concrete parts (e.g. geometry). 
+
+\item The present MJ interfaces are flexible enough that they does not 
+put \emph{any} constraint to the Gerda side concerning geometry, physics, 
+i/o and generators. All the detector-specific or 
+not-suitable existing components can be extended or replaced with others 
+written from scratch. Gerda is hence not forced to use any of the 
+existing components: each of them can be independently re-written, 
+sharing only the generic interfaces. 
+%--------------------------------------------------------------------%
+% Luciano:
+% I tried to stress this point. I don't know if it is clear and/or if 
+% is too underlined.
+% Xiang: I agree with your point.
+%--------------------------------------------------------------------%
+
+\item More data from
+real experiments will be available for the MC validation. 
+Since both Gerda and Majorana have their own R\&D research
+and their own measurements from different test facilities,
+simulations can be compared and studied more extensively.
+
+\item Geant4 is flexible enough for possible framework modifications
+and is suitable for distributed development.
+
+\end{itemize}
+
+%\clearpage
+%\newpage
+\section{What is in Majorana MC package?}
+\label{sec:what-is-in-majorana-mc-package}
+
+\subsection{Framework provided}
+The most important thing about the Majorana MJ package
+is that the framework is already designed, implemented 
+and working.
+After getting the source code, we could define our own geometry 
+and output format and start the events simulation. 
+A key point is that only one executable 
+file is created and the user can choose at run-time (via macros) 
+the specific implementation he/she wants for geometry, physics, 
+generators and i/o.
+As an example, the procedure for the definition of the 
+default Gerda geometry and a steering file for loading this geometry
+are described in the next chapter.
+
+The following directories are present in the MJ package:
+\begin{itemize}
+\item {\tt geometry}
+\item {\tt materials}
+\item {\tt database}
+\item {\tt generators}
+\item {\tt processes}
+\item {\tt io}
+\item {\tt management}
+\item {\tt waveform}
+\end{itemize}
+
+They are described in the following sections.
+In each section, possible future developments
+are also briefly discussed.
+
+\subsection{Geometry ({\tt geometry}) }
+It contains a virtual base geometry class for the interface with 
+the rest of the framework.
+Concrete classes for new geometries just need to inherit the base 
+class and define the specific volumes.
+
+Majorana implemented two experimental setups, describing a clover 
+detector and a clover detector inside a NaI barrel calorimeter. 
+
+\subsection{Material ({\tt material}) }
+Majorana provides a small material database of 22 items, based 
+on postgreSQL. All materials defined in the database are automatically 
+constructed in the simulation; no additional code is required to 
+add new materials. It is hence easy to define and use materia;s.
+
+\subsection{Event generator ({\tt generators})}
+It contains a virtual base generator class that manages the general interface 
+with the framework. New customized generators inherit this base class. 
+Presently 5 alternative generators are available. 
+Our first concrete contribution to the common package was the implementation of  
+the interface for the DECAY0 generator, which is working and available for 
+Majorana collaborators.
+Majorana uses the PNNL database for radioactive isotopes and decays.
+Have to be checked whether it is possible to it.
+We foresee to implement a new generator for the simulation of cosmic-ray 
+muons inside the Gran Sasso Lab and a new algorithm to randomly sample 
+a point within a volume (a preliminary version is already available).
+
+\subsection{Physics process ({\tt processes})}
+Majorana defines a unique physics list with two different sets of 
+production cuts: one for dark matter search (low energy threshold), 
+the other for standard double-beta decay search 
+(higher energy threshold and faster speed). Initial 
+studies are done showing
+that higher energy threshold does not affect physics results
+for double-beta decay. 
+We would like to have the possibility to switch among 
+alternative physics lists by macro commands, in order to optimize the 
+hadronic processes. This option is still not available but could be implemented 
+in a straightforward way. A further possible development line is the definition of 
+different cuts for the more-interesting (e.g. germanium detectors) and 
+the less-interesting (e.g. air outside the shielding) regions of the set-up, in 
+order to optimize the CPU-time. 
+%-----------------------------------------------------------%
+%Luciano: Do you think it should put here?
+% Xiang:  I agree.
+%-----------------------------------------------------------%
+
+\subsection{Output ({\tt io}) }
+
+The event informations need to be saved on ntuples, or ASCII 
+files or whatever else. The base class for the actions
+at run level, event level and step level is written.
+User just needs to define the set of variables and
+the ways to retrieve and calculate them at each level. 
+The module was extended in order to accomodate other 
+analysis tools alternative to ROOT: the top-level 
+base class for the i/o management is no longer ROOT-specific 
+(as it was in the original MJ package) but it is now  
+completely generic.
+
+\subsection{Macro control ({\tt management})}
+The MJ package generates only one executable;  
+macro commands can be used to set geometry, tune geometry parameters,
+select physics process, choose event generator and output scheme. 
+It is fairly easy to add more macro commands if needed.
+Furthermore, the root of the package class hierarchy ({\tt MJManager}) 
+is a singleton: any class can be accessed via the 
+manager, avoiding the need for global variables. 
+
+\subsection{Preliminary waveform simulation ({\tt waveform})}
+This module (not ready yet) is called pulse shape simulation
+within Gerda collaboration 
+and is of general interest and the 
+development could then be shared between Majorana and Gerda, 
+with mutual benefit.
+Standalone waveform simulation codes are available at the
+semiconductor Lab in Munich and at the INFN-Padua. They will be 
+tested in the future and possible interfaced with the MC side.
+The Majorana group is independently working on pulse shape 
+simulation as well.
+%-------------------------------------------%
+%Luciano: Should we take this subsection?
+%Xiang: maybe we could mention Padova and Munich here
+%Luciano: Added something. Check if it sounds good, please.
+%-------------------------------------------%
+
+
+\subsection{How to implement a new geometry}
+The following is a quick guide for the implementaytion of new geometries
+into the existing Majorana package; it shows that the procedure is
+easy to understand and to work with. 
+More details about the Gerda geometry already implemented 
+in MaGe can be found in the appendix.
+
+Two steps are required.
+
+First: the new geometry needs to be added.
+\begin{itemize}
+\item add the definitions for the needed elements and materials in
+the material table, i.e. in the database or in the local 
+file {\tt MaGeGerdaLocalMaterialTable} under {\tt materials}
+\item Write your own geometry class, which returns the pointer of
+your main (i.e. outermost) logical volume. The world volume 
+is a 10$\times$10$\times$10 m cube filled of air and it is 
+created by default. The logical volume provided by the user has to 
+contain the whole set-up is placed at the center of the 
+world box.
+\item Write your own sensitive detector classes and associate them
+to your geometry.
+\item Register the geometry in the main framework
+(by modifying one line and adding two new lines of code)
+so that
+it can be loaded at run-time via macro command.
+\end{itemize}
+
+Second: save the event information to ntuples
+after new geometry is added.
+\begin{itemize}
+\item Write your i/o class which is inherited from class 
+{\tt MJOutputROOT }
+(if ROOT-based output is wanted, otherwise from {\tt MJVOutputManager} ).
+Within this class override the following member functions:
+
+\begin{itemize}
+\item {\tt BeginOfRunAction()}
+(opens file and defines variables to be saved to ROOT ntuples.)
+\item {\tt BeginOfEventAction()}
+(retrieves true MC informations for each event.)
+\item {\tt EndOfEventAction()} 
+(calculates variables after the event is finished.)
+\item {\tt EndOfRunAction()} (closes file.)
+\item {\tt RootSteppingAction()}
+(retrieves and saves information after each Geant4 stepping; it can
+be left empty.)
+\end{itemize}
+
+\item Register your i/o class in the main framework (by modifying one line
+and adding 4 more lines of code) so that the output scheme can
+be selected by macro commands.
+\end{itemize}
+
+After these, the new geometry can be loaded at run time and
+results will be saved to ntuples.
+
+%\clearpage
+%\newpage
+
+\section{First version of MaGe}
+\label{sec:first-version-of-mage}
+
+A test version of MaGe with the Gerda geometry is available.
+
+\subsection{List of work already done in MaGe}
+The preliminary MaGe package is based on the original MJ simulation package
+with the following modifications.
+\begin{itemize}
+\item Implementation of Gerda-specific geometry and output inside two
+new directories {\tt gerdageometry} and {\tt gerdaio} (see next sections
+ for more details).
+\item Accessing trajectories of all particles.
+\item Interface to the 2$\nu$-2$\beta$ and 0$\nu$-2$\beta$ event generator DECAY0.
+\item Generation of events with random distribution inside some volumes.
+(preliminary)
+\item Construction of a local material database and registration in 
+the main frame.
+\item Generalization of the output interface to beyond ROOT.
+\end{itemize}
+
+\subsection{Gerda geometry in MaGe}
+
+The implemented Gerda geometry contains 21 Ge crystals surrounded 
+by different shielding materials, as shown in Fig.~\ref{fig:gerdasetup}.
+\begin{figure}[h]
+\centerline{  \epsfxsize=2.0in  \epsfbox{gerda_picture/crystal.eps}
+              \epsfxsize=3.5in  \epsfbox{gerda_picture/watertank.eps}}
+\vskip 0 cm
+\caption{Left plot shows the size of one true coaxial Ge crystal,
+right plot shows the Gerda setup with liquid N$_{2}$ shielding inside and
+water shielding outside. (not to scale)}
+\label{fig:gerdasetup}
+\end{figure}
+The single Ge crystal is true coaxial with the size shown 
+in Fig.~\ref{fig:gerdasetup}.
+The Ge array has 3 layers with 7 Ge crystals in each layer.
+The vertical gap between two layers is 5 cm, and the horizontal
+gap between two neighboring crystals within the same layer is 1 cm.
+
+
+\subsection{One steering file}
+
+The following macro steering file is an example of generating
+0$\nu$-2$\beta$ events with random distributions
+inside one Ge crystal. \\
+1 {\tt/MJ/manager/mjlog trace} \\
+2 {\tt/MJ/geometry/detector GerdaArray} \\
+3 {\tt/MJ/geometry/database false} \\
+4 {\tt/MJ/processes/realm BBdecay} \\
+5 {\tt/MJ/eventaction/rootschema GerdaArrayWithTrajectory} \\
+6 {\tt/MJ/eventaction/rootfilename testGerda.root} \\
+7 {\tt/MJ/eventaction/reportingfrequency 1000} \\
+8 {\tt/run/initialize} \\
+9 {\tt/MJ/generator/confine volume} \\
+10 {\tt/MJ/generator/volume Ge\_det\_0} \\
+11 {\tt/MJ/generator/select decay0} \\
+12 {\tt/MJ/generator/decay0/filename ge76.0nubb.1} \\
+13 {\tt/tracking/verbose 0} \\
+14 {\tt/run/beamOn 10000} \\
+
+Line 1 defines the log-book mode. Line 2 selects the Gerda geometry.
+Line 3 disables the connection to the LBL database
+(the local database will be used). 
+Line 4 selects the physics processes for 2$\beta$ decay study.
+Line 5 selects the set of variables to be saved to ntuples with
+the file name specified in line 6.
+Line 7 asks for reporting the event information for every 1000 events.
+Line 8 triggers the run initialization (material table and 
+geometry are actually loaded). 
+Line 9 asks the events to be generated randomly
+inside some volume with the name specified in line 10.
+Line 11 selects decay0 as event generator with the interface filename
+specified in Line 12. Line 13 asks for no debugging information during 
+the tracking. Line 14 then starts running for 10,000 events. 
+%
+The simulation reproduced the results from
+an independent previous simulation.
+
+
+
+%\clearpage
+%\newpage
+\section{CVS and database servers}
+\label{sec:cvs-and-database-servers}
+
+A common MaGe CVS repository is needed for Majorana and Gerda people to 
+cooperate. Originally, we suggested two synchronized and independent 
+CVS repositories, one at LBL, one at Munich. 
+%The synchronization will happen 
+%on a daily base. 
+However, this proposal turned out to be technically unfeasible.
+Therefore,
+we propose to create a single main repository (e.g. at Munich) which is 
+regularly backupped by the other side. 
+Presently a preliminary CVS repository for Gerda collaborators is available 
+at Munich and is being tested extensively by both Gerda and Majorana
+people.
+%-------------------------------------------%
+%Luciano: It is the case to add the instruction of how to download a local 
+%         copy of the repository?
+%-------------------------------------------%
+We also suggest to have two separate databases, one at LBL, one at Munich.
+Users will be able to select which database to connect to through macro 
+commands. The two database could be synchronized weekly.
+
+
+Right now the MaGe code can be checked out by the command \\
+{\tt setenv CVSROOT :pserver:gerdaguest@pclg-02.mppmu.mpg.de:/home/pclg-02/cvsroot \\
+cvs login } (enter password {\tt gerda}) \\
+{\tt cvs checkout MaGe \\
+cvs logout}  \\
+Then follow the instructions in \\
+{\tt MaGe/doc/MaGeSetup/setup.ps} \\
+to compile the code.
+
+
+
+\section{Conclusion}
+Having investigated in depth the Majorana MC package and successfully 
+instantiated a preliminary Gerda geometry with the corresponding output,
+we conclude that the Majorana package provides a simulation framework
+which is well-designed, easy to use, flexible and suitable for future
+collaborations.
+Therefore, we suggest to collaborate with the Majorana MC developers 
+and to construct a common software package named MaGe.
+Each side will have its own geometry setup, output 
+format and specific modules, sharing the development and 
+the know-how of general interfaces and common tools.
+
+\clearpage
+\newpage
+\appendix
+
+\section{Implementing Gerda geometry}
+This section describes in detail how the Gerda geometry, including
+crystals and shielding materials, is implemented in the
+first version of MaGe. It serves both as an example and as 
+a manual to create new geometries in MaGe.
+
+{\bf Step 1. Create Gerda geometry }
+
+One new directory {\tt gerdageometry} is created with
+the following new files: 
+\begin{itemize} 
+\item {\tt MaGeGeometryGerda} calls the following classes and
+contains the whole Gerda setup. It inherites the base 
+detector class {\tt MJGeometryDetector}
+and overrides the member function {\tt ConstructDetector()}.
+It sets the logical volume pointer of the whole detector
+to the variable {\tt theDetectorLogical} defined in {\tt MJGeometryDetector}.
+\item {\tt MaGeGeometryShielding} describes the shielding structure.
+\item {\tt MaGeGeometryGermaniumArray} contains the array of crystals.
+\item {\tt MaGeGeometryGermaniumCrystal} defines one single crystal.
+\end{itemize}
+
+The size of the detectors can be tuned as shown in the corresponding
+{\tt Messenger} classes.
+New elements and materials can be added in
+class \\
+{\tt MJGerdaLocalMaterialTable} under directory
+{\tt materials}.
+
+
+{\bf Step 2. Define sensitive volume}
+The class {\tt MaGeGeometrySD} is a general class for sensitive
+volumes and is used in class {\tt MaGeGeometryGermaniumArray}
+to define the Ge crystals sensitive.
+%-------------------------------------------%
+%Luciano: This is for future: also water & nitrogen buffers
+%         should have a sensitive volume (at least the energy 
+%         deposit).
+%-------------------------------------------%
+
+{\bf Step 3. Register the Gerda geometry}
+In class {\tt MJGeometryDetectorMessenger},
+include name {\tt GerdaArray} for the new geometry in the line: \\
+{\tt MJGeometryDetectorChoiceCommand->SetCandidates} \\
+so that it can be loaded by macro.
+
+Then in class {\tt MJGeometryDetectorConstruction},
+add the following lines in the member function {\tt SetDetector()} \\
+{\tt~~~~~      else if (detectorType == "GerdaArray") \\
+    ~~~~~      theDetector = new MaGeGeometryGermaniumArray(); \\
+}
+This defines the actions for the macro command, which is to
+instantiate the new geometry.
+
+{\bf Step 4. Create Gerda output}
+One new directory {\tt gerdaio} is created with the following file \\
+{\tt MaGeOutputGermaniumArray} with the following member functions
+\begin{itemize}
+\item {\tt BeginOfRunAction()} 
+\item {\tt DefineSchema()} defines the set of variables to be saved.
+\item {\tt BeginOfEventAction()} 
+\item {\tt EndOfEventAction()}
+\item {\tt EndOfRunAction()}
+\item {\tt RootSteppingAction()}
+\end{itemize}
+which are already explained in Chapter~\ref{sec:what-is-in-majorana-mc-package}.
+
+
+{\bf Step 5. Register Gerda output}
+In class {\tt MJManagementEventActionMessenger} under directory
+{\tt management}, include the new output schema {\tt GerdaArray}
+in the line \\
+{\tt schemacandidates = ...} \\
+Then in member function {\tt SetNewValue()}, add the following lines \\
+{\tt
+    else if (newValues == "GerdaArray") \{ \\
+      fEventAction->SetOutputManager(new MaGeOutputGermaniumArray()); \\
+      fEventAction->SetOutputName("GerdaArray"); \} \\
+}
+Notice that {\tt GerdaArrayWithTrajectory} is a different schema
+requiring the trajectory information to be saved to ntuple as well.
+
+{\bf Step 6. Add new commands in macro }
+
+Add the following new commands in the macro \\
+{\tt  
+/MJ/geometry/detector GerdaArray \\
+/MJ/eventaction/rootschema GerdaArray \\
+/MJ/eventaction/rootfilename testGerda.root \\
+}
+and start running.
+
+That is it!
+
+\bibliography{}
+\begin{thebibliography}{3}
+\bibitem{G4ref} S.~Agostinelli \emph{et al.}, \textsc{Geant4} -- a
+simulation toolkit, Nucl. Instr. Meth. A, 506 (2003) 250
+\bibitem{MJref} Majorana Monte Carlo User's and Developer's Guide, \\
+http://neutrino.lbl.gov/majorana/udg/book1.html (internal)
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,14 @@
+(Author: Janina Hakenmueller)
+
+This is a brief description of the possibility to position detectors for phase II individually along the z axis.
+
+For phase II matrix files with 7 blocks a 19 entries each are required (max 7 detectors per string and max 19 strings).
+
+To have individual positioning of the detectors, the following has to be done:
+- Set flag in macro: /MG/geometry/detector/individualzposofdetectors true
+- Add a second column to the matrix file with the length of the holder bars of the detectors in cm. All values have to be positive, if there is no detector at a position, set "-1". The length of the holder bars for each detector can be found in the GERDA Wiki. It is typically 5.0-6.0*cm for single BEGes, 10.0*cm for BEGe Pairs and 9.0-14.0*cm for Coax. An example can be found in "matrix_phase_ii_StatusDec2015_pos_vis.dat".
+
+The individual positioning is only possible for geometry type 5 and 11 for phase II.
+
+If necessary, to adapt the absolute position of the array in the cryostat, the macro command "/MG/geometry/detector/general/depth 0.0 cm" with respective value can be used.
+

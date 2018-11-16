@@ -1,0 +1,407 @@
+$Id: README,v 1.4 2008-05-08 13:03:31 schubert Exp $
+
+This file is used to explain the usage of our macro files. 
+In general to use a macro, you should enter your "MaGe" directory and type after your shell prompt:
+
+$ MaGe macros/groupname/macrofilename.mac
+
+where "groupname" can be "Gerda" or "Majorana" or even "Samples" for the Sample macros. This README will explain how to use the "Gerda" and "Sample" files, for others contact the Majorana people.
+When you add a new macro file, please add one or more sentence about what this
+macro is going to do, and how to run it. Please arrange them
+alphabetically:
+
+*******************************************************************************
+
+In general, Geant4 provides a variety of Visualization Drivers to meet the needs of the user. Two of them are explained here, DAWN and HepRep (HepRepFile and HepRepXML). For others such as OpenGL, OpenInventor, VRML, RayTracer and ASCIITree, see the G4 User's Guide at: 
+geant4.web.cern.ch/geant4/G4UsersDocuments/UsersGuides/ForApplicationDeveloper/html/index.html
+
+*******************************************************************************
+
+HepRep creates a wireframe or simple area fill drawing, it does not provide photorealistic pictures. 
+HepRep has many interactive features like zooming, translating and rotating the drawing. Attributes can be shown by clicking on objects.
+HepRep provides a hierarchical view of the geometry  which can be controlled from a tree-like structure (World->MotherVolume-> etc.)
+Files created by HepRep can be exported to many vector graphic formats like (Encapsulated) PostScript, PDF etc.
+However, HepRep requires the WIRED Browser which you have to install additionally to geant4.
+
+Two visualization modes can be used in HepRep, HepRepFile or HepRepXML:
+
+HepRepFile creates a HepRepXML file in the so-called "HepRep1" format. This format is suitable for viewing with the WIRED3 HepRepBrowser. This Browser has to be installed additionally to geant4.
+The generated files have the extension ".heprep"(default) or, as a binary, ".bheprep".
+The command to open a filename.heprep-file with wired3 is:
+
+wired filename.heprep
+
+HepRepXML creates a HepRepXML file in the so-called "HepRep2" format. This format is suitable for viewing with the WIRED4 plugin to the JAS3 Analysis System. This jas3 also has to be installed seperately.
+ The generated files have the extension ".heprep.zip" (default), ".heprep.gz",and as a binary ".bheprep.zip"or ".bheprep.gz".
+To open a filename.heprep.zip-file with jas3 (wired4), the command is:
+
+jas3 filename.heprep.zip
+
+jas3 opens a window for drawing, you should choose "File -> New.." on the toolbar, and then "Wired4 View". Then your drawing will appear, you can zoom, rotate, translate.. by clicking on the picture. You can export different file formats (eps, pdf...) directly from the window.
+
+*******************************************************************************
+
+DAWN is a vectorized 3D Postscript processor and creates technically high quality photorealistic outputs. It is therefore suitable for preparing presentations etc.
+However, there are no interactive features in DAWN.
+DAWNFILE creates a ".prim"-file which transforms into an encapsulated Postscript ".eps"-file by invoking "dawn filename.prim". This enables the user to easily include the drawing in LaTeX. 
+
+*******************************************************************************
+
+All Visualization Drivers are coded in a rather similar way:
+---
+First, a viewer is created:
+
+/vis/open [Visualization Driver]
+
+[  ] is the name (mode) of a Visualization Driver, e.g. DAWNFILE, HepRepFile, HepRepXML etc.
+---
+In the next step, an empty scene is created:
+
+/vis/scene/create [filename.*]
+
+[filename] is the name of the scene. It can have various extensions (*) depending on the Visualization Driver.
+For HepRepFile: filename.heprep/filename.bheprep
+For HepRepXML: filename.heprep.zip/filename.heprep.gz/filename.bheprep.zip/filename.bheprep.gz
+If you do not specify the filename, geant4 will do this for you.
+DAWN creates its own filenames, so the command goes without [  ].
+---
+
+Filling the scene consisting of a physical volume and making the current viewer draw it requires:
+
+/vis/drawVolume [physical volume]
+
+If no physical volume is specified, the default value is "world".  
+---
+The appearance of the drawing can be specified by the following commands:
+
+/vis/viewer/set/viewpointThetaPhi 80 -90 deg 	sets viewing angle
+/vis/viewer/zoom 2.5				sets magnification of drawinge
+/vis/viewer/set/viewpointVector 1 0.25 0.25	sets viewpoint coordinates
+
+For more options see User's Guide.
+---
+The end of a visualization is declared by:
+
+/vis/viewer/flush
+
+*******************************************************************************
+
+The Macros for "Gerda":
+
+-------------------------------------------------------------------------------
+*CosmicRays.mac
+
+Simulates a spectrum of cosmic rays that irradiate the detector setup of the complete Gerda experiment (Phase II).
+The spectrum is generated according to a parametrization from Lipari et 
+al., which is found to agree fairly well with data at LNGS. The angular 
+distribution is generated according to experimental data. If data are not 
+found, a 1/cos(theta) distribution is used.
+
+Uses the root output scheme called "GerdaArray" which stores information about primary particles, hits in the dead layer, in the passivation layer and in the sensititve detector volume including position and energy deposition, the number of detectors with energy deposit, the hits and energy deposition in each crystal, the energy deposit in water, nitrogen and plastic scintillator, the neutrons found and the trajectories of the particles.
+
+Outputs a rootfile named 'testCosmicRays.root' with a tree structure that can be explored using ROOT.
+
+Information about the ROOT output schemes can be found in "MaGe/management/src/MGManagementEventActionMessenger.cc". Detailed information about the "GerdaArray" output scheme can be found in "MaGe/gerdaio/src/GEOutputGermaniumArray.cc".
+
+-------------------------------------------------------------------------------
+
+Draw_HadesScintillator.mac 
+
+Draws a Ge-sandwich detector with two scintillator plates on top. The
+setup is located in the HADES facility.
+
+-------------------------------------------------------------------------------
+*DrawBruno.mac
+
+Draws the detector setup named "Bruno" situated in Heidelberg. It is a detector routinely 
+used in Heidelberg for gamma-ray screening. MaGe is used for efficiency calculations.
+
+Uses DAWNFILE to draw setup.
+
+-------------------------------------------------------------------------------
+*DrawDario.mac
+
+Draws the detector setup named "Dario" situated in Heidelberg. It is a detector routinely 
+used in Heidelberg for gamma-ray screening. MaGe is used for efficiency calculations.
+
+-------------------------------------------------------------------------------
+*DrawGerda.mac
+
+Draws a model of the Gerda experimental setup in Phase 2: water tank, cryogenic vessel, lock, matrix with 7 detector strings, photomultipliers...
+
+Uses the standard "GerdaArray" detector geometry.
+Uses a file "geometry_phase_ii.dat" for the detector geometry and "matrix_phase_ii.dat for the string matrix. Both can be found in the "MaGe/gerdageometry"-directory.
+
+Contains more than needed to draw the setup e.g. the commands to create a rootfile which is not created since there is no run. The generator is defined,a volume containing a source and a command to store trajectories  is also contained in the macro. These commands are used in the "Run...."-file but have no consequences here.
+
+Uses DAWNFILE to draw GERDA setup seen from the side. Opens DAWNFILE renderer (you can change zoom, angle and other properties of the drawing here) and creates .eps-file from the .prim file automatically. Shows the drawing using Ghostview.
+
+-------------------------------------------------------------------------------
+*DrawGerdaStandard.mac
+
+Draws detector with standard geometry.
+Uses the standard "GerdaArray" detector geometry (see CosmicRays.mac).
+
+Uses HepRepFile to visualize the detector -> the created G4Data0.heprep file can be viewed with wired3.
+
+-------------------------------------------------------------------------------
+*DrawGerdaWithCalibrationSources.mac
+
+Draws the Gerda setup with a detector string arrangement from Phase II ideal (7 detector strings). 
+Uses the standard "GerdaArray" detector geometry.
+
+Uses DAWNFILE in the way described above ("DrawGerda") to visualize the setup.
+
+-------------------------------------------------------------------------------
+*DrawGerda_Calibration.mac
+
+Draws the Gerda setup with a detector string arrangement from Phase II ideal (7 detector strings). 
+Uses the standard "GerdaArray" detector geometry.
+Sets the geometry such that MaGe takes into account the calibration sources, "/MG/geometry/general/constructcalibration true".
+
+Uses DAWNFILE in the way described above ("DrawGerda")to visualize the setup.
+
+-------------------------------------------------------------------------------
+*DrawGerda_Collimator.mac
+
+Draws a combination of a segmented germanium detector (Siegfried) and a collimator for calibration sources. The general geometry is defined in: "MaGe/munichteststand/src/GEMunichTestStandCollimator.cc". Most of the collimator geometry can be modified directly from the macro (explained in the macro).
+
+Uses HepRepXML to visualize the drawing. Creates a file named scene-#.heprep.zip (# stands for a number) which can be viewed with jas3 using the command:
+
+jas3 scene-#.heprep.zip
+
+jas3 opens a window, you have to choose "File -> New ->  Wired4 View" to be able to view the drawing. Then you can zoom, rotate, translate....(see intro).
+
+-------------------------------------------------------------------------------
+*DrawGerda_PhaseI.mac
+
+Draws a model of the Gerda experimental setup in Phase 1: water tank, cryogenic vessel, lock, matrix with 3 detector strings, photomultipliers...
+
+Uses the standard "GerdaArray" detector geometry (CosmicRays.mac).
+Uses a file "geometry.dat" for the detector geometry and "matrix_phase_i.dat for the detector string matrix. Both can be found in the "MaGe/gerdageometry"-directory.
+
+You can choose various viewers in this file. 
+
+-------------------------------------------------------------------------------
+*DrawGerda_PhaseII.mac
+
+Draws a model of the realistic Gerda experimental setup in Phase 2: water tank, cryogenic vessel, lock,  photomultipliers and a matrix with 7 detector strings with different detectors like segmented ones and such without segmentation, true coaxial and non-true coaxial ones.
+
+Uses the standard "GerdaArray" detector geometry.
+Uses a file "geometry.dat" for the detector geometry and "matrix_phase_ii.dat for the detector string matrix. Both can be found in the "MaGe/gerdageometry"-directory.
+
+"/MG/geometry/detector/CrystalZShiftScheme" set a z-position scheme of the strings. 
+At the moment there are two possibilities
+ - 'unshifted'                                        --> upper edge of all crystals in zeroth row are set on one z-level
+ - 'center_between_top0_and_bottom2_on_common_zlevel' --> centers between upper edge of col-0-crystals and lower edge of col-2-crystals are on one common z-level
+For the second scheme one needs to set a reference-string which remains unshifted.
+
+Uses DAWNFILE to visualize drawing (see "DrawGerda").
+
+-------------------------------------------------------------------------------
+*DrawGerda_PhaseII_ideal.mac
+
+Draws a model of the Gerda experimental setup in Phase 2: water tank, cryogenic vessel, lock, , photomultipliers and a matrix with 7 symmetrically arranged detector strings, each holding 3 18-fold segmented true-coaxial detectors.
+
+Uses the standard "GerdaArray" detector geometry.
+Uses a file "geometry.dat" for the detector geometry and "matrix_phase_ii_ideal.dat for the detector string matrix. Both can be found in the "MaGe/gerdageometry"-directory.
+
+Uses DAWNFILE to visualize drawing (see "DrawGerda").
+
+-------------------------------------------------------------------------------
+*DrawGerda_TeststandLN2.mac
+
+Draws liquid nitrogen teststand "Gerdalinchen I" with detector, holder and heat (infrared) shielding.
+
+Uses geometry settings from the "MunichTestStand" and sets the teststandtype to "ln2" which specifies Gerdalinchen. The different teststandtypes can be found in the file "MaGe/munichteststand/src/GEMunichTestStand.cc", the teststand itself is defined in "MaGe/munichteststand/src/GEMunichTestStandLN2.cc"
+
+Uses DAWNFILE to visualize drawing (see "DrawGerda").
+
+-------------------------------------------------------------------------------
+* DrawGerda_TeststandSiegfried.mac
+
+Draws the geometry of the "Siegfried" crystal (18-fold segmented) and its teststand (classical cryostat with detector on cold finger) defined in "MaGe/munichteststand/src/GEMunichTestStandSiegfried.cc"
+
+Uses HepRepFile driver to generate .heprep file.
+The created file named G4Data0.heprep can be handled in wired3 (see intro).
+
+-------------------------------------------------------------------------------
+*DrawGerda_TeststandSimple.mac
+
+Draws a simple teststand setup defined in "MaGe/munichteststand/src/GEMunichTestStandSimple.cc": an unsegmented REGe detector shielded by lead bricks with a sourc and cold finger.
+
+Uses DAWNFILE to visualize drawing (see "DrawGerda").
+
+-------------------------------------------------------------------------------
+
+Run_HadesScintillator.mac 
+
+Runs a simulation of cosmic muons for a Ge-sandwich detector with two
+scintillator plates on top. The setup is located in the HADES facility. 
+
+The interface used is MUSUN with which the muon distributions for the
+particular depth of HADEs were generated. 
+
+-------------------------------------------------------------------------------
+
+*RunGerda_Calibration.mac
+
+Runs a simulation of Gerda setup with the matrix_phase_ii_ideal -configuration (see DrawGerda_PhaseII_ideal.mac) with a Co-60 source.
+
+Uses "G4gun" and places the source in a volume inside the setup.
+
+Uses the root output scheme "GerdaArrayCalibration" to create a root tree file called "Calibration.root". 
+The energy in water/nitrogen/scintillator, the number, position, energy deposition and total energy in passivation layer/dead layer/sensitive volume are written in the tree.
+You can find more detailed information in "MaGe/gerdaio/src/GEOutputGermaniumArray.cc" and "MaGe/management/src/MGManagementEventActionMessenger.cc".
+
+-------------------------------------------------------------------------------
+*RunGerda_Collimator.mac
+
+Runs a simulation of a combination of a 18-fold segmented detector, a Co60 source and the collimator for the source.
+
+Uses "G4gun" and places the source in the collimator.
+
+Uses the "GerdaTeststandEnergyandHits" root output scheme to create a root tree file called "testcollimator.root".
+The tree contains the total number, the total energy and the position of hits, the energy deposited per hit/per segment, the number of hits per crystal segment, the number of segments hit in one event and several special information.  
+You can find more details in "MaGe/gerdaio/src/GEOutputTestStand.cc" and "MaGe/management/src/MGManagementEventActionMessenger.cc".
+
+-------------------------------------------------------------------------------
+*RunGerda_PhaseI.mac
+
+Runs a simulation of Gerda in the detector configuration of the Phase I Gerda setup (see DrawGerda_PhaseI.mac) with a Co60 source.
+
+Uses "G4gun" and places the source in a volume inside the setup (x=y=z=0).
+
+Uses "GerdaArrayWithTrajectory" root output scheme which creates a tree file called "PhaseI.root".
+The leaves of the tree are the same as for "GerdaArray", only the trajectories of the particles are saved additionally. 
+More detailed information can be found in "MaGe/gerdaio/src/GEOutputGermaniumArray.cc" and "MaGe/management/src/MGManagementEventActionMessenger.cc". 
+
+-------------------------------------------------------------------------------
+*RunGerda_PhaseII.mac
+
+Runs a simulation of Gerda in the detector configuration of the Phase II Gerda setup (see DrawGerda_PhaseII.mac) with a Co60 source.
+
+Uses "G4gun" and places the source inside the detector matrix.
+
+Uses "GerdaArrayWithTrajectory" root output scheme which creates a tree file called "PhaseII.root".
+The leaves of the tree are the same as for "GerdaArray", only the trajectories of the particles are saved additionally. More detailed information can be found in "MaGe/gerdaio/src/GEOutputGermaniumArray.cc" and "MaGe/management/src/MGManagementEventActionMessenger.cc". 
+
+-------------------------------------------------------------------------------
+*RunGerda_PhaseIIideal.mac
+
+Runs a simulation of Gerda in the detector configuration of the Phase II Gerda setup with seven symmetrically arranged detector strings (see DrawGerda_PhaseII_ideal.mac) with a Co60 source.
+
+Uses "G4gun" and places the source inside the detector matrix.
+
+Uses "GerdaArrayWithTrajectory" root output scheme which creates a tree file called "PhaseII_ideal.root".
+The leaves of the tree are the same as for "GerdaArray", only the trajectories of the particles are saved additionally.  More detailed information can be found in "MaGe/gerdaio/src/GEOutputGermaniumArray.cc" and "MaGe/management/src/MGManagementEventActionMessenger.cc". 
+
+-------------------------------------------------------------------------------
+*RunGerda_TeststandCoincidence.mac
+
+Runs a simulation of the two REGe detectors in coincidence mode with a Co60 source.
+
+Uses "GerdaTeststandCoincidence" root output scheme which creates a tree file called "TeststandCoincidence.root".
+The leaves of the tree are the same as for "GerdaTeststand", but the coincidence flag that contains simultaneous energy deposits in both REGe detectors is set "true". More detailed information can be found in "MaGe/gerdaio/src/GEOutputTestStand.cc" and "MaGe/management/src/MGManagementEventActionMessenger.cc". 
+
+-------------------------------------------------------------------------------
+*RunGerda_TeststandLN2.mac
+
+Runs a simulation of a Co60-source with the teststand "Gerdalinchen I".
+
+Uses G4gun with the Co60-source.
+
+Uses "GerdaTeststandEnergyandHits" root output scheme to create a tree file called "TeststandLN2.root".
+The leaves of the tree are the same as for "RunGerda_Collimator.mac" and are explained there.
+
+-------------------------------------------------------------------------------
+*RunGerda_TeststandSiegfriedCoincidence.mac
+
+Runs a simulation of a Tl208-source with the teststand for the detector Siegfried in coicidence with a REGe detector.
+
+The geometry of this experimental setup is specified through using the special teststandtype "siegfriedcoincidence". It is such that the source is pointing at the detector Siegfried from the side and the REGe detector stands in some angle to it, but in the same vertikal plane.
+Some features of the geometry can be modified in the macro, e.g. the position of the source and the distance between REGe detector and Siegfried.
+
+Uses the "GerdaTeststandSiegfriedCoincidence" root output scheme to create a tree file called " TeststandSiegfriedCoincidence.root".
+The leaves of the tree are the same as for "GerdaTeststandCoincidence", but the REGe coincidence flag is set "false" while the SiegfriedCoincidenceFlag which contains simultaneous hits in both Siegfried and a REGe detector is set to "true". More detailed information can be found in "MaGe/gerdaio/src/GEOutputTestStand.cc" and "MaGe/management/src/MGManagementEventActionMessenger.cc". 
+
+-------------------------------------------------------------------------------
+*RunGerda_TeststandSiegfried_neutron.mac
+
+Runs a simulation of an AmBe neutron source with the teststand for the 18-fold segmented detector "Siegfried".
+
+The geometry in this case is specified by the "teststandtype siegfried", the standard geometry (see "DrawGerda_TeststandSiegfried.mac").
+
+Another generator than G4gun is used here. It is possible to select various sources and to position them in exactly the way that is required.
+
+Uses "GerdaTeststandEnergyandHits" root output scheme to create a tree file called "TeststandSiegfriedNeutron.root".
+The leaves of the tree are the same as for "RunGerda_Collimator.mac" and are explained there.
+ 
+
+-------------------------------------------------------------------------------
+*RunGerda_TeststandSimple.mac
+
+Runs a simulation of the simple teststand consisting of an unsegmented REGe Detector, a source and lead bricks (see "DrawGerda_TeststandSimple.mac") with a Co60-source..
+
+The geometry is defined by "teststandtype simple".
+
+G4gun is used to simulate the primary particles coming from the Co60-source.
+
+Uses "GerdaTeststandEnergyOnly" root output scheme to create a tree file called
+"TeststandSimple.root". The root output scheme stores no hits, only deposited energy.
+
+-------------------------------------------------------------------------------
+
+*RunGerda_VertexInShielding_Centric.mac
+
+Events with 2.6 MeV photons as generated inside the water tank are simulated.
+
+The geometry is defined using the detector configuration "GerdaArray" 
+(see "CosmicRays.mac").
+
+The generated 2.6 MeV photons are randomly distributed inside the water tank.
+The momentum of the photons are defined such that all photons are moving towards
+the geometry center. For each generated photon, 
+a central target position is randomly generated
+within a sphere centered at the point defined by
+/MG/generator/g4gun/detector_center_position 0.0 0.0 -75.0 cm
+with the radius defined by
+/MG/generator/g4gun/detector_position_smear  8.0 cm
+The vector from the position where the photon is generated towards
+the central target position defines the photon direction.
+
+This method is suitable for generating large amount of radioactive background events
+which are randomly distributed in the large shielding volume, like cryo tank,
+water tank and the walls. However, to estimate the contamination level 
+that can be tolerated, the solid angle that the generated photons cover has to be
+taken into account.
+
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+*UniformSource.mac
+
+This macro shows how to confine a primary source within a given volume. In this case 
+the position of the primary particle is sampled uniformly within this volume.  
+
+The detector configuration is the standard "GerdaArray" one, using segmented PhaseII 
+crystals. The primary particles are Co60 nuclei at rest. They are confined in the volume 
+defined by the command
+/MG/generator/volume Segment_1
+which has to be given after
+/MG/generator/confine volume
+The target volume in this case is the one called Segment_1. Co60 nuclei are generated as 
+uniformly distributed in this volume. The output scheme is the usual GerdaArray one.
+
+
+-------------------------------------------------------------------------------
+
+*******************************************************************************
+for "Samples":
+-------------------------------------------------------------------------------
+*SampleGenerators.mac
+-------------------------------------------------------------------------------
+*SampleGeometries.mac
+-------------------------------------------------------------------------------
+*SampleTemplate.mac
+-------------------------------------------------------------------------------

@@ -1,0 +1,11 @@
+<!doctype book PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
+<!entity template system "template.sgm">
+<!entity sect4 system "sect4.sgm">
+<!entity parsing system "parsing.sgm">
+]>
+
+<book>
+   <title>Template Chapter Test Book for Majorana Monte Carlo User's and Developer's Guide
+   </title>
+   &template;
+</book>

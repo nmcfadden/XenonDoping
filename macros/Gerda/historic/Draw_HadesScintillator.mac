@@ -1,0 +1,34 @@
+# ==================================== #
+# Draw the Hades Scintillator sandwich #
+# ==================================== # 
+
+#
+# Geometry setup 
+#
+
+/MG/geometry/detector HadesScintillator
+/MG/geometry/database false
+
+#
+# Geometry modifications 
+#
+
+#
+# Initialize run 
+#
+
+/run/initialize
+
+#
+# visualization 
+#
+
+/vis/open DAWNFILE
+/vis/viewer/set/viewpointThetaPhi 50 270 deg
+/vis/viewer/zoom 3.0
+
+/vis/drawVolume 
+
+/vis/viewer/flush 
+ 
+ 

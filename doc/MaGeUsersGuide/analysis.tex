@@ -1,0 +1,99 @@
+\section{Handling of decay chains} 
+
+Radioactive decay in \geant \ is handled by the radioactive decay module(RDM).
+The RDM will handle an entire decay chain, including proper branching ratios.
+The chain all happens in one \geant \ event, so it is up to the user to divvy up
+the chain into events that a physical detector would actually measure.  One way
+of doing this is to keep track of each particle's global time.  The global time
+of a track in \geant \ is the time since the track was created({\tt
+aTrack$\rightarrow$GetGlobalTime()}).   Steps of an event that fall within a
+user-prescribed window of time are then gathered together.  The time window
+would typically correspond to the time resolution of the DAQ.  The user's output
+class would then write to a \rootv \ object more often than once a \geant \ event.  
+
+A problem arises because of the finite precision of a double.  In decimal form,
+a G4double is only accurate to 15 digits or so.  Following the decay of
+$^{238}$U, the global time of the daughter nucleus, $^{234}$Th would be on the
+order of 5 $\times 10^9$ years, or $10^{17}$ seconds.  Each additional decay
+only adds more to the global time.  If one wishes to gather steps that fall
+within a typical time window of say, 15 $\mu$s, then one must find steps that
+differ in time by $\sim$ 1 part in $10^{22}$.  This is treated as zero.
+
+The workaround to this involves resetting the GlobalTime of a track that was
+spawned by radioactive decay to zero if it is too large.  Any comparison of
+global times can then yield the desired sensitivity.  A new variable, {\tt
+fOffsetTime} is kept separate from GlobalTime, and is incremented to keep track
+of the actual global time.
+
+\subsection{Stacking Actions}
+
+A brief comment on stacking actions.  When a track is created by a process, it
+is sent to any UserStackingAction that is in place.  In \mage, the
+UserStackingAction resides in the output classes that derive from {\tt
+MGVOutputManager}.  The StackingAction can look at the track and determine
+whether to put it in the ``Urgent" stack or the ``Waiting" stack.  When all
+tracks in the urgent stack are finished, then all tracks in the waiting stacks
+are transferred(all at once) to the urgent stack.  The urgent stack is then
+processed as normal by \geant.  The StackingAction allows for a user-defined
+{\tt NewStage()} function that is called once all tracks in the urgent stack are
+finished.
+
+\subsection{TimeWindower Implementation}
+
+The UserStackingAction set in MaGe.cc is {\tt MGManagementStackingAction}.  It
+has three functions, {\tt ClassifyNewTrack(const *G4Track)}, {\tt NewStage()},
+and {\tt PrepareNewEvent()}.  These functions call their corresponding
+counterparts in whatever output class you use that derives from {\tt
+MGVOutputManager}.  One note of possible confusion, the {\tt
+ClassifyNewTrack(const *G4Track)} points to output function {\tt
+StackingAction(const *G4Track)} in the output class.  The {\tt
+StackingAction(const *G4Track)} and the {\tt NewStage()} functions are written
+in {\tt MGVOutputManager} and probably don't need to be messed with unless
+you're doing something complicated.  The {\tt MGVOutputManager} also defines a
+{\tt WritePartialEvent(const *G4Event)} and {\tt ResetPartialEvent(const
+*G4Event)} functions.  Each individual output class needs to have its own
+version of these two functions to properly use the TimeWindower.
+
+The use of time windowing is specified by macro(default is off), as is the actual window of time to use.
+If the macro specifies time windowing, then the {\tt StackingAction(const
+*G4Track)} looks at each track as it is created.  If the creator process was
+RadioactiveDecay and the GlobalTime is larger than the time window, then:
+
+\begin{itemize}
+\item the track's global time is stored
+\item the track's global time is set to zero
+\item the track is given the ``waiting" classification, so it is sent to the waiting stack
+\end{itemize}
+
+If all tracks in the urgent stack have been processed and there are tracks in
+the waiting stack, then {\tt NewStage()} is called.  The {\tt fOffsetTime} is
+updated, and {\tt WritePartialEvent(const *G4Event)} and {\tt
+ResetPartialEvent(const *G4Event)} are called.  These functions obviously
+depends on the output class being used, but the general idea is that the event
+is written to a \rootv \ file, and any necessary arrays/variables/etc... are reset.
+Only after all this are the tracks in the waiting stack sent to the urgent
+stack.  It's worth mentioning that {\tt NewStage()} only happens if there are
+tracks in the waiting stack.  If not, then the output class's {\tt
+EndOfEventAction()} should handle the end of the actual \geant \ event.
+
+
+\subsection{How to use the TimeWindower}
+
+First, make sure that the WritePartialEvent() and ResetPartialEvent() functions have been implemented in your 
+output class(look at the {\tt MGOutputG4Steps} class for an example of how to do
+this).  You will also need to add messenger commands to your output messenger
+class.  You can handle everything by messenger in a macro.  The macro commands
+are:
+
+{\tt
+/MG/io/G4Steps/useTimeWindow
+
+/MG/io/G4Steps/setTimeWindow
+}
+
+\noindent Where you would substitute your output class for G4Steps.
+
+%\end{document}  
+
+
+

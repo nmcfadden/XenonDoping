@@ -1,0 +1,39 @@
+# Management 
+/MG/manager/mglog routine
+/MG/eventaction/reportingfrequency 10000
+
+# Process List
+/MG/processes/realm BBdecay
+
+# Configure Detector.
+/MG/geometry/detector MJ57Banger
+/MG/geometry/idealCoax/setDefaults
+/MG/geometry/idealCoax/deadLayerOn true
+/MG/geometry/idealCoax/cutInHalfOn false
+/MG/geometry/idealCoax/outerDeadLayer 1 micrometer
+/MG/geometry/idealCoax/coreDeadLayer 0.05 cm
+/MG/geometry/idealCoax/height 7.0 cm
+/MG/geometry/idealCoax/radius 3.0 cm
+/MG/geometry/idealCoaxWShield/shieldOn false
+
+# ROOT output schema
+/MG/eventaction/rootschema MCEvent
+/MG/eventaction/rootfilename  @OUTFILE@
+
+
+/run/initialize
+/MG/generator/select SPS
+#/MG/geometry/idealCoax/dump
+#/MG/geometry/idealCoaxWShield/dump
+
+
+# Setup GPS
+/gps/particle neutron
+/gps/pos/type Surface
+/gps/pos/shape Sphere
+/gps/pos/centre 0 0 0 cm
+/gps/pos/radius 0.5 m
+/gps/ang/type iso
+/gps/energy @ENERGY@ MeV
+
+/run/beamOn @NEVENT@

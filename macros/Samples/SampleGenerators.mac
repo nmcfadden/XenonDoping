@@ -1,0 +1,124 @@
+#------------------------------------------------------------------------------ 
+# SampleGenerators.mac
+# This file contains examples of using different generators in MaGe
+
+
+#------------------------------------------------------------------------------ 
+# This macro shows how to generate particles from G4ParticleGun
+# with the direction isotropically sampled in a given cone
+# in this instance, the "cone" is the lower hemisphere
+
+/MG/generator/select G4gun
+/MG/generator/g4gun/cone_on true 
+/MG/generator/g4gun/coneDirection 0 0 -1 
+/MG/generator/g4gun/thetaDelta 90 deg
+
+/run/initialize
+
+/gun/particle geantino
+/gun/position 0 0 150. cm
+/gun/energy 1 MeV
+
+
+
+#------------------------------------------------------------------------------ 
+# This macro uses the General Particle Source (GPS) to create radioactive
+# particles.  In particular, a U-238 isotope is set and allowed to decay until
+# it reaches Rn-222
+
+/MG/generator/select SPS
+
+/run/initialize
+
+/gps/particle ion
+/gps/ion 92 238 0 0
+/gps/pos/type Point
+/gps/pos/centre 0.0 0.0 10.0 cm
+# we don't want our ion to go anywhere...
+/gps/energy 1e-20 eV
+/grdm/nucleusLimits 222 238 86 92
+
+# the format for the nucleusLimits is
+# /grdm/nucleusLimits <Amin> <Amax> <Zmin> <Zmax>
+#
+# the format for /gps/ion or /gun/ion is
+# /gps/ion <Atomic Number> <Mass Number> <Ionic Charge> <Excitation Energy>
+# where ionic charge is in units of e and excitation energy in units of keV
+# also, if you use grdm to set the ion, the Z and A are opposite, i.e.
+# /grdm/ion <Mass Number> <Atomic Number> <Excitation Energy>
+
+
+#------------------------------------------------------------------------------ 
+# More on the General Particle Source.  
+# The GPS allows you to place PrimaryVertices in a randomized distribution
+# according to pre-defined simple shapes and surfaces.  It also allows the user
+# many options for setting the angular and spectral distribution.  For full
+# documentation and many, many examples, see
+# http://reat.space.qinetiq.com/gps/
+# This macro creates an ellipsoidal distribution of gammas, with energies
+# according to a powerlaw spectrum y = A*E^{-.5}, and emitted isotropically
+
+/MG/generator/select SPS
+
+/run/initialize
+
+/gps/particle gamma
+/gps/pos/type Volume
+/gps/pos/shape Ellipsoid
+/gps/pos/centre 2. 2. 2. cm
+/gps/pos/halfx 2. cm
+/gps/pos/halfy 3. cm
+/gps/pos/halfz 4. cm
+/gps/ang/type iso
+/gps/ene/type Pow
+/gps/ene/min 2. MeV
+/gps/ene/max 10. MeV
+/gps/ene/alpha 0.5
+
+                                                
+#------------------------------------------------------------------------------ 
+# The Generic Surface Sampler (GSS) Part I - 
+# This generator is useful for randomly sampling complex surfaces(surfaces too
+# complex for the GPS, like Germanium crystals or any other Boolean solid)
+# You actually have to run the GSS over your geometry once to get however many
+# points you're interested in, and that writes the randomly spaced position
+# points to a ROOT file (a GSSTree, with leafs x, y, and z).  You can also
+# pick and choose from among the individual volumes within a geometry the ones
+# you want to sample.
+
+# The GSS needs a bounding sphere around all the volumes you want to sample.
+# The easy case is if they're all nested together, with one volume encompassing
+# all the rest:
+/MG/generator/gss/boundvol InnerCryostatPhysical
+# otherwise, you can always do it the hard way...
+# /MG/generator/gss/origin [x y z]
+# /MG/generator/gss/boundingR R
+
+# now time to add the volumes.  For this, we're using the Majorana Reference
+# Design (57 crystal array).  For surfaces to sample, we'll just pick 2 crystals
+# and the inside of the cryostat.
+
+/MG/io/gss/addVolume InnerCryostatPhysical
+/MG/io/gss/addVolume Crystal1CrystalColumn2
+/MG/io/gss/addVolume Crystal0CrystalColumn13
+
+# and you also need to set the maximum number of surfaces that a line would
+# intersecting the volumes you've chosen would hit.  If you underpick, then MaGe
+# will tell you while running.  If you overpick, your efficiency for getting 
+# good, random points will be less.
+/MG/io/gss/setMaxIntersections 10
+
+
+#------------------------------------------------------------------------------ 
+# The Generic Surface Sampler Part II - 
+# So now you have some root file, GSSSample.root, for example.  Now you want to
+# use those random points to actually simulate physics.
+
+/MG/generator/gsspositionsfile GSSSample.root
+/MG/generator/gssoffset 1e-5 mm
+/MG/generator/gsseventnumber 1
+
+# where the gsseventnumber indicates which entry in the GSSTree to start with,
+# and the gssoffset is a hack to avoid MaGe croaking with certain toroids.
+
+

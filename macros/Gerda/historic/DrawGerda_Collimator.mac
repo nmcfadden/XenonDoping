@@ -1,0 +1,41 @@
+# =============================== 
+# Draws Collimator and Detector 
+# ===============================
+
+# Geometry setup 
+/MG/geometry/detector MunichTestStand
+/MG/geometry/teststand/teststandtype collimator
+/MG/geometry/database false
+/MG/processes/useNoHadPhysics true
+#Geometry Modifications
+#Two different positions for the collimator: 1=centered (r=0) pointing at the detector from above, 2=at z=0 pointing at det. from the side:
+/MG/geometry/teststand/collimatorposition           1
+#distance from surface of detector to end of collimator:
+/MG/geometry/teststand/collimatordetectordistance   5.0 mm
+#Pos.1: radial distance from center, Pos.2: vertical distance from z=0
+/MG/geometry/teststand/collimatordelta              20.0 mm
+#/MG/geometry/teststand/collimatorsystemrotation     45.0 deg
+#inner radius of collimator, for conical coll. radius at end of coll. tube
+/MG/geometry/teststand/collimatorinnerradius        3.0 mm
+#uter radius of coll.
+/MG/geometry/teststand/collimatorouterradius       20.0 mm
+#length of coll. tube beginning at source
+/MG/geometry/teststand/collimatorlowerheight       50.0 mm
+#coll. material; "Copper", "Lead" or "Tungsten"
+/MG/geometry/teststand/collimatormaterial          Copper
+#collimator tube or conical coll.; "Tube" or "Conical"
+/MG/geometry/teststand/collimatortype              Tube
+
+/run/initialize
+
+# visualization
+#/vis/open HepRepXML
+#/vis/open HepRepFile
+/vis/open DAWNFILE
+/vis/scene/create 
+/vis/viewer/set/viewpointThetaPhi 120 90 deg
+/vis/viewer/zoom 0.1
+
+/vis/drawVolume
+
+/vis/viewer/flush

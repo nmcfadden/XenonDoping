@@ -1,0 +1,337 @@
+
+                --- Geant4 Toolkit Build  ---
+
+Would you like to see the instructions? [n] y
+
+This installation shell script will examine your system and ask you questions
+to determine how the Geant4 Toolkit should be installed.  If you get stuck on
+a question, you may use a ! shell escape to start a subshell or execute a
+command.  Many of the questions will have default answers in square brackets;
+typing carriage return will set the default.
+
+On AFS it is allowed to specify either absolute or relative
+paths (i.e. starting with the ~username construct).
+
+[Type carriage return to continue]
+
+The prompt used in this script allows you to use shell variables and backticks
+in your answers. You may use $1, $2, etc...  to refer to the words in the
+default answer, as if the default line was a set of arguments given to a
+script shell. This means you may also use $* to repeat the whole default line.
+
+Everytime there is a substitution, you will have to confirm.  If there is an
+error (e.g. an unmatched backtick), the default answer will remain unchanged
+and you will be prompted again.
+
+Running 'Configure -d' will bypass nearly all the questions and
+use the computed defaults (or answers saved in a configuration
+previously generated).
+
+Type 'Configure -h' for a list of options.
+
+You may also start interactively and then answer '& -d' at any prompt to turn
+on the non-interactive behaviour for the rest of the execution.
+
+[Type carriage return to continue]
+
+Much effort has been spent to ensure that this shell script will run on any
+Unix system. If despite that you can't run Configure for some reason, you'll
+have to set the proper environment variables by hand and follow the "manual"
+installation as specified in the Geant4 Installation Guide.
+
+[Type carriage return to continue]
+
+Definition of G4SYSTEM variable is Linux-g++.
+That stands for:
+
+1) OS           : Linux
+
+2) Compiler     : g++
+
+To modify default settings, select number above (e.g. 2)
+[Press [Enter] for default settings]
+
+There exists a config.sh file. Shall I use it to set the defaults? [y]
+Fetching default answers from your old config.sh file...
+
+I can set things up so that your shell scripts and binaries are more portable,
+at what may be a noticable cost in performance.  In particular, if you
+ask to be portable, the following happens:
+
+     1) Shell scripts will rely on the PATH variable rather than using
+        the paths derived above.
+     2) ~username interpretations will be done at run time rather than
+        by Configure.
+
+Do you expect to run these scripts and binaries on multiple machines? [n]
+
+< Use the default answer here. The real meaning of the "multiple
+machines" above is "multiple architectures". It's enough to compile
+Geant4 only for YOUR architecture. >
+
+*OPTIONS FOR GEANT4 INSTALLATION PATHS*
+What is the path to the Geant4 source tree?  [/.hb/raidg01/gsoft/geant4.9.3]
+
+< The exact meaning of this question is "Where are your unpacked
+Geant4 source codes?" Say you unpack geant4.9.3.tar.gz into
+/home/gx336-01/gsoft/usr, then the geant4 source codes should be in
+/home/gx336-01/gsoft/usr/geant4.9.3 >
+
+Where should Geant4 be installed?  [/.hb/raidg01/gsoft/geant4.9.3]
+
+< The exact meaning of this question is "After a successful
+compilation of the geant4 libraries, where do you like to copy the
+libraries to?" >
+
+Do you want to install all Geant4 headers in one directory? [y]
+
+< The answer here does not effect the compilation of MaGe. However, if
+you want to avoid long lists of Geant4 include paths, you can choose
+to copy all its header files into one include directory. This is also
+convenient for you to browse the source codes of these header
+files. Besides, some of the packages, which can enhance the function
+of Geant4 (GDML for example), need a yes here. If you want to install
+these packages in the future, say yes. >
+
+*GEANT4 LIBRARY BUILD OPTIONS*
+Do you want to build shared libraries? [y]
+
+< The static libraries will be included into the executable files of
+your Geant4 applications, while the shared libraries won't. The shared
+libraries will be used only when you run the executables. So using
+shared libraries can dramatically decrease the size of the MaGe
+executables. But you should let MaGe know where the shared libs are by
+including the libraries directory in an environment variable named
+LD_LIBRARY_PATH. If you have no idea what I am talking about, please
+say no here. >
+
+Do you want to build static libraries too? [n]
+
+< If you say no to the previous question, you won't be asked this
+one. >
+
+Do you want to build global libraries? [y]
+
+< Please say no. If you choose to use the static libraries before and
+say yes to this question, the executable files of your Geant4
+applications will become very large. >
+
+Do you want to build granular libraries as well? [n]
+Do you want to build libraries with debugging information? [n]
+
+< Saying yes here will increase the size of the libraries. But you
+might find the DEBUG mode very useful for your code development
+later. If you don't care about the size of the libraries, give a yes
+here. >
+
+*CHECKS AND OPTIONS FOR GEANT4 PHYSICS DATA FILES*
+Specify the path where the Geant4 data libraries are installed:
+[/.hb/raidg01/gsoft/geant4_data]
+checking for PhotonEvaporation2.0... yes
+checking for RadioactiveDecay3.2... yes
+checking for G4EMLOW6.9... yes
+checking for G4NDL3.13... yes
+checking for G4ABLA3.0... yes
+checking for RealSurface1.0... yes
+
+*CHECKS FOR CORRECT MAKE IMPLEMENTATION*
+Checking for make... /usr/bin/make
+Checking for gmake... /usr/bin/gmake
+Checking if make is GNU make... yes
+Checking if gmake is GNU make... yes
+
+*CHECKS FOR REQUIRED EXTERNAL PACKAGE CLHEP*
+checking for a CLHEP installation... /.hb/raidg01/gsoft
+
+Is this the CLHEP installation you want to use?  [/.hb/raidg01/gsoft]
+
+You can customize paths and library name of you CLHEP installation:
+
+1) CLHEP_INCLUDE_DIR:           /.hb/raidg01/gsoft/include
+2) CLHEP_LIB_DIR:               /.hb/raidg01/gsoft/lib
+3) CLHEP_LIB:                   CLHEP
+To modify default settings, select number above (e.g. 2)
+[Press [Enter] for default settings]
+
+*OPTIONS FOR GEANT4 USER INTERFACE MODULES*
+Enable building of User Interface (UI) modules? [y]
+
+< Say yes. UI (User Interface) is very useful. >
+
+Enable building of the XAW (X11 Athena Widget set) UI module? [n]
+
+< This enhances the Geant4 UI. If you have XAW installed in your
+system, say yes; if you are not sure about that, say no. Without this
+you still have a terminal-like UI. So don't worry about this too
+much. >
+
+Enable building of the X11-Motif (Xm) UI module? [n]
+
+< This enhances the Geant4 UI. If you have XM Motif installed in your
+system, say yes; if you are not sure about that, say no. Without this
+you still have a terminal-like UI. So don't worry about this too
+much. >
+
+< The visualization drivers that do not depend on external libraries
+are automatically incorporated into Geant4 libraries during the
+compilation. The automatically incorporated visualization drivers are:
+DAWNFILE, HepRepFile, HepRepXML, RayTracer, VRML1FILE, VRML2FILE and
+ATree and GAGTree.
+
+The OpenGL, OpenInventor and RayTracerX drivers are not incorporated
+by default. Nor are the DAWN-Network and VRML-Network drivers, because
+they require the network setting of the installed machine. In order to
+incorporate them, you should say yes to the following questions: >
+
+Enable building of the Qt UI module? [n]
+
+*OPTIONS FOR GEANT4 VISUALIZATION DRIVERS*
+Enable building of visualization drivers? [y]
+
+< Say yes. Visualization of the detector geometries is very useful. If
+you want to get some basic ideas of the Geant4 Visualization very
+quickly, please search on Google "introduction to geant4
+visualization". There is a not-that-long presentation which gives you
+a big picture about the visualization.>
+
+Enable building of the X11 OpenGL visualization driver? [y]
+
+< In most of the cases, you have OpenGL installed in your system. So
+saying yes here should be safe. But if you have some problems with
+OpenGL, please consult to your system administrator. >
+
+Enable building of the X11-Motif OpenGL visualization driver? [n]
+
+< Make sure you have the XM Motif installed in your system before you
+say yes. If you are not sure about this, say no. >
+
+Enable building of the FukuiRenderer/DAWN visualization driver? [n]
+
+< The DAWNFILE driver is automatically incorporated in Geant4. Saying
+no to this question doesn't remove the DAWNFILE driver. Saying yes to
+this question means that you want to install the DAWN-Network driver,
+which is not necessary if you don't want to use DAWN through the
+Internet. >
+
+Enable building of the X11 OpenInventor visualization driver? [n]
+
+< Make sure you have the OpenInventor installed in your system
+before you say yes. If you are not sure about this, say no. >
+
+Enable building of the X11 RayTracer visualization driver? [y]
+
+< The compilation of the RAYTRACERX driver only depends on the Xlib,
+which is available on most of the Linux machines nowadays. So saying
+yes here should be OK. If you have some compilation problem caused by
+this answer later, say no and try again. >
+
+Enable building of the VRML visualization driver? [n]
+
+< The VRML1FILE, VRML2FILE drivers are automatically incorporated in
+Geant4. Saying no to this question doesn't remove these
+drivers. Saying yes here means that you want to install the
+VRML-Network driver, which is not necessary if you don't want to use
+VRML through the Internet. >
+
+You have selected to build one or more drivers that require OpenGL.
+Specify the correct path (OGLHOME) where OpenGL is installed on your system.
+It was found in /usr/X11R6. Press [Enter] to set this path or type the correct one.
+
+< Now that Geant4 has already found the OpenGL, why not just use this
+one. >
+
+You can set '-' (without quotation) to CANCEL the OpenGL flag at all:
+[/usr/X11R6]
+
+*OPTIONS FOR GEANT4 OPTIONAL EXTENSION MODULES*
+Enable the Geometry Description Markup Language (GDML) module? [y]
+
+< The GDML is built-in visualization utility, but it can be also used to create
+the geometry from external files. It might be useful if you need to create
+a very simple setup. Advantage of using it as a visualizer is that it can modularize
+the output. It means that you will be able to see all parts of the detector
+as separate files, which is much faster than other drivers. Say yes here if you
+did not understand a word from here. >
+
+Enable build of the g3tog4 utility module? [n] < You mostly don't need g3tog4 >
+Enable internal zlib compression for HepRep visualization? [y] < Say yes if you want to use HepRepXML. >
+
+End of configuration phase.
+
+Stripping down executable paths...
+
+Creating configuration setup file...
+
+WARNING: the generated configuration file
+can be edited if necessary!
+You can introduce any change to the configuration file
+/.hb/raidg01/gsoft/geant4.9.3/.config/bin/Linux-g++/config.sh before the final installation.
+To do so, use a shell escape now (e.g. !vi /.hb/raidg01/gsoft/geant4.9.3/.config/bin/Linux-g++/config.sh).
+
+Press [Enter] to start installation or use a shell escape to edit config.sh:
+
+Now starting Geant4 libraries build...
+
+On this machine the G4SYSTEM=Linux-g++
+On this machine the G4INSTALL=/.hb/raidg01/gsoft/geant4.9.3
+On this machine the G4INCLUDE=/.hb/raidg01/gsoft/geant4.9.3/include
+On this machine the G4TMP=/.hb/raidg01/gsoft/geant4.9.3/tmp
+On this machine the G4LIB=/.hb/raidg01/gsoft/geant4.9.3/lib
+On this machine the G4LEVELGAMMADATA=/.hb/raidg01/gsoft/geant4_data/PhotonEvaporation2.0
+On this machine the G4RADIOACTIVEDATA=/.hb/raidg01/gsoft/geant4_data/RadioactiveDecay3.2
+On this machine the G4LEDATA=/.hb/raidg01/gsoft/geant4_data/G4EMLOW6.9
+On this machine the G4NEUTRONHPDATA=/.hb/raidg01/gsoft/geant4_data/G4NDL3.13
+On this machine the G4ABLADATA=/.hb/raidg01/gsoft/geant4_data/G4ABLA3.0
+On this machine the CLHEP_BASE_DIR=/.hb/raidg01/gsoft
+On this machine the CLHEP_INCLUDE_DIR=/.hb/raidg01/gsoft/include
+On this machine the CLHEP_LIB_DIR=/.hb/raidg01/gsoft/lib
+On this machine the CLHEP_LIB=CLHEP
+On this machine G4UI_NONE is not set - following UIs will be built:
+On this machine G4VIS_NONE is not set - following drivers will be built:
+On this machine the G4VIS_BUILD_DAWN_DRIVER=1
+On this machine the G4VIS_BUILD_OPENGLX_DRIVER=1
+On this machine the G4VIS_BUILD_RAYTRACERX_DRIVER=1
+On this machine the G4VIS_USE_DAWN=1
+On this machine the G4VIS_USE_OPENGLX=1
+On this machine the G4VIS_USE_RAYTRACERX=1
+On this machine the OGLHOME=/usr/X11R6
+On this machine the XMFLAGS=
+On this machine the XMLIBS=
+On this machine the XMFLAGS=
+On this machine the XAWFLAGS=
+On this machine the XAWLIBS=
+On this machine the G4LIB_BUILD_GDML=1
+On this machine the XERCESCROOT=/.hb/raidg01/gsoft
+On this machine the G4LIB_BUILD_ZLIB=1
+On this machine the G4LIB_USE_ZLIB=1
+On this machine the G4LIB_BUILD_SHARED=1
+
+Starting build...
+
+*************************************************************
+ Installation Geant4 version : geant4-09-03
+ Copyright (C) 1994-2009 Geant4 Collaboration
+*************************************************************
+
+Making dependency for file src/G4ios.cc ...
+
+<... Here is a very long compiling process. Be patient! ...>
+
+
+Weeding out paths and files ...
+Making libname.map starter file ...
+Making libname.map ...
+  Reading library name map file...
+  Reading dependency files...
+  Checking for circular dependencies...
+  Reordering according to dependencies...
+  Writing new library map file...
+Libraries installation completed !
+
+####################################################
+# Your Geant4 installation seems to be successful!  
+# To be sure please have a look into the log file:  
+# /.hb/raidg01/gsoft/geant4.9.3/.config/bin/Linux-g++/g4make.log
+####################################################
+
+< Finally, it's ended! >

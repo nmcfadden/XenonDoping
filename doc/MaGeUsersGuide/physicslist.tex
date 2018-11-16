@@ -1,0 +1,151 @@
+\section{Introduction}
+
+This section gives a high-level description of the physics list used
+in the MaGe framework, and documents the MGProcesses Messenger that
+provides a small amount of user control over that list. All macro commands 
+relative to physics list must be issued in the \texttt{Pre\_init} phase, 
+namely before the \texttt{/run/initialize}. 
+ 
+\section{MGProcesses description}
+The MaGe framework physics list is an amalamation of two physics lists
+that are distributed with the GEANT4 simulation package. One part of
+the list comes from the list included as part of the Underground
+Physics advanced example. The other part of the list comes from the
+QGSP\_HP hadronic list. Documentation on these lists are available on
+the GEANT4 website. It manages the processes for Optical Photons 
+(Cherenkov emission, Scintillation, Absorption) supports the cut-per-region 
+approach: this allows to set different production cuts in different regions 
+of the geometry.
+
+The primary class is the MGProcessesList class, but it uses
+supporting classes MGProcessesMaxTimeCuts, MGProcessesMinEkineCuts,
+and MGProcessesSpecialCuts.
+
+\section{Details of the physics lists}
+\subsection{Interactions of hadrons}
+The hadronic part of the physics list (default) is composed by 
+\begin{enumerate}
+\item theory-driven quark-gluon string models (QGSP) for the energetic pions, kaons, and nucleons, 
+up to 100~TeV; 
+\item LEP parametrized models for inelastic interactions of pions and nucleons below 25~GeV;
+\item tabulated cross-section data derived from the 
+ENDF/B-VI database to model capture, fission elastic scattering and 
+inelastic scattering of neutrons from thermal energies up to 20~MeV (HP models). 
+\end{enumerate}
+%
+Alternatively, the physics list developed by M.~Bauer (QGSP\_GN\_HP\_BIC\_ISO) for the description 
+of muon-induced neutron production can be used. The list is chosen using the macro command
+\begin{lstlisting}
+ /MG/processes/qgsp_hadron_list true
+\end{lstlisting}
+The main difference with respect to the default physics list is that Binary cascade models (BIC) 
+are used insted of LEP parametrized models for the 
+description of nucleon and pion interactions below 10~GeV. It is also possible to replace the 
+Binary cascade models with the Bertini (BERT) cascade models for the same energy range. 
+The macro command is
+\begin{lstlisting}
+ /MG/processes/useBertCascade true
+\end{lstlisting}
+If the physics list is set to M.~Bauer's one , the quark-gluon plasma string 
+model (QGSP) 
+for the description of high-energy interactions can be replaced with chiral-invariant-phase-space 
+models (CHIPS) for the de-excitation for the quark-gluon plasma. The macro command is 
+\begin{lstlisting}
+ /MG/processes/useQGSC true
+\end{lstlisting}
+As specified above, the latter command works only after
+\begin{lstlisting}
+ /MG/processes/qgsp_hadron_list true
+\end{lstlisting}
+%
+For some applications, it may be useful to switch off all the hadronic interactions. It is 
+possible in MaGe with the command 
+\begin{lstlisting}
+ /MG/processes/useNoHadPhysics true
+\end{lstlisting}
+In this case, all the additional specifiers described avove (e.g. useBertCascade or useQGSC) have no 
+effect.
+%
+\subsection{Interactions of electrons, positrons and $\gamma$-rays}
+The specific low-energy \geant\ models~\cite{geant4physics} are used by default for the description 
+of the electromagnetic interactions of $\gamma$-rays, electrons, positrons and ions. The 
+low-energy models include atomic effects (fluorescence, Doppler broadening) and can handle 
+interactions down to 250~eV. The processes registered for $\gamma$-rays are coherent 
+scattering (a.k.a. Rayleigh scattering), Compton scattering, photo-electric effect and pair 
+production. Electromagnetic processes registered for electrons and positrons are ionisation, 
+bremsstrahlung, $e^{+}$-annihilation and synchrotron radiation. Specific low-energy models 
+are not available for $e^{+}$ (only for $e^{-}$); standard \geant\ models (see below) are 
+used for the positron electromagnetic interactions. \\
+Alternatively, electromagnetic interactions in \mage\ can be treated using the 
+so-called Standard models provided by \geant. These models are tailored for high-energy 
+applications; they are less precise in the low-energy part, not including atomic effect, but are 
+faster from the point of view of CPU-time. The choice between Low-energy (default) and Standard 
+electromagnetic models is done at run-time by the macro command
+\begin{lstlisting}
+ /MG/processes/lowenergy true/false
+\end{lstlisting}
+(true is the default). \\
+Interactions of $\gamma$-rays and $e^{\pm}$ with hadrons are described by theory-driven quark-gluon 
+string models for energetic particles ($> 3.5$~GeV) and by chiral invariant phase space (CHIPS) 
+models for lower energies.
+%
+\subsection{Interactions of muons}
+Hadronic interactions of high-energy muons are simulated using the \texttt{G4MuNuclearInteraction} model, 
+replacing the \texttt{G4MuonNucleus} model. Although \texttt{G4MuNuclearInteraction} is known to be in 
+closer agreement with experimental data, in old versions of \geant\ the processes had a bug in the 
+desctructor, causing a crash of the program at the exit. While this bug had no effect on the simulation 
+results, it prevented the clean exit from the program. \\
+For those application not requiring the precise description of muon-induced effects (e.g. studies 
+of radioactive background), the \texttt{G4MuonNucleus} can be registered to the physics list 
+instead of \texttt{G4MuNuclearInteraction}, giving the command 
+\begin{lstlisting}
+ /MG/processes/useMuonNucleusProc true
+\end{lstlisting}
+The advantage is that one always has clean exit from the \mage\ runs.\\
+Standard models only are available in \geant\ for electromagnetic interactions of muons (ionization, 
+bremsstrahlung and pair production). 
+%
+\subsection{Interactions of optical photons}
+\geant\ is able to handle optical photons and \mage\ takes advantage from such capability. While 
+the default \mage\ physics list does \emph{not} include interactions of optical photons, these 
+processes can be switched on with the command
+\begin{lstlisting}
+ /MG/processes/optical true/false
+\end{lstlisting}
+(false is the default). The models included in \mage\ encompass scintillation light 
+emission (possibly with different light yield for electrons, $\alpha$-particles and nuclei), 
+Cherenkov light emission, absorption, boundary processes, Rayleigh scattering and wavelength shifting. 
+In order to produce correct results for optical photons, it is indeed necessary to specify in the 
+geometry definition all the relevant optical properties of interfaces and bulk materials 
+(scintillation yield, refraction index, absorption length, etc.). An example of this can be 
+found in the geometry \texttt{GEMPIKLArGe.cc} (\texttt{munichteststand} directory). 
+%
+\subsection{Cuts definition}
+As a general feature, \geant\ has not tracking cut, but only production cuts for 
+$\delta$-rays and for soft bremsstrahlung photons. Cuts are expressed in range, and they are 
+internally converted in energy threshold for each material used in the geometry. \\
+In most applications, it is necessary to find a trade-off between accuracy and computing time. For this 
+reason \mage\ provides three simulation ``realms'', with different production cuts. The realms 
+are called \textsc{DarkMatter}, \textsc{BBDecay} and \textsc{CosmicRays}. \\ 
+\begin{itemize}
+\item \textsc{DarkMatter} realm is used for high precision simulations, especially related to background 
+studies for dark matter applications: cut-in-range for $\gamma$-rays and e$^{\pm}$ are 5~$\mu$m and 
+0.5~$\mu$m, respectively, corresponding to 1-keV threshold in metallic germanium. 
+\item \textsc{BBdecay}  realm (default) is suitable for background studies related to double-beta 
+decay, i.e. in the MeV region: the cut-in-range is tuned to give a 100-keV threshold for $\delta$-rays 
+in metallic germanium (it is 0.1~mm for e$^{\pm}$ and $\gamma$-rays). 
+\item  \textsc{CosmicRay} realm is used for the simulation of extensive electromagnetic showers 
+induced by cosmic ray muons. The cuts are different in the volumes belonging to to the 
+\texttt{Sensitive Region} and the other volumes. Cuts for the volumes in the sensitive region are the 
+same than for the double-beta realm, while they are more relaxed everywhere else (5~cm for 
+$\gamma$-rays and 1~cm for e$^{\pm}$), in order to save CPU time  and to avoid the precise tracking 
+of particles in the uninteresting parts of the setups). Such a capability is based on the general 
+cut-per-region feature of \geant. Sensitive volumes are registered in the geometry definition using the 
+code reported in \ref{macros-processes}. 
+\end{itemize}
+The simulation realm is selected by macro using the command 
+\begin{lstlisting}
+/MG/processes/realm BBdecay/DarkMatter/CosmicRays
+\end{lstlisting}
+(\textsc{BBdecay} is the default). The 
+simulation realm can be changed at run-time, even after the run initialization. 

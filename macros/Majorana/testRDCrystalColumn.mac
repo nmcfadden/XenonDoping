@@ -1,0 +1,58 @@
+#
+# Macro to draw Majorana RD Crystal Column. 
+#
+# R. Henning
+# 11/14/2005
+#
+
+# Management 
+/MG/manager/mglog routine
+/MG/eventaction/reportingfrequency 10000
+
+# Process List
+/MG/processes/realm BBdecay
+
+# Select geometry
+#/MG/geometry/detector MJRDCrystalColumn
+#/MG/geometry/detector MJRDCryostat
+/MG/geometry/detector MJRDBasicShield
+
+# Define template crystal. 
+/MG/geometry/idealCoax/setDefaults
+/MG/geometry/idealCoax/deadLayerOn true
+/MG/geometry/idealCoax/cutInHalfOn false
+/MG/geometry/idealCoax/outerDeadLayer 1 micrometer
+/MG/geometry/idealCoax/coreDeadLayer 0.05 cm
+/MG/geometry/idealCoax/coreRadius 0.4 cm
+/MG/geometry/idealCoax/coreDepth 6.0 cm
+/MG/geometry/idealCoax/height 7.0 cm
+/MG/geometry/idealCoax/radius 3.1 cm
+/MG/geometry/idealCoax/bubbleOn false
+/MG/geometry/idealCoaxWShield/shieldOn false
+
+# Output
+/MG/eventaction/rootschema MCEvent
+/MG/eventaction/rootfilename CCRDtest.root
+
+/run/initialize
+/vis/scene/create
+
+/vis/open OGLIX
+/vis/viewer/set/viewpointThetaPhi 240 40 
+/vis/viewer/zoom 1.2
+/vis/drawVolume World
+/vis/viewer/flush 
+
+
+
+/tracking/storeTrajectory 1
+/vis/open RayTracer
+/vis/viewer/set/viewpointThetaPhi 0.21 0.51 
+/vis/viewer/zoom 1.
+/vis/drawVolume GeTraycrystalColumn00
+/vis/viewer/flush
+
+/vis/scene/add/trajectories
+/vis/scene/endOfEventAction accumulate
+
+/run/beamOn 1000

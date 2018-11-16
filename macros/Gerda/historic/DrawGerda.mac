@@ -1,0 +1,55 @@
+# The first line sets the verbosity level
+/MG/manager/mglog trace
+/MG/geometry/detector GerdaArray
+#
+# No geometry specifiers
+# The default GerdaArray geometry is defined
+#
+/MG/geometry/database false
+#/MG/geometry/detector/geometryfile ./gerdageometry/geometry_phase_ii.dat
+#/MG/geometry/detector/matrixfile ./gerdageometry/matrix_phase_ii.dat
+#
+# This line sets lower cuts
+/MG/processes/realm BBdecay
+#
+/MG/eventaction/rootschema GerdaArray
+/MG/eventaction/rootfilename testGerda.root
+/MG/eventaction/reportingfrequency 1000
+#
+/run/initialize
+#
+# geometry has to be created first 
+#
+# The following two lines generate the 
+# primary uniformly in the volume called 
+# "Segment_0" (geometry has to be created first) 
+/MG/generator/confine volume
+/MG/generator/volume Segment_0
+#
+/MG/generator/select G4gun
+/tracking/verbose 0
+#
+# visualization
+#
+/vis/scene/create
+/tracking/storeTrajectory 1
+#/vis/open DAWNFILE
+#/vis/viewer/set/viewpointThetaPhi 140 150 deg
+#/vis/viewer/zoom 1.0
+#/vis/drawVolume
+#
+/vis/scene/add/trajectories
+#
+# create dawn files
+#
+/vis/viewer/flush
+/vis/open DAWNFILE
+/vis/viewer/set/viewpointThetaPhi 85 0 deg
+/vis/drawVolume
+/vis/viewer/flush
+#
+#maybe more stuff
+#
+ 
+
+

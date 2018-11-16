@@ -1,0 +1,12 @@
+
+/MG/manager/mglog routine
+/MG/geometry/detector clover
+/MG/eventaction/rootschema LANLCloverNoPS
+/MG/eventaction/rootfilename testCo60.root
+/MG/generator/select PNNLiso
+/MG/generator/PNNL/init /auto/majorana1/MJ/database/generators/PNNL/Co60_Source.dat
+/MG/generator/PNNL/setsourceage 0.0
+/MG/generator/PNNL/position 0.0 0.0 14.8
+/MG/generator/PNNL/reportingfrequency 50
+/run/initialize
+/run/beamOn 200

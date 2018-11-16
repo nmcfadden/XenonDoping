@@ -1,0 +1,37 @@
+# mageMacro.mac
+# This macro excerises several basic areas of the MJ code in MaGe.
+
+# Management 
+/MG/manager/mglog routine
+/MG/manager/seedWithUUID
+
+# Process List
+/MG/processes/realm BBdecay
+#/MG/processes/lowenergy true
+
+# Configure Detector.
+/MG/geometry/detector MJDemonstrator
+/MG/geometry/WorldMaterial Vacuum
+
+# ROOT output schema
+/MG/eventaction/rootschema MCRun
+/MG/eventaction/rootfilename mjdemoDemoOutput.root
+/MG/io/MCRun/SetSensitiveIDLabelScheme askGeom 
+/MG/io/MCRun/setRunID 1
+/MG/io/MCRun/useTimeWindow true
+/MG/io/MCRun/setTimeWindow 86400 second
+
+# Initialize Geant4 and geometry
+/run/initialize
+
+# Set to run 232Th chain in the Cryostat1 hoop using Geant4 RDM generator 
+/MG/generator/select RDMiso
+/gun/energy 0 eV
+/grdm/ion 232 90 0
+/MG/generator/confine volume
+/MG/generator/volume CalibrationAssembly_001_Source_001
+
+# Run 3k events, reporting every 100th event
+/MG/eventaction/reportingfrequency 100
+/run/beamOn 3000
+

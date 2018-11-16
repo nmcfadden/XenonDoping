@@ -1,0 +1,219 @@
+<chapter id="Geometry">
+	<title>MGGeometry</title>
+
+	<section>
+		<title>Introduction</title>
+		<para>
+			This section covers the MGGeometry code and messengers. Right now
+			this guide is meant as both a User's Guide and a Programmer's Guide.
+			The first section will be on Messengers (the User's Guide) and the
+			second on classes (the Programmer's Guide).
+		</para>
+	</section>
+
+	<section>
+		<title>MGGeometry Messengers</title>
+		<para>
+			The MGGeometry Messengers are used to specify which detector is to
+			be simulated. Right now there are three MGGeometry detector
+			messengers, and the commands and their options are listed here:
+		</para>
+		<screen>
+			<cmdsynopsis>
+				<command>/MG/geometry/dumpG4materials</command>
+			</cmdsynopsis>
+			<cmdsynopsis>
+				<command>/MG/geometry/detector</command> <arg><replaceable>clover</replaceable></arg> <arg><replaceable>cloverinNaIbarrel</replaceable></arg> <arg><replaceable>solidBlock</replaceable></arg> <arg><replaceable>GerdaArray</replaceable></arg> <arg><replaceable>idealCoax</replaceable></arg> <arg><replaceable>MunichTestStand</replaceable></arg> <arg><replaceable>MJ57Banger</replaceable></arg> <arg><replaceable>MPIK_LArGe</replaceable></arg>  <arg><replaceable>GS_LArGe</replaceable></arg> <arg><replaceable>UWLArGe</replaceable></arg> <arg><replaceable>SLACBD</replaceable></arg> <arg><replaceable>cloverInShield</replaceable></arg>
+			</cmdsynopsis>
+	                <cmdsynopsis>
+				<command>/MG/geometry/database</command> <arg><replaceable>true</replaceable></arg> <arg><replaceable>false</replaceable></arg>
+			</cmdsynopsis>
+                        <cmdsynopsis>
+				<command>/MG/geometry/addNewMaterial</command> <arg>filename</arg>
+			</cmdsynopsis>
+		</screen>
+		<para>
+			The first command, dumpG4materials, prints to the screen all defined
+			materials. The second command selects which detector so simulate
+			(right now there are only three options for Majorana and two for 
+                        Gerda). With the third command the user can choose if read the 
+                        material table from the database (=true) (default) or from the 
+                        local class materials/MGGerdaLocalMaterialTable (=false). 
+                 </para>
+	         <para>
+                        The fourth 
+                        command is used to read a material definition from an external file. It 
+                        works only if the database is switched off. The material definition should be 
+                        as follows:
+                  </para> 
+                  <para>
+                        First line: material name, density (g/cm3), number of elemental components
+                  </para>
+                  <para>
+                        The name of the material cannot cointain blank spaces and must be different from 
+                        the materials already defined in the material table. The following lines (one 
+                        for each component) contain:
+                     </para>
+                   <para>
+                        Element name, Element symbol, Z (double), A(double) and mass fraction.
+                   </para>
+                   <para>
+                        The information written in the file is used only if the element table does not 
+                        contain already an element with the same name. An example of definition file 
+                        is the following:
+       		</para>
+                <screen>
+                         TelluriumOxide 5.9 2
+                         Oxygen O 8.0 16.000 0.201 
+                         Tellurium Te 52.0 127.60 0.799
+                </screen>
+		<para>
+			As a caveat, the user also needs to explicitly specify which ROOT
+			output class to use. This must be done with care, as the output
+			class can be tied to the detector choice, and there is so far no
+			internal checking to make sure the output class and detector choice
+			are compatible.
+		</para>
+	</section>
+
+	<section>
+		<title>MGGeometry Classes</title>
+		<para>
+			The following is a list of classes in the MGGeometry framework and
+			a description of their uses.
+		</para>
+		
+		<para>
+			MGGeometryDetectorConstruction
+			<screen>
+				This class is the primary class that builds the MG materials as
+				well as instantiates any detector chosen in the
+				/MG/geometry/detector messenger described above. It creates a
+				world volume and places the detector as a single object inside
+				it. Eventually it will first place a shield inside the world
+				volume, and then a detector inside the shield, but for now we
+				don't have any shields.
+			</screen>
+			MGGeometryDetector
+			<screen>
+				This is the base class for all MGGeometry detector classes.
+				When instantiated, it must be called with the serial number of
+				the desired detector. It allocates a pointer to the outermost 
+				detector and sets its name. All other functionality must be built 
+                                within each individual kind of detector class.
+			</screen>
+			MGGeometryDetectorMessenger
+			<screen>
+				The object that is used to issue commands to the MGGeometry
+				framework.
+			</screen>
+			MJGeometry800gCrystal
+			MJGeometryCloverDetector
+			MJGeometryCloverInNaIBarrel
+			MJGeometrySolidBlock
+			<screen>
+				These are subclasses of the MGGeometryDetector class. These
+				classes may contain active detector subparts (e.g.,
+				the MJGeometryCloverDetector), but as far as the simulation is
+				concerned, these classes correspond to the "entire" detector
+				detector. ("Entire" is in quotes because what makes up the
+				"entire" detector is somewhat subjective. A dewar, for instance,
+				may or may not be thought of as part of the detector.)
+			</screen>
+			MJGeometryCloverCrystal
+			MJGeometryNaIBarrel
+			<screen>
+				These classes are subparts of detectors. For examples, the
+				MJGeometryCloverDetector contains pointers to four
+				MJGeometryCloverCrystals, and each crystal is treated as a
+				separate object. When the four crystals are instantiated as
+				part of the MJGeometryCloverDetector, however, the entire
+				clover detector is handled as as object incorporating the
+				crystals.
+			</screen>
+		</para>
+	</section>
+
+        <section>
+         <title> GERDA Geometry </title>
+         <para>
+            The GERDA geometry can be chosen by setting the command
+	            <screen>
+			<cmdsynopsis>
+				<command>/MG/geometry/detector</command> <arg><replaceable>detector</replaceable></arg> 
+			</cmdsynopsis>
+                    </screen>
+            in the corresponding macro. For the
+            standard GERDA geometry, the detector has to be "GerdaArray". Also
+            other geometries exist that are related to the GERDA experiment,
+            i.e. they are either modified geometries or teststands.
+          </para>
+          <para>
+              The geometry is organized in a group of classes: the following figure gives an
+              overview of the structure.  
+              <figure> <title> Class structure for GerdaArray</title>
+               <mediaobject>
+               <imageobject>
+                <imagedata fileref="figures6/geometryclasses.gif"/>
+               </imageobject>
+               </mediaobject>
+               </figure>
+              The class names in the figure do not
+              include the prefix GEGeometry since it is common to all classes
+              displayed. The class "GEGeometryGerda" inherits from
+              "MGGeometryDetector", i.e. it is the basic class which gets
+              instantiated from the MaGe framework. Since the real geometry of the
+              experiment is still under investigation and not fixed yet, the Monte
+              Carlo is kept as flexible as possible. For that reason a database
+              class, "GEGeometryDetectorDB" is introduced which governs all the
+              parameters for the geometry. Those parameters can be adjusted by
+              commands, i.e. there exists a messenger class which controls the
+              database. As can be seen in the diagram, the database is connected to
+              all classes in the geometry structure.
+          </para>
+
+          <para>
+            The first three branches "Detector", "Shielding" and
+            "CalibrationSourceArray" are rough groupings. In order to focus on
+            particular parts of the geometry each of those branches can be 
+            switched off. The calibration sources for example are not needed for 
+            the study of internal background of the crystals and the support.
+            The detector itself consists of an array of crystals which is made out
+            of bare crystals (or crystal segments) and a support structure that
+            includes holders, strings, cables and electronics. This allows easy
+            replacements of parts of the geometry for test reasons or changes in
+            the setup.  Auxiliary detectors are also installed, namely the muon
+            plastic scintillator on top of the vessel and photomultipliers inside
+            the water tank (not yet in the Monte Carlo).
+            The shaded classes are those in which physical volumes are
+            created. Also, most of the calculations for positioning and
+            orientation are done via class functions.
+            In order to add new elements to the simulation new classes are added.
+            Existing examples are the scintillator and the germanium
+            detectors. The solids and logical volumes should be introduced in the
+            database class whereas the physical volume should be instanciated in
+            the corresponding class. All used parameters are held flexible by
+            adding the corresponding commands to the database messenger
+            class. This has to include a flag that controls if the new element is
+            to be included in the run or not. By following these instructions, the
+            changes can be submitted to the CVS repository and are made available
+            for other users
+          </para>
+
+          <para>
+            The following setups are currently available. They are defined by the
+            settings in the corresponding macros, i.e. the deviation from the
+            default values of the geometry parameters.
+
+            Phase I:           Unsegmented crystals. So far, this setup is only used in the study of cosmic muons.
+
+            Phase II:          7 strings with 3 crystals. Each crystal is segmented into 6 phi- and 3 z-segments (standard).
+
+            Simple Test Stand: A standard crystal within an aluminum cryostat which is placed in front of a capsulated
+                   source and lead bricks. The comparison of Monte Carlo and real data provided a first
+                   validation of the new MaGe code development.
+          </para>
+
+        </section>
+
+</chapter>

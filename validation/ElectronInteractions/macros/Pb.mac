@@ -1,0 +1,28 @@
+# specify the gdml file you want to use
+/MG/geometry/GDML/sourceFile /global/homes/g/gilliss/dev/mjswDev/MaGe_Val/MaGe/validation/ElectronInteractions/macros/Pb.gdml
+
+# use low energy physics list
+/MG/processes/lowenergy true
+/MG/processes/realm DarkMatter
+
+# set output schema and define file name
+/MG/eventaction/rootschema G4Steps
+/MG/eventaction/rootfilename /global/homes/g/gilliss/dev/mjswDev/MaGe_Val/MaGe/validation/ElectronInteractions/dat/Pb_20MeV.root
+/MG/eventaction/writeOutFrequency 100
+
+# set verbose level
+/MG/manager/mglog warning
+
+# initialize MaGe
+/run/initialize
+
+# a simple simulation
+/MG/generator/select SPS
+/gps/particle e-
+/gps/energy 20 MeV
+/gps/position 0 0 0
+/gps/direction 0 0 1
+
+# show the simulation
+#/vis/scene/add/trajectories
+/run/beamOn 1000

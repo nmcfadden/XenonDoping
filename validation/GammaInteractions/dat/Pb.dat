@@ -1,0 +1,33 @@
+
+# material density [g/cm^3] 
+XX:Pb_density:XX	10	11.35
+
+# mass attenuation coefficient [cm^2/g]
+XX:Pb_attenuation_gamma0.01MeV:XX	11	0.01	130.6000
+XX:Pb_attenuation_gamma0.015MeV:XX	11	0.015	111.6000
+XX:Pb_attenuation_gamma0.02MeV:XX	11	0.02	86.3600
+XX:Pb_attenuation_gamma0.03MeV:XX	11	0.03	30.3200
+XX:Pb_attenuation_gamma0.04MeV:XX	11	0.04	14.3600
+XX:Pb_attenuation_gamma0.05MeV:XX	11	0.05	8.0410
+XX:Pb_attenuation_gamma0.06MeV:XX	11	0.06	5.0210
+XX:Pb_attenuation_gamma0.08MeV:XX	11	0.08	2.4190
+XX:Pb_attenuation_gamma0.1MeV:XX	11	0.1	5.5490
+XX:Pb_attenuation_gamma0.15MeV:XX	11	0.15	2.0140
+XX:Pb_attenuation_gamma0.2MeV:XX	11	0.2	0.9985
+XX:Pb_attenuation_gamma0.3MeV:XX	11	0.3	0.4031
+XX:Pb_attenuation_gamma0.4MeV:XX	11	0.4	0.2323
+XX:Pb_attenuation_gamma0.5MeV:XX	11	0.5	0.1614
+XX:Pb_attenuation_gamma0.6MeV:XX	11	0.6	0.1248
+XX:Pb_attenuation_gamma0.8MeV:XX	11	0.8	0.0887
+XX:Pb_attenuation_gamma1.0MeV:XX	11	1	0.0710
+XX:Pb_attenuation_gamma1.25MeV:XX	11	1.25	0.0588
+XX:Pb_attenuation_gamma1.5MeV:XX	11	1.5	0.0522
+XX:Pb_attenuation_gamma2MeV:XX	11	2	0.0461
+XX:Pb_attenuation_gamma3MeV:XX	11	3	0.0423
+XX:Pb_attenuation_gamma4MeV:XX	11	4	0.0420
+XX:Pb_attenuation_gamma5MeV:XX	11	5	0.0427
+XX:Pb_attenuation_gamma6MeV:XX	11	6	0.0439
+XX:Pb_attenuation_gamma8MeV:XX	11	8	0.0468
+XX:Pb_attenuation_gamma10MeV:XX	11	10	0.0497
+XX:Pb_attenuation_gamma15MeV:XX	11	15	0.0566
+XX:Pb_attenuation_gamma20MeV:XX	11	20	0.0621

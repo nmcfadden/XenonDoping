@@ -1,0 +1,36 @@
+/MG/manager/mglog trace
+/MG/processes/realm BBdecay
+/MG/geometry/detector VT1-KURF			 
+/MG/geometry/WorldMaterial Air
+/MG/eventaction/reportingfrequency 1
+/MG/geometry/VT1Detector/useSample true
+/MG/geometry/VT1Detector/chooseSample CalibrationSource 
+/MG/geometry/VT1Detector/placeSample InBottom
+# candidates for VT1Detector/chooseSample are:
+# RockBucket RockBag SuperInsulation Teflon Calibration Source
+# Pick Same Choice for /MG/generator/volume
+
+/MG/eventaction/rootschema MCEvent
+/MG/eventaction/rootfilename vis.root
+/MG/io/G4Steps/killAlphas true
+/MG/io/G4Steps/stopNuclei true
+/MG/io/MCEvent/setG4StepsOutput false
+/run/initialize
+/geometry/test/recursive_test
+/MG/generator/select SPS
+/MG/generator/confine volume
+/MG/generator/volume CalibrationSource
+
+/gps/particle ion
+/gps/ion 19 40 0 0   # K-40
+
+#Visualziation in HepRep
+/vis/open HepRepFile
+/vis/scene/create
+/vis/scene/endOfEventAction accumulate 10
+/vis/scene/add/volume
+/vis/sceneHandler/attach
+/vis/viewer/flush
+/vis/scene/add/trajectories
+/vis/scene/add/hits
+/run/beamOn 10

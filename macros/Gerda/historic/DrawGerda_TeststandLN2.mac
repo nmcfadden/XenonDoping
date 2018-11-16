@@ -1,0 +1,36 @@
+# =============================== #
+# Draws liquid nitrogen teststand #
+# =============================== # 
+
+#
+# Geometry setup 
+#
+
+/MG/geometry/detector MunichTestStand
+/MG/geometry/teststand/teststandtype ln2 
+/MG/geometry/database false
+
+#
+# Geometry modifications 
+#
+
+#
+# Initialize run 
+#
+
+/run/initialize
+
+#
+# visualization
+#
+
+/vis/scene/create
+#/vis/open OGLSX
+/vis/open DAWNFILE
+#/vis/open HepRepXML
+/vis/viewer/set/viewpointThetaPhi 110 110 deg
+/vis/viewer/zoom 10.0
+
+/vis/drawVolume 
+
+/vis/viewer/flush 

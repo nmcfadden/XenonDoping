@@ -1,0 +1,191 @@
+\documentclass[pdftex, a4paper, 12pt,pointlessnumbers]{scrartcl} %twoside,
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{ae}
+\usepackage[automark]{scrpage2}
+
+% use high quality equations
+\usepackage[intlimits]{amsmath}
+\usepackage{amsfonts, amssymb, amsthm, amstext}
+\usepackage[all, warning]{onlyamsmath}
+%
+% use color and graphics support packages
+\usepackage[usenames, dvipsnames]{color}
+\usepackage[pdftex]{graphicx}
+\usepackage{subfigure, wrapfig}
+
+% add support for tables spanning over more than one page
+\usepackage{longtable}
+
+\usepackage[pdftex, plainpages = false, pdfpagelabels = true, colorlinks = true,
+linkcolor = blue, citecolor = blue,
+	linktocpage, pdfstartpage = 1, pdfview = FitH, pdfpagemode =
+UseNone]{hyperref}
+
+\title{MaGe Validation Report}
+\author{MaGeValidation.py}
+\date{\today}
+
+\hypersetup{
+	pdfsubject = {MaGe Validation Report},
+	pdftitle = {MaGe Validation Report},
+	pdfauthor = {N.N.},
+	pdfcreator = {LaTeX, pdfTeX},
+	pdfproducer = {pdf2latex},
+	pdfkeywords = {MaGe validation}
+}
+
+\definecolor{White}{RGB}{255,255,255}
+
+
+\begin{document}
+ 
+\maketitle
+
+~\\
+~\\
+Geant4 version Name: \textbf{XX:Geant4VersionName:XX}\\
+CLHEP Version: \textbf{XX:CLHEPVersion:XX}\\
+~\\
+MaGe Revision: \textbf{XX:MaGeRevision:XX}\\
+MaGe SVN Tag: \textbf{XX:MaGeSVNTag:XX}\\
+MaGe Last Updated: \textbf{XX:MaGeLastUpdated:XX}\\
+~\\
+MGDO Revision: \textbf{XX:MGDORevision:XX}\\
+MGDO SVN Tag: \textbf{XX:MGDOSVNTag:XX}\\
+MGDO Last Updated: \textbf{XX:MGDOLastUpdated:XX}\\
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+\section{Overview of Validation Results}
+
+This section contains an overview of the validation tests. For more information go to the individual sections.
+
+\subsection{Radioactive Decays}
+
+Table \ref{tab:radioactivityOverview} shows an overview of the diagnostic tests of decay energy and intensity (branching ratio) of different isotopes.
+
+\begin{table}[h]
+	\centering
+	\captionabove{Overview of MaGe validation radioactive decay tests}
+		\begin{tabular}{|c|c|c|}
+		\hline
+		Isotope & Energy [\%] & Intensity [\%]\\
+		\hline
+		$^{46}$Sc & XX:Sc46_EnergyQuality:XX & XX:Sc46_IntensityQuality:XX \\
+		\hline
+		$^{59}$Fe & XX:Fe59_EnergyQuality:XX & XX:Fe59_IntensityQuality:XX \\
+		\hline
+		$^{56}$Co & XX:Co56_EnergyQuality:XX & XX:Co56_IntensityQuality:XX \\
+		\hline
+		$^{57}$Co & XX:Co57_EnergyQuality:XX & XX:Co57_IntensityQuality:XX \\
+		\hline
+		$^{60}$Co & XX:Co60_EnergyQuality:XX & XX:Co60_IntensityQuality:XX \\
+		\hline
+		$^{73}$As & XX:As73_EnergyQuality:XX & XX:As73_IntensityQuality:XX \\
+		\hline
+		$^{74}$As & XX:As74_EnergyQuality:XX & XX:As74_IntensityQuality:XX \\
+		\hline
+		$^{208}$Tl & XX:Tl208_EnergyQuality:XX & XX:Tl208_IntensityQuality:XX \\
+		\hline
+		$^{214}$Bi & XX:Bi214_EnergyQuality:XX & XX:Bi214_IntensityQuality:XX \\
+		\hline
+		\end{tabular}
+	\label{tab:radioactivityOverview}
+\end{table}
+
+\section{Radioactive Decays}
+
+In order to check the radioactive decay of different isotopes, the decay energy and intensity (branching ratio) of different isotopes is simulated and compared with literature values. For each isotope a plot of the simulated decay energies is available. In case of $\beta$-decay, the decay energy is calculated as the sum of the energies of emitted electron ($e$) and electron anti-neutrino ($\overline{\nu_{e}}$).
+
+For each decay type a table is available which compares the literature values (decay energy and intensity) with the simulated values. The differences between literature values and simulated values is colour coded. In case there is agreement within the uncertainties of the values, the difference is highlighted in \colorbox{OliveGreen}{\color{White} green }. If the difference is larger than the uncertainties but smaller than 1~\% of the energy value or 10~\% of the intensity, the difference is highlighted in \colorbox{BurntOrange}{\color{White} orange }. In all other cases the difference is highlighted in \colorbox{Red}{\color{White} red }. If too few events are simulated to have sufficient statistics to check the decay intensity, the difference will show \colorbox{Gray}{\color{White} low }.
+
+The shape of the energy spectrum of emitted $\beta$-decay electrons is checked for the $\beta$-decay with the largest end point energy $E_0$. Using dimensionless units for energy
+%$
+\begin{equation}
+  \varepsilon = \frac{E + m_0c^2}{m_0c^2}
+\end{equation}
+%$
+and momentum
+%$
+\begin{equation}
+  %\eta = \sqrt{\varepsilon^2 - 1}
+  \eta = \frac{p}{m_0c}
+\end{equation}
+%$
+the shape of the $\beta$-spectrum can be described with
+%$
+\begin{equation}
+  N(\eta) d\eta = K \cdot \eta \cdot \varepsilon \cdot G(\eta,Z) \cdot (\varepsilon_0 - \varepsilon)^2 d\eta.
+\end{equation}
+%$
+$G(\eta,Z)$ is the reduced Fermi function and K is an energy independent constant, containing different parameters such as the matrix element. In order to calculate $G(\eta,Z)$, a linear interpolation of tabulated values \cite{sie65} is used. The fit of the $\beta$-spectrum is done in a Kurie plot which reduces the fit function to a linear function. The parameters obtained from the fit are then used to calculate the fitted spectrum.
+
+\include{RadioactiveDecays/Sc46report}
+
+\include{RadioactiveDecays/Fe59report}
+
+\include{RadioactiveDecays/Co56report}
+
+\include{RadioactiveDecays/Co57report}
+
+\include{RadioactiveDecays/Co60report}
+
+\include{RadioactiveDecays/As73report}
+
+\include{RadioactiveDecays/As74report}
+
+\include{RadioactiveDecays/Ba133report}
+
+\include{RadioactiveDecays/Tl208report}
+
+\include{RadioactiveDecays/Bi214report}
+
+\section{$\gamma$-ray Interactions}
+
+\include{GammaInteractions/Pbreport}
+
+\include{GammaInteractions/Cureport}
+
+\include{GammaInteractions/Gereport}
+
+\section{Electron Interactions}
+
+\include{ElectronInteractions/Pbreport}
+
+\include{ElectronInteractions/Cureport}
+
+\include{ElectronInteractions/Gereport}
+
+\section{$\alpha$ Interactions}
+
+\include{AlphaInteractions/Pbreport}
+
+\include{AlphaInteractions/Cureport}
+
+\include{AlphaInteractions/Gereport}
+
+\section{Neutron Interactions}
+
+\include{NeutronInteractions/Pbreport}
+
+\include{NeutronInteractions/Cureport}
+
+\include{NeutronInteractions/Gereport}
+
+\section{CERN NA55 Simulation}
+The CERN NA55 experiment measured the energy spectrum and angular distribution of fast neutrons generated by high energy muons striking a target.  
+In the experiment targets made of graphite, copper and lead were used.  The geometry of the experiment has been built in MaGe.  The results from the simulation
+and the original experiment are shown below.
+
+\include{CERN_NA55/CERNreport}
+
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

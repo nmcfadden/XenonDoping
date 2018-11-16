@@ -1,0 +1,531 @@
+#  Set verbosity with "/vis/ASCIITree/verbose <verbosity>":
+#    <  10: - does not print daughters of repeated placements, does not repeat replicas.
+#    >= 10: prints all physical volumes.
+#  The level of detail is given by verbosity%10:
+#  for each volume:
+#    >=  0: physical volume name.
+#    >=  1: logical volume name (and names of sensitive detector and readout geometry, if any).
+#    >=  2: solid name and type.
+#    >=  3: volume and density.
+#    >=  5: daughter-subtracted volume and mass.
+#  and in the summary at the end of printing:
+#    >=  4: daughter-included mass of top physical volume(s) in scene to depth specified.
+#  Note: by default, culling is switched off so all volumes are seen.
+#  Note: the mass calculation takes into account daughters, which can be time consuming.  If you want the mass of a particular subtree to a particular depth:
+#    /vis/open ATree
+#    /vis/ASCIITree/verbose 14
+#    /vis/scene/create
+#    /vis/scene/add/volume <subtree-physical-volume> ! <depth>
+#    /vis/sceneHandler/attach
+#    /vis/viewer/flush
+#  Now printing with verbosity 0
+#  Format is: PV:n
+#  Abbreviations: PV = Physical Volume,     LV = Logical Volume,
+#                 SD = Sensitive Detector,  RO = Read Out Geometry.
+"World":0
+  "Detector":0
+    "Rock":0
+      "Room":0
+        "MuonVeto":0
+          "NeutronShield":0
+            "OuterPbShield":0
+              "InnerPbShield":0
+                "OuterCuShield":0
+                  "InnerCuShield":0
+                    "InternalVolume":0
+                      "CryostatPhysical":0
+                        "StringerMountPlate":0
+                        "CrystalColumn0":0
+                          "SupportRod01CrystalColumn0":0
+                          "SupportRod02CrystalColumn0":0 (repeated placement)
+                          "SupportRod03CrystalColumn0":0 (repeated placement)
+                          "ContactRing0CrystalColumn0":0
+                          "GeTray0CrystalColumn0":0
+                          "ContactRing1CrystalColumn0":0 (repeated placement)
+                          "GeTray1CrystalColumn0":0 (repeated placement)
+                          "ContactRing2CrystalColumn0":0 (repeated placement)
+                          "GeTray2CrystalColumn0":0 (repeated placement)
+                          "StringerLidCrystalColumn0":0
+                          "LFEP01ACrystalColumn0":0
+                          "LFEP01BCrystalColumn0":0 (repeated placement)
+                          "LFEP01CCrystalColumn0":0 (repeated placement)
+                          "LFEP02ACrystalColumn0":0 (repeated placement)
+                          "LFEP02BCrystalColumn0":0 (repeated placement)
+                          "LFEP02CCrystalColumn0":0 (repeated placement)
+                          "LFEP03ACrystalColumn0":0 (repeated placement)
+                          "LFEP03BCrystalColumn0":0 (repeated placement)
+                          "LFEP03CCrystalColumn0":0 (repeated placement)
+                          "Crystal0CrystalColumn0":0
+                            "ActiveCrystal0CrystalColumn0":0
+                          "Crystal1CrystalColumn0":0
+                            "ActiveCrystal1CrystalColumn0":0
+                          "Crystal2CrystalColumn0":0
+                            "ActiveCrystal2CrystalColumn0":0
+                        "CrystalColumn1":0
+                          "SupportRod01CrystalColumn1":0 (repeated placement)
+                          "SupportRod02CrystalColumn1":0 (repeated placement)
+                          "SupportRod03CrystalColumn1":0 (repeated placement)
+                          "ContactRing0CrystalColumn1":0 (repeated placement)
+                          "GeTray0CrystalColumn1":0 (repeated placement)
+                          "ContactRing1CrystalColumn1":0 (repeated placement)
+                          "GeTray1CrystalColumn1":0 (repeated placement)
+                          "ContactRing2CrystalColumn1":0 (repeated placement)
+                          "GeTray2CrystalColumn1":0 (repeated placement)
+                          "StringerLidCrystalColumn1":0 (repeated placement)
+                          "LFEP01ACrystalColumn1":0 (repeated placement)
+                          "LFEP01BCrystalColumn1":0 (repeated placement)
+                          "LFEP01CCrystalColumn1":0 (repeated placement)
+                          "LFEP02ACrystalColumn1":0 (repeated placement)
+                          "LFEP02BCrystalColumn1":0 (repeated placement)
+                          "LFEP02CCrystalColumn1":0 (repeated placement)
+                          "LFEP03ACrystalColumn1":0 (repeated placement)
+                          "LFEP03BCrystalColumn1":0 (repeated placement)
+                          "LFEP03CCrystalColumn1":0 (repeated placement)
+                          "Crystal0CrystalColumn1":0
+                            "ActiveCrystal0CrystalColumn1":0
+                          "Crystal1CrystalColumn1":0
+                            "ActiveCrystal1CrystalColumn1":0
+                          "Crystal2CrystalColumn1":0
+                            "ActiveCrystal2CrystalColumn1":0
+                        "CrystalColumn2":0
+                          "SupportRod01CrystalColumn2":0 (repeated placement)
+                          "SupportRod02CrystalColumn2":0 (repeated placement)
+                          "SupportRod03CrystalColumn2":0 (repeated placement)
+                          "ContactRing0CrystalColumn2":0 (repeated placement)
+                          "GeTray0CrystalColumn2":0 (repeated placement)
+                          "ContactRing1CrystalColumn2":0 (repeated placement)
+                          "GeTray1CrystalColumn2":0 (repeated placement)
+                          "ContactRing2CrystalColumn2":0 (repeated placement)
+                          "GeTray2CrystalColumn2":0 (repeated placement)
+                          "StringerLidCrystalColumn2":0 (repeated placement)
+                          "LFEP01ACrystalColumn2":0 (repeated placement)
+                          "LFEP01BCrystalColumn2":0 (repeated placement)
+                          "LFEP01CCrystalColumn2":0 (repeated placement)
+                          "LFEP02ACrystalColumn2":0 (repeated placement)
+                          "LFEP02BCrystalColumn2":0 (repeated placement)
+                          "LFEP02CCrystalColumn2":0 (repeated placement)
+                          "LFEP03ACrystalColumn2":0 (repeated placement)
+                          "LFEP03BCrystalColumn2":0 (repeated placement)
+                          "LFEP03CCrystalColumn2":0 (repeated placement)
+                          "Crystal0CrystalColumn2":0
+                            "ActiveCrystal0CrystalColumn2":0
+                          "Crystal1CrystalColumn2":0
+                            "ActiveCrystal1CrystalColumn2":0
+                          "Crystal2CrystalColumn2":0
+                            "ActiveCrystal2CrystalColumn2":0
+                        "CrystalColumn3":0
+                          "SupportRod01CrystalColumn3":0 (repeated placement)
+                          "SupportRod02CrystalColumn3":0 (repeated placement)
+                          "SupportRod03CrystalColumn3":0 (repeated placement)
+                          "ContactRing0CrystalColumn3":0 (repeated placement)
+                          "GeTray0CrystalColumn3":0 (repeated placement)
+                          "ContactRing1CrystalColumn3":0 (repeated placement)
+                          "GeTray1CrystalColumn3":0 (repeated placement)
+                          "ContactRing2CrystalColumn3":0 (repeated placement)
+                          "GeTray2CrystalColumn3":0 (repeated placement)
+                          "StringerLidCrystalColumn3":0 (repeated placement)
+                          "LFEP01ACrystalColumn3":0 (repeated placement)
+                          "LFEP01BCrystalColumn3":0 (repeated placement)
+                          "LFEP01CCrystalColumn3":0 (repeated placement)
+                          "LFEP02ACrystalColumn3":0 (repeated placement)
+                          "LFEP02BCrystalColumn3":0 (repeated placement)
+                          "LFEP02CCrystalColumn3":0 (repeated placement)
+                          "LFEP03ACrystalColumn3":0 (repeated placement)
+                          "LFEP03BCrystalColumn3":0 (repeated placement)
+                          "LFEP03CCrystalColumn3":0 (repeated placement)
+                          "Crystal0CrystalColumn3":0
+                            "ActiveCrystal0CrystalColumn3":0
+                          "Crystal1CrystalColumn3":0
+                            "ActiveCrystal1CrystalColumn3":0
+                          "Crystal2CrystalColumn3":0
+                            "ActiveCrystal2CrystalColumn3":0
+                        "CrystalColumn4":0
+                          "SupportRod01CrystalColumn4":0 (repeated placement)
+                          "SupportRod02CrystalColumn4":0 (repeated placement)
+                          "SupportRod03CrystalColumn4":0 (repeated placement)
+                          "ContactRing0CrystalColumn4":0 (repeated placement)
+                          "GeTray0CrystalColumn4":0 (repeated placement)
+                          "ContactRing1CrystalColumn4":0 (repeated placement)
+                          "GeTray1CrystalColumn4":0 (repeated placement)
+                          "ContactRing2CrystalColumn4":0 (repeated placement)
+                          "GeTray2CrystalColumn4":0 (repeated placement)
+                          "StringerLidCrystalColumn4":0 (repeated placement)
+                          "LFEP01ACrystalColumn4":0 (repeated placement)
+                          "LFEP01BCrystalColumn4":0 (repeated placement)
+                          "LFEP01CCrystalColumn4":0 (repeated placement)
+                          "LFEP02ACrystalColumn4":0 (repeated placement)
+                          "LFEP02BCrystalColumn4":0 (repeated placement)
+                          "LFEP02CCrystalColumn4":0 (repeated placement)
+                          "LFEP03ACrystalColumn4":0 (repeated placement)
+                          "LFEP03BCrystalColumn4":0 (repeated placement)
+                          "LFEP03CCrystalColumn4":0 (repeated placement)
+                          "Crystal0CrystalColumn4":0
+                            "ActiveCrystal0CrystalColumn4":0
+                          "Crystal1CrystalColumn4":0
+                            "ActiveCrystal1CrystalColumn4":0
+                          "Crystal2CrystalColumn4":0
+                            "ActiveCrystal2CrystalColumn4":0
+                        "CrystalColumn5":0
+                          "SupportRod01CrystalColumn5":0 (repeated placement)
+                          "SupportRod02CrystalColumn5":0 (repeated placement)
+                          "SupportRod03CrystalColumn5":0 (repeated placement)
+                          "ContactRing0CrystalColumn5":0 (repeated placement)
+                          "GeTray0CrystalColumn5":0 (repeated placement)
+                          "ContactRing1CrystalColumn5":0 (repeated placement)
+                          "GeTray1CrystalColumn5":0 (repeated placement)
+                          "ContactRing2CrystalColumn5":0 (repeated placement)
+                          "GeTray2CrystalColumn5":0 (repeated placement)
+                          "StringerLidCrystalColumn5":0 (repeated placement)
+                          "LFEP01ACrystalColumn5":0 (repeated placement)
+                          "LFEP01BCrystalColumn5":0 (repeated placement)
+                          "LFEP01CCrystalColumn5":0 (repeated placement)
+                          "LFEP02ACrystalColumn5":0 (repeated placement)
+                          "LFEP02BCrystalColumn5":0 (repeated placement)
+                          "LFEP02CCrystalColumn5":0 (repeated placement)
+                          "LFEP03ACrystalColumn5":0 (repeated placement)
+                          "LFEP03BCrystalColumn5":0 (repeated placement)
+                          "LFEP03CCrystalColumn5":0 (repeated placement)
+                          "Crystal0CrystalColumn5":0
+                            "ActiveCrystal0CrystalColumn5":0
+                          "Crystal1CrystalColumn5":0
+                            "ActiveCrystal1CrystalColumn5":0
+                          "Crystal2CrystalColumn5":0
+                            "ActiveCrystal2CrystalColumn5":0
+                        "CrystalColumn6":0
+                          "SupportRod01CrystalColumn6":0 (repeated placement)
+                          "SupportRod02CrystalColumn6":0 (repeated placement)
+                          "SupportRod03CrystalColumn6":0 (repeated placement)
+                          "ContactRing0CrystalColumn6":0 (repeated placement)
+                          "GeTray0CrystalColumn6":0 (repeated placement)
+                          "ContactRing1CrystalColumn6":0 (repeated placement)
+                          "GeTray1CrystalColumn6":0 (repeated placement)
+                          "ContactRing2CrystalColumn6":0 (repeated placement)
+                          "GeTray2CrystalColumn6":0 (repeated placement)
+                          "StringerLidCrystalColumn6":0 (repeated placement)
+                          "LFEP01ACrystalColumn6":0 (repeated placement)
+                          "LFEP01BCrystalColumn6":0 (repeated placement)
+                          "LFEP01CCrystalColumn6":0 (repeated placement)
+                          "LFEP02ACrystalColumn6":0 (repeated placement)
+                          "LFEP02BCrystalColumn6":0 (repeated placement)
+                          "LFEP02CCrystalColumn6":0 (repeated placement)
+                          "LFEP03ACrystalColumn6":0 (repeated placement)
+                          "LFEP03BCrystalColumn6":0 (repeated placement)
+                          "LFEP03CCrystalColumn6":0 (repeated placement)
+                          "Crystal0CrystalColumn6":0
+                            "ActiveCrystal0CrystalColumn6":0
+                          "Crystal1CrystalColumn6":0
+                            "ActiveCrystal1CrystalColumn6":0
+                          "Crystal2CrystalColumn6":0
+                            "ActiveCrystal2CrystalColumn6":0
+                        "CrystalColumn7":0
+                          "SupportRod01CrystalColumn7":0 (repeated placement)
+                          "SupportRod02CrystalColumn7":0 (repeated placement)
+                          "SupportRod03CrystalColumn7":0 (repeated placement)
+                          "ContactRing0CrystalColumn7":0 (repeated placement)
+                          "GeTray0CrystalColumn7":0 (repeated placement)
+                          "ContactRing1CrystalColumn7":0 (repeated placement)
+                          "GeTray1CrystalColumn7":0 (repeated placement)
+                          "ContactRing2CrystalColumn7":0 (repeated placement)
+                          "GeTray2CrystalColumn7":0 (repeated placement)
+                          "StringerLidCrystalColumn7":0 (repeated placement)
+                          "LFEP01ACrystalColumn7":0 (repeated placement)
+                          "LFEP01BCrystalColumn7":0 (repeated placement)
+                          "LFEP01CCrystalColumn7":0 (repeated placement)
+                          "LFEP02ACrystalColumn7":0 (repeated placement)
+                          "LFEP02BCrystalColumn7":0 (repeated placement)
+                          "LFEP02CCrystalColumn7":0 (repeated placement)
+                          "LFEP03ACrystalColumn7":0 (repeated placement)
+                          "LFEP03BCrystalColumn7":0 (repeated placement)
+                          "LFEP03CCrystalColumn7":0 (repeated placement)
+                          "Crystal0CrystalColumn7":0
+                            "ActiveCrystal0CrystalColumn7":0
+                          "Crystal1CrystalColumn7":0
+                            "ActiveCrystal1CrystalColumn7":0
+                          "Crystal2CrystalColumn7":0
+                            "ActiveCrystal2CrystalColumn7":0
+                        "CrystalColumn8":0
+                          "SupportRod01CrystalColumn8":0 (repeated placement)
+                          "SupportRod02CrystalColumn8":0 (repeated placement)
+                          "SupportRod03CrystalColumn8":0 (repeated placement)
+                          "ContactRing0CrystalColumn8":0 (repeated placement)
+                          "GeTray0CrystalColumn8":0 (repeated placement)
+                          "ContactRing1CrystalColumn8":0 (repeated placement)
+                          "GeTray1CrystalColumn8":0 (repeated placement)
+                          "ContactRing2CrystalColumn8":0 (repeated placement)
+                          "GeTray2CrystalColumn8":0 (repeated placement)
+                          "StringerLidCrystalColumn8":0 (repeated placement)
+                          "LFEP01ACrystalColumn8":0 (repeated placement)
+                          "LFEP01BCrystalColumn8":0 (repeated placement)
+                          "LFEP01CCrystalColumn8":0 (repeated placement)
+                          "LFEP02ACrystalColumn8":0 (repeated placement)
+                          "LFEP02BCrystalColumn8":0 (repeated placement)
+                          "LFEP02CCrystalColumn8":0 (repeated placement)
+                          "LFEP03ACrystalColumn8":0 (repeated placement)
+                          "LFEP03BCrystalColumn8":0 (repeated placement)
+                          "LFEP03CCrystalColumn8":0 (repeated placement)
+                          "Crystal0CrystalColumn8":0
+                            "ActiveCrystal0CrystalColumn8":0
+                          "Crystal1CrystalColumn8":0
+                            "ActiveCrystal1CrystalColumn8":0
+                          "Crystal2CrystalColumn8":0
+                            "ActiveCrystal2CrystalColumn8":0
+                        "CrystalColumn9":0
+                          "SupportRod01CrystalColumn9":0 (repeated placement)
+                          "SupportRod02CrystalColumn9":0 (repeated placement)
+                          "SupportRod03CrystalColumn9":0 (repeated placement)
+                          "ContactRing0CrystalColumn9":0 (repeated placement)
+                          "GeTray0CrystalColumn9":0 (repeated placement)
+                          "ContactRing1CrystalColumn9":0 (repeated placement)
+                          "GeTray1CrystalColumn9":0 (repeated placement)
+                          "ContactRing2CrystalColumn9":0 (repeated placement)
+                          "GeTray2CrystalColumn9":0 (repeated placement)
+                          "StringerLidCrystalColumn9":0 (repeated placement)
+                          "LFEP01ACrystalColumn9":0 (repeated placement)
+                          "LFEP01BCrystalColumn9":0 (repeated placement)
+                          "LFEP01CCrystalColumn9":0 (repeated placement)
+                          "LFEP02ACrystalColumn9":0 (repeated placement)
+                          "LFEP02BCrystalColumn9":0 (repeated placement)
+                          "LFEP02CCrystalColumn9":0 (repeated placement)
+                          "LFEP03ACrystalColumn9":0 (repeated placement)
+                          "LFEP03BCrystalColumn9":0 (repeated placement)
+                          "LFEP03CCrystalColumn9":0 (repeated placement)
+                          "Crystal0CrystalColumn9":0
+                            "ActiveCrystal0CrystalColumn9":0
+                          "Crystal1CrystalColumn9":0
+                            "ActiveCrystal1CrystalColumn9":0
+                          "Crystal2CrystalColumn9":0
+                            "ActiveCrystal2CrystalColumn9":0
+                        "CrystalColumn10":0
+                          "SupportRod01CrystalColumn10":0 (repeated placement)
+                          "SupportRod02CrystalColumn10":0 (repeated placement)
+                          "SupportRod03CrystalColumn10":0 (repeated placement)
+                          "ContactRing0CrystalColumn10":0 (repeated placement)
+                          "GeTray0CrystalColumn10":0 (repeated placement)
+                          "ContactRing1CrystalColumn10":0 (repeated placement)
+                          "GeTray1CrystalColumn10":0 (repeated placement)
+                          "ContactRing2CrystalColumn10":0 (repeated placement)
+                          "GeTray2CrystalColumn10":0 (repeated placement)
+                          "StringerLidCrystalColumn10":0 (repeated placement)
+                          "LFEP01ACrystalColumn10":0 (repeated placement)
+                          "LFEP01BCrystalColumn10":0 (repeated placement)
+                          "LFEP01CCrystalColumn10":0 (repeated placement)
+                          "LFEP02ACrystalColumn10":0 (repeated placement)
+                          "LFEP02BCrystalColumn10":0 (repeated placement)
+                          "LFEP02CCrystalColumn10":0 (repeated placement)
+                          "LFEP03ACrystalColumn10":0 (repeated placement)
+                          "LFEP03BCrystalColumn10":0 (repeated placement)
+                          "LFEP03CCrystalColumn10":0 (repeated placement)
+                          "Crystal0CrystalColumn10":0
+                            "ActiveCrystal0CrystalColumn10":0
+                          "Crystal1CrystalColumn10":0
+                            "ActiveCrystal1CrystalColumn10":0
+                          "Crystal2CrystalColumn10":0
+                            "ActiveCrystal2CrystalColumn10":0
+                        "CrystalColumn11":0
+                          "SupportRod01CrystalColumn11":0 (repeated placement)
+                          "SupportRod02CrystalColumn11":0 (repeated placement)
+                          "SupportRod03CrystalColumn11":0 (repeated placement)
+                          "ContactRing0CrystalColumn11":0 (repeated placement)
+                          "GeTray0CrystalColumn11":0 (repeated placement)
+                          "ContactRing1CrystalColumn11":0 (repeated placement)
+                          "GeTray1CrystalColumn11":0 (repeated placement)
+                          "ContactRing2CrystalColumn11":0 (repeated placement)
+                          "GeTray2CrystalColumn11":0 (repeated placement)
+                          "StringerLidCrystalColumn11":0 (repeated placement)
+                          "LFEP01ACrystalColumn11":0 (repeated placement)
+                          "LFEP01BCrystalColumn11":0 (repeated placement)
+                          "LFEP01CCrystalColumn11":0 (repeated placement)
+                          "LFEP02ACrystalColumn11":0 (repeated placement)
+                          "LFEP02BCrystalColumn11":0 (repeated placement)
+                          "LFEP02CCrystalColumn11":0 (repeated placement)
+                          "LFEP03ACrystalColumn11":0 (repeated placement)
+                          "LFEP03BCrystalColumn11":0 (repeated placement)
+                          "LFEP03CCrystalColumn11":0 (repeated placement)
+                          "Crystal0CrystalColumn11":0
+                            "ActiveCrystal0CrystalColumn11":0
+                          "Crystal1CrystalColumn11":0
+                            "ActiveCrystal1CrystalColumn11":0
+                          "Crystal2CrystalColumn11":0
+                            "ActiveCrystal2CrystalColumn11":0
+                        "CrystalColumn12":0
+                          "SupportRod01CrystalColumn12":0 (repeated placement)
+                          "SupportRod02CrystalColumn12":0 (repeated placement)
+                          "SupportRod03CrystalColumn12":0 (repeated placement)
+                          "ContactRing0CrystalColumn12":0 (repeated placement)
+                          "GeTray0CrystalColumn12":0 (repeated placement)
+                          "ContactRing1CrystalColumn12":0 (repeated placement)
+                          "GeTray1CrystalColumn12":0 (repeated placement)
+                          "ContactRing2CrystalColumn12":0 (repeated placement)
+                          "GeTray2CrystalColumn12":0 (repeated placement)
+                          "StringerLidCrystalColumn12":0 (repeated placement)
+                          "LFEP01ACrystalColumn12":0 (repeated placement)
+                          "LFEP01BCrystalColumn12":0 (repeated placement)
+                          "LFEP01CCrystalColumn12":0 (repeated placement)
+                          "LFEP02ACrystalColumn12":0 (repeated placement)
+                          "LFEP02BCrystalColumn12":0 (repeated placement)
+                          "LFEP02CCrystalColumn12":0 (repeated placement)
+                          "LFEP03ACrystalColumn12":0 (repeated placement)
+                          "LFEP03BCrystalColumn12":0 (repeated placement)
+                          "LFEP03CCrystalColumn12":0 (repeated placement)
+                          "Crystal0CrystalColumn12":0
+                            "ActiveCrystal0CrystalColumn12":0
+                          "Crystal1CrystalColumn12":0
+                            "ActiveCrystal1CrystalColumn12":0
+                          "Crystal2CrystalColumn12":0
+                            "ActiveCrystal2CrystalColumn12":0
+                        "CrystalColumn13":0
+                          "SupportRod01CrystalColumn13":0 (repeated placement)
+                          "SupportRod02CrystalColumn13":0 (repeated placement)
+                          "SupportRod03CrystalColumn13":0 (repeated placement)
+                          "ContactRing0CrystalColumn13":0 (repeated placement)
+                          "GeTray0CrystalColumn13":0 (repeated placement)
+                          "ContactRing1CrystalColumn13":0 (repeated placement)
+                          "GeTray1CrystalColumn13":0 (repeated placement)
+                          "ContactRing2CrystalColumn13":0 (repeated placement)
+                          "GeTray2CrystalColumn13":0 (repeated placement)
+                          "StringerLidCrystalColumn13":0 (repeated placement)
+                          "LFEP01ACrystalColumn13":0 (repeated placement)
+                          "LFEP01BCrystalColumn13":0 (repeated placement)
+                          "LFEP01CCrystalColumn13":0 (repeated placement)
+                          "LFEP02ACrystalColumn13":0 (repeated placement)
+                          "LFEP02BCrystalColumn13":0 (repeated placement)
+                          "LFEP02CCrystalColumn13":0 (repeated placement)
+                          "LFEP03ACrystalColumn13":0 (repeated placement)
+                          "LFEP03BCrystalColumn13":0 (repeated placement)
+                          "LFEP03CCrystalColumn13":0 (repeated placement)
+                          "Crystal0CrystalColumn13":0
+                            "ActiveCrystal0CrystalColumn13":0
+                          "Crystal1CrystalColumn13":0
+                            "ActiveCrystal1CrystalColumn13":0
+                          "Crystal2CrystalColumn13":0
+                            "ActiveCrystal2CrystalColumn13":0
+                        "CrystalColumn14":0
+                          "SupportRod01CrystalColumn14":0 (repeated placement)
+                          "SupportRod02CrystalColumn14":0 (repeated placement)
+                          "SupportRod03CrystalColumn14":0 (repeated placement)
+                          "ContactRing0CrystalColumn14":0 (repeated placement)
+                          "GeTray0CrystalColumn14":0 (repeated placement)
+                          "ContactRing1CrystalColumn14":0 (repeated placement)
+                          "GeTray1CrystalColumn14":0 (repeated placement)
+                          "ContactRing2CrystalColumn14":0 (repeated placement)
+                          "GeTray2CrystalColumn14":0 (repeated placement)
+                          "StringerLidCrystalColumn14":0 (repeated placement)
+                          "LFEP01ACrystalColumn14":0 (repeated placement)
+                          "LFEP01BCrystalColumn14":0 (repeated placement)
+                          "LFEP01CCrystalColumn14":0 (repeated placement)
+                          "LFEP02ACrystalColumn14":0 (repeated placement)
+                          "LFEP02BCrystalColumn14":0 (repeated placement)
+                          "LFEP02CCrystalColumn14":0 (repeated placement)
+                          "LFEP03ACrystalColumn14":0 (repeated placement)
+                          "LFEP03BCrystalColumn14":0 (repeated placement)
+                          "LFEP03CCrystalColumn14":0 (repeated placement)
+                          "Crystal0CrystalColumn14":0
+                            "ActiveCrystal0CrystalColumn14":0
+                          "Crystal1CrystalColumn14":0
+                            "ActiveCrystal1CrystalColumn14":0
+                          "Crystal2CrystalColumn14":0
+                            "ActiveCrystal2CrystalColumn14":0
+                        "CrystalColumn15":0
+                          "SupportRod01CrystalColumn15":0 (repeated placement)
+                          "SupportRod02CrystalColumn15":0 (repeated placement)
+                          "SupportRod03CrystalColumn15":0 (repeated placement)
+                          "ContactRing0CrystalColumn15":0 (repeated placement)
+                          "GeTray0CrystalColumn15":0 (repeated placement)
+                          "ContactRing1CrystalColumn15":0 (repeated placement)
+                          "GeTray1CrystalColumn15":0 (repeated placement)
+                          "ContactRing2CrystalColumn15":0 (repeated placement)
+                          "GeTray2CrystalColumn15":0 (repeated placement)
+                          "StringerLidCrystalColumn15":0 (repeated placement)
+                          "LFEP01ACrystalColumn15":0 (repeated placement)
+                          "LFEP01BCrystalColumn15":0 (repeated placement)
+                          "LFEP01CCrystalColumn15":0 (repeated placement)
+                          "LFEP02ACrystalColumn15":0 (repeated placement)
+                          "LFEP02BCrystalColumn15":0 (repeated placement)
+                          "LFEP02CCrystalColumn15":0 (repeated placement)
+                          "LFEP03ACrystalColumn15":0 (repeated placement)
+                          "LFEP03BCrystalColumn15":0 (repeated placement)
+                          "LFEP03CCrystalColumn15":0 (repeated placement)
+                          "Crystal0CrystalColumn15":0
+                            "ActiveCrystal0CrystalColumn15":0
+                          "Crystal1CrystalColumn15":0
+                            "ActiveCrystal1CrystalColumn15":0
+                          "Crystal2CrystalColumn15":0
+                            "ActiveCrystal2CrystalColumn15":0
+                        "CrystalColumn16":0
+                          "SupportRod01CrystalColumn16":0 (repeated placement)
+                          "SupportRod02CrystalColumn16":0 (repeated placement)
+                          "SupportRod03CrystalColumn16":0 (repeated placement)
+                          "ContactRing0CrystalColumn16":0 (repeated placement)
+                          "GeTray0CrystalColumn16":0 (repeated placement)
+                          "ContactRing1CrystalColumn16":0 (repeated placement)
+                          "GeTray1CrystalColumn16":0 (repeated placement)
+                          "ContactRing2CrystalColumn16":0 (repeated placement)
+                          "GeTray2CrystalColumn16":0 (repeated placement)
+                          "StringerLidCrystalColumn16":0 (repeated placement)
+                          "LFEP01ACrystalColumn16":0 (repeated placement)
+                          "LFEP01BCrystalColumn16":0 (repeated placement)
+                          "LFEP01CCrystalColumn16":0 (repeated placement)
+                          "LFEP02ACrystalColumn16":0 (repeated placement)
+                          "LFEP02BCrystalColumn16":0 (repeated placement)
+                          "LFEP02CCrystalColumn16":0 (repeated placement)
+                          "LFEP03ACrystalColumn16":0 (repeated placement)
+                          "LFEP03BCrystalColumn16":0 (repeated placement)
+                          "LFEP03CCrystalColumn16":0 (repeated placement)
+                          "Crystal0CrystalColumn16":0
+                            "ActiveCrystal0CrystalColumn16":0
+                          "Crystal1CrystalColumn16":0
+                            "ActiveCrystal1CrystalColumn16":0
+                          "Crystal2CrystalColumn16":0
+                            "ActiveCrystal2CrystalColumn16":0
+                        "CrystalColumn17":0
+                          "SupportRod01CrystalColumn17":0 (repeated placement)
+                          "SupportRod02CrystalColumn17":0 (repeated placement)
+                          "SupportRod03CrystalColumn17":0 (repeated placement)
+                          "ContactRing0CrystalColumn17":0 (repeated placement)
+                          "GeTray0CrystalColumn17":0 (repeated placement)
+                          "ContactRing1CrystalColumn17":0 (repeated placement)
+                          "GeTray1CrystalColumn17":0 (repeated placement)
+                          "ContactRing2CrystalColumn17":0 (repeated placement)
+                          "GeTray2CrystalColumn17":0 (repeated placement)
+                          "StringerLidCrystalColumn17":0 (repeated placement)
+                          "LFEP01ACrystalColumn17":0 (repeated placement)
+                          "LFEP01BCrystalColumn17":0 (repeated placement)
+                          "LFEP01CCrystalColumn17":0 (repeated placement)
+                          "LFEP02ACrystalColumn17":0 (repeated placement)
+                          "LFEP02BCrystalColumn17":0 (repeated placement)
+                          "LFEP02CCrystalColumn17":0 (repeated placement)
+                          "LFEP03ACrystalColumn17":0 (repeated placement)
+                          "LFEP03BCrystalColumn17":0 (repeated placement)
+                          "LFEP03CCrystalColumn17":0 (repeated placement)
+                          "Crystal0CrystalColumn17":0
+                            "ActiveCrystal0CrystalColumn17":0
+                          "Crystal1CrystalColumn17":0
+                            "ActiveCrystal1CrystalColumn17":0
+                          "Crystal2CrystalColumn17":0
+                            "ActiveCrystal2CrystalColumn17":0
+                        "CrystalColumn18":0
+                          "SupportRod01CrystalColumn18":0 (repeated placement)
+                          "SupportRod02CrystalColumn18":0 (repeated placement)
+                          "SupportRod03CrystalColumn18":0 (repeated placement)
+                          "ContactRing0CrystalColumn18":0 (repeated placement)
+                          "GeTray0CrystalColumn18":0 (repeated placement)
+                          "ContactRing1CrystalColumn18":0 (repeated placement)
+                          "GeTray1CrystalColumn18":0 (repeated placement)
+                          "ContactRing2CrystalColumn18":0 (repeated placement)
+                          "GeTray2CrystalColumn18":0 (repeated placement)
+                          "StringerLidCrystalColumn18":0 (repeated placement)
+                          "LFEP01ACrystalColumn18":0 (repeated placement)
+                          "LFEP01BCrystalColumn18":0 (repeated placement)
+                          "LFEP01CCrystalColumn18":0 (repeated placement)
+                          "LFEP02ACrystalColumn18":0 (repeated placement)
+                          "LFEP02BCrystalColumn18":0 (repeated placement)
+                          "LFEP02CCrystalColumn18":0 (repeated placement)
+                          "LFEP03ACrystalColumn18":0 (repeated placement)
+                          "LFEP03BCrystalColumn18":0 (repeated placement)
+                          "LFEP03CCrystalColumn18":0 (repeated placement)
+                          "Crystal0CrystalColumn18":0
+                            "ActiveCrystal0CrystalColumn18":0
+                          "Crystal1CrystalColumn18":0
+                            "ActiveCrystal1CrystalColumn18":0
+                          "Crystal2CrystalColumn18":0
+                            "ActiveCrystal2CrystalColumn18":0

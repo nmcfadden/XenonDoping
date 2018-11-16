@@ -1,0 +1,41 @@
+April 30, 2004
+Akbar Mokhtarani, LBNL
+
+This is the README file for the MJLogger. It is taken from the BaBar 
+experiment and simplified.
+
+MJLogger is a utility class for redirecting output to the screen by setting 
+the severity the messages to be printed. The lowest level severity is 
+"debugging" and the higest is "fatal". For a given severity level, anythig 
+with higher severity will be routed to the output. The following is the list
+of severity levels:  
+
+
+ fatal:          The message is related to a condition preventing
+                 further execution of the program.  MJLogger will
+                 terminate the program.  Programmers should not call
+                 abort or exit themselves.
+
+ error:          A condition exists such that requested result
+                 or action can not be produced.  This is a serious
+
+ warning:        The result is produced, but may not be
+                 what's desired due to an unexpected condition
+
+ routine:        Nothing known to be wrong with the result;
+                 messages that are always produced in normal
+                 operation
+
+ trace:          Messages about the flow of program control
+                 and which optional operations took place.
+                 (This is the default if nothing is defined)
+  
+ debugging:      Information in addition to the above
+
+
+USAGE:
+include the MJLogger.hh file in your file and use the following syntax:
+
+   MJLog(severity) << "your message and other variables you want to
+			print "  << endlog; 
+

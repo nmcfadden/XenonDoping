@@ -1,0 +1,87 @@
+# #
+#
+# Example macro to run the LAr Instrumentation in MaGe.
+#
+# #
+
+/control/verbose 2
+#/MG/manager/mglog trace
+/MG/manager/mglog debugging
+
+# No geometry specifiers
+# Load the default GerdaArray design
+#
+/MG/geometry/database false
+/MG/geometry/detector GerdaArray
+#
+# Use the tentative phase-II geometry
+/MG/geometry/lock/type PhaseIILock
+/MG/geometry/detector/geometryfile geometry.dat
+# Matrix file with phase II simplified lock design 
+/MG/geometry/detector/matrixfile   matrix_phase_ii_bege.dat
+#
+# Don't construct neither support of cabling
+# Not yet implemented for the new detector types
+# 
+/MG/geometry/general/constructsupport false
+/MG/geometry/general/constructcabling false
+#
+###################################
+# Activate the LAr instrumentation
+###################################
+
+# This activates automatically the optical processes
+/MG/geometry/general/constructLArInstrumentation true
+#
+# Load the desired design implementation 
+#
+/MG/geometry/scintilla/design test
+
+# Set the apropriate output schema
+/MG/eventaction/rootschema GerdaInstrumentedArray
+# Uncomment to also have trajectories
+#/MG/eventaction/rootschema GerdaInstrumentedArrayWithTrajectories
+#
+/MG/eventaction/rootfilename testGerdaLArInstr.root
+/MG/eventaction/reportingfrequency 10
+#
+#
+# Bypass the (long) loading of hadronic physics tables
+# /MG/processes/useNoHadPhysics true
+#
+/run/initialize
+#
+# geometry has to be created first 
+#
+# The following two lines fire an electron towards the
+# Germanium crystals
+#
+/MG/generator/select G4gun
+/gun/particle e-
+/gun/energy 2500 keV
+/gun/direction -1 0 0
+/MG/generator/position 192 -54 100.5 mm
+/MG/generator/g4gun/detector_center_position 0 0 0
+
+# Don't enable this unless you want to be swamped by thousands of 
+# optical photon tracks
+#/tracking/verbose 1
+
+#
+# visualization
+#
+#/vis/open DAWNFILE
+#/vis/open OIX
+#/vis/scene/create
+#/vis/scene/add/volume CryoLiquidPhysical
+#/vis/sceneHandler/attach
+#/vis/viewer/flush
+#
+#/vis/scene/add/trajectories
+#/vis/scene/add/hits
+#/tracking/storeTrajectory 1
+#
+/run/beamOn 100
+
+
+

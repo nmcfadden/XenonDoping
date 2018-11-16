@@ -1,0 +1,117 @@
+<chapter id="Physics">
+	<title>MGProcesses</title>
+
+	<section>
+		<title>Introduction</title>
+		<para>
+			This section gives a high-level description of the physics list used
+			in the MaGe framework, and documents the MGProcesses Messenger that
+			provides a small amount of user control over that list.
+		</para>
+	</section>
+	
+	<section>
+		<title>MGProcesses description</title>
+		<para>
+			The MaGe framework physics list is an amalamation of two physics lists
+			that are distributed with the GEANT4 simulation package. One part of
+			the list comes from the list included as part of the Underground
+			Physics advanced example. The other part of the list comes from the
+			QGSP_HP hadronic list. Documentation on these lists are available on
+			the GEANT4 website. It manages the processes for Optical Photons 
+                        (Cerenkov emission, Scintillation, Absorption) supports the cut-per-region 
+                        approach: this allows to set different production cuts in different regions 
+                        of the geometry.
+		</para>
+		<para>
+			The primary class is the MGProcessesList class, but it uses
+			supporting classes MGProcessesMaxTimeCuts, MGProcessesMinEkineCuts,
+			and MGProcessesSpecialCuts.
+		</para>
+	</section>
+	
+	<section>
+		<title>MGProcessesMessenger</title>
+		<para>
+			The MGProcesses Messenger has command to set 
+			the simulation "realm" to double-beta decay, 
+			dark matter or cosmic rays. 
+                        The difference between the realms lies in the
+			secondary production cutoff. 
+                        For the first two realms the distances specified in the code
+			are keyed to germanium, and they provide a double-beta production
+			cutoff of 100 keV and a dark matter production cutoff of 1 keV.
+                        In the cosmic rays realm, the cuts are different in the volumes 
+                        belonging to to the "Sensitive Region" and the other volumes. In particular, 
+                        the cuts for the volumes in the sensitive region are the same than for 
+                        the double-beta realm, while they are more relaxed everywhere else, in 
+                        order to save CPU time (avoiding the precise tracking of particles in the uninteresting 
+                        parts of the setups). 
+		</para>
+		<para>
+			These cutoffs specify the energy below which no secondaries will
+			be created (with a few excpetions, such as if the secondary
+			particle would annihilate, such as positrons, or if the particle
+			is relatively close to a volume boundary).
+		</para>
+		<para>
+			The goal of establishing these different realms is to increase the
+			speed of the simulation when possible. Since the interesting energy
+			range of double-beta decays is much greater than that of dark
+			matter interactions, the simulation should not have to spend so
+			much time tracking secondary particles down to the lower energy
+			ranges.
+		</para>
+                <para>
+                        If no logical volume is registered in the "Sensitive Region", the cut-per-region 
+                        approach has no effect in the simulation. The cuts are the same everywhere and 
+                        correspond to about 140 keV (gammas) and 7.5 MeV (e-) in germanium. 
+                        The code to register one logical volume in the "Sensitive Region" is 
+                 	<cmdsynopsis>
+				<command> G4Region* sensitiveRegion = G4RegionStore::GetInstance()->GetRegion("Sensitive Region"); 
+                                </command>
+                                <command> sensitiveRegion->AddRootLogicalVolume(myLogicalVolume); </command>
+			</cmdsynopsis>
+                       When a volume is registered to the region, all its daugthers are included too.
+                </para>
+		<para>
+			The MGProcesses Messenger is used as such:
+			<screen>
+			<cmdsynopsis>
+				<command>/MG/processes/realm</command> <arg><replaceable>BBdecay</replaceable></arg> <arg><replaceable>DarkMatter</replaceable></arg> <arg><replaceable>CosmicRays</replaceable></arg>
+			</cmdsynopsis>
+			</screen>
+			The default realm is "BBdecay".
+		</para>
+                <para>
+                   Geant4 has the capability to generate and track optical photons, e.g. originated by scintillation or by 
+                   Cerenkov emission. In the default MaGe Physics List optical photons are not generated. They can be switched 
+                   on with the messenger command 
+                   <screen>
+			<cmdsynopsis>
+				<command>/MG/processes/optical</command>
+				<arg><replaceable>true</replaceable></arg>
+                                <arg><replaceable>false</replaceable></arg>
+			</cmdsynopsis>
+			</screen>
+                   that has to be given before the <cmdsynopsis><command>/run/initialize</command></cmdsynopsis>. In this case, 
+                   be sure that the geometry definition contains the optical properties of materials (refraction index, absorption 
+                   lenght, scintillation yield) and of surfaces (reflection index, etc.).
+                </para>
+                <para>
+                   Geant4 provides two alternative sets of Electromagnetic Processes, called Standard (Std) and Low Energy (LowE). 
+                   The LowEnergy processes include atomic effects (as fluorescence) and can track gammas, electrons and positrons 
+                   down to 250 eV; the drawback of LowE processes is that they require a longer computing time. By default, the 
+                   Electromagnetic processes in the MaGe Physics List are the LowE ones. One can switch to the Standard processes 
+                   (quicker and less precise) with the messenger command 
+	           <screen>
+			<cmdsynopsis>
+				<command>/MG/processes/lowenergy</command>
+				<arg><replaceable>true</replaceable></arg>
+                                <arg><replaceable>false</replaceable></arg>
+			</cmdsynopsis>
+			</screen>
+                  It must be given before the <cmdsynopsis><command>/run/initialize</command></cmdsynopsis>.
+                </para>
+	</section>
+</chapter>

@@ -1,0 +1,37 @@
+# Management 
+/MG/manager/mglog routine
+/MG/eventaction/reportingfrequency 10000
+
+# Process List
+/MG/processes/realm BBdecay
+
+# Configure Detector.
+/MG/geometry/detector MJ57Banger
+/MG/geometry/idealCoax/setDefaults
+/MG/geometry/idealCoax/deadLayerOn true
+/MG/geometry/idealCoax/cutInHalfOn false
+/MG/geometry/idealCoax/outerDeadLayer 1 micrometer
+/MG/geometry/idealCoax/coreDeadLayer 0.05 cm
+/MG/geometry/idealCoax/height 7.0 cm
+/MG/geometry/idealCoax/radius 3.0 cm
+/MG/geometry/idealCoaxWShield/shieldOn false
+
+# ROOT output schema
+/MG/eventaction/rootschema MCEvent
+/MG/eventaction/rootfilename  @OUTFILE@
+
+# Select Geant 4 RDM generator as a point source
+/MG/generator/select RDMiso
+
+/run/initialize
+/MG/generator/confine volume
+/MG/generator/volume @VOLUME@
+
+#/MG/geometry/idealCoax/dump
+#/MG/geometry/idealCoaxWShield/dump
+
+# Select ion and position source right outside can.
+/gun/particle
+/grdm/ion @IONN@ @IONZ@ @IOND@
+
+/run/beamOn @NEVENT@

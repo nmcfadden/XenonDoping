@@ -1,0 +1,70 @@
+#
+#
+# The first line sets the verbosity level
+#/MG/manager/mglog debugging 
+/MG/manager/mglog trace
+#
+# Geometry setup 
+#
+/MG/geometry/detector Dario
+/MG/geometry/database false
+#
+# The NPL rest sample, with material defined thru file
+#
+/MG/geometry/addMaterial NPLsolution.def
+#
+/MG/geometry/dario/samplematerial NPLsolution
+/MG/geometry/dario/sample custom
+#
+/MG/geometry/dario/tubelength 3.5 cm
+#
+# Output setup
+#
+#/MG/eventaction/rootschema Dario
+#/MG/eventaction/rootfilename Dario.root
+#
+# Other setups
+#
+/MG/processes/optical false
+/MG/processes/lowenergy true
+/MG/processes/realm DarkMatter
+#
+#/MG/generator/select G4gun
+/MG/generator/select RDMiso
+/tracking/verbose 0
+#
+#
+/run/initialize
+#
+#
+/MG/generator/confine volume
+/MG/generator/volume NPLsample
+#
+#/gun/position 0 0 25
+#
+#
+# Visualization
+#
+/vis/scene/create
+/vis/open DAWNFILE
+#
+#/vis/viewer/set/viewpointThetaPhi 80 -90 deg
+#/vis/viewer/set/lightsVector -1 1 1
+/vis/viewer/zoom 2.5
+/vis/viewer/set/viewpointVector 1 0.25 0.25
+#
+/tracking/storeTrajectory 1
+/vis/scene/add/trajectories
+/vis/scene/endOfEventAction accumulate
+/vis/viewer/flush
+#
+#
+# Shoot
+#
+/gun/particle ion
+/gun/energy 0 eV
+/gun/ion 11 22
+#/run/beamOn 1000
+ 
+
+

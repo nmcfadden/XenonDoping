@@ -1,0 +1,25 @@
+$Id: README,v 1.1 2007-09-28 14:35:44 jliu Exp $
+$Author: jliu $
+$Date: 2007-09-28 14:35:44 $
+
+This directory contains MaGe and ROOT macros showing how to use GDML
+with MaGe and ROOT.
+
+g42gdml.mac  - dump a simple detector setup "Corrado" from MaGe into
+   	       gdml files
+
+Corrado.gdml - mother gdml file containing the whole setup
+
+    * Crystal_log.gdml - daughter gdml file containing only the
+      		       	 logical volume "Crystal_log"
+    * Spider_log.gdml  - daughter gdml file containing only the
+      		         logical volume "Spider_log"
+
+drawGDML.C - ROOT macro showing how to visualize GDML in ROOT. (You
+	     have to enable GDML support in ROOT by passing
+	     "--enable-gdml" option to the configuration
+	     process. You'd better also enable OpenGL support in ROOT:
+	     $./configure --enable-gdml --enable-opengl) 
+
+gdml2g4.mac - read gdml file in, run a simple simulation based on the
+	      geometry inside the gdml file

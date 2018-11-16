@@ -1,0 +1,64 @@
+<chapter id="QAQC">
+   <title>Quality Assurance and Verification Procedures
+   </title>
+   <para>Reyco, Yuen-Dat, and Brian will write this part.
+   </para>
+   <section><title> Status of Software Components</title>
+   <para>
+   Here are a list of software components that require QA/QC and their status.
+   Last updated : 12/6/2004
+   </para>
+   <table frame="top"><title>Status of Software Components</title>
+     <tgroup cols="3">
+     <thead>
+     <row><entry>Component</entry>
+          <entry>Responsible</entry>
+          <entry>Status</entry>
+     </row>
+     </thead>
+     <tbody>
+        <row><entry>LANL Clover Geometry</entry>
+             <entry>K. Kazkaz?</entry>
+             <entry>Implmented, some testing done.</entry>
+        </row>
+        <row><entry>LANL Clover in FEL</entry>
+             <entry>R. Henning</entry>
+             <entry>Tested, needs sign-off from LANL Clover</entry>
+        </row>
+        <row><entry>LArGe Geometry</entry>
+             <entry>M. Di Marco</entry>
+             <entry>Under Development</entry>
+        </row>
+        <row><entry>Baseline Majorana Detector Geometry for Proposal</entry>
+             <entry>R. Henning</entry>
+             <entry>Under Development</entry>
+        </row>
+        <row><entry>PNNL Generator</entry>
+             <entry>D. Jordan</entry>
+             <entry>Tested, sign off required.</entry>
+        </row>
+        <row><entry>Decay0 Generator</entry>
+             <entry>L. Pandola</entry>
+             <entry>Implemented, needs testing</entry>
+        </row>
+        <row><entry>Volume Sampler</entry>
+             <entry>D. Jordan/L. Pandola</entry>
+             <entry>Implemented, needs testing</entry>
+        </row>
+        <row><entry>TUNL FEL Generator</entry>
+             <entry>R. Henning</entry>
+             <entry>*SIGNED OFF*</entry>
+        </row>
+        <row><entry>Volume Sampler</entry>
+             <entry>D. Jordan/L. Pandola</entry>
+             <entry>Implemented, needs testing</entry>
+        </row>
+        <row><entry>Physics Lists</entry>
+             <entry>?</entry>
+             <entry>Implemented, needs testing</entry>
+        </row>
+     </tbody>
+     </tgroup>
+   </table>
+   </section>
+</chapter>

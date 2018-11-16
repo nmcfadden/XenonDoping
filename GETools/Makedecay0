@@ -1,0 +1,6 @@
+# script to compile decay0
+CD=<...> # location of cernlib libraries
+gfortran -ffixed-line-length-80 -c decay0.for -O
+gfortran decay0.o -o decay0 -O -L$CD -lgraflib -lpacklib -lmathlib -lkernlib 
+rm -f core *.o
+chmod ug+rxw decay0

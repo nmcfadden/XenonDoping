@@ -1,0 +1,50 @@
+# ==================================== #
+# Draw the Hades Scintillator sandwich #
+# ==================================== # 
+
+#
+# Geometry setup 
+#
+
+/MG/manager/mglog trace
+/MG/geometry/detector HadesScintillator
+/MG/geometry/database false
+/MG/eventaction/rootschema HadesScintillator
+/MG/eventaction/rootfilename HadesScintillator.root
+/MG/eventaction/reportingfrequency 100
+
+#
+# Geometry modifications 
+#
+
+#
+# Processes 
+#
+
+/MG/processes/optical false
+/MG/processes/lowenergy false
+/MG/processes/qgsp_hadron_list true
+/MG/processes/realm CosmicRays
+
+#
+# generator setup 
+#
+
+/MG/generator/select musun
+/MG/generator/musun/filename muons.dat 
+/MG/generator/cosmicray/height 1.0 m 
+/MG/generator/cosmicray/radius 2.0 m 
+
+#
+# Initialize run 
+#
+
+/run/initialize
+
+#
+# Start run 
+#
+
+/tracking/verbose 0
+/run/beamOn 50000
+

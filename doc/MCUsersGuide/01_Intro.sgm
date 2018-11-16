@@ -1,0 +1,126 @@
+<chapter id="Intro">
+   <title>Introduction to the User's Guide
+   </title>
+   <para>
+     This is the Monte Carlo User's Guide for the combined simulation package
+     for the Majorana and Gerda experiments. Majorana is 
+     a 120-Kg. enriched Germanium crystal array that will search for 
+     neutrinoless double-beta decay and dark matter. If you are reading this, 
+     then you are probably familiar with these experiments. 
+     This manual is limited
+     to the Monte Carlo software. It does not discuss the design or motivation 
+     of the experiments.  For more information
+     about the Majorana experiment, see: 
+   </para>
+   <para>
+       <ulink url="http://xxx.lanl.gov/abs/nucl-ex/0311013">
+       http://xxx.lanl.gov/abs/nucl-ex/0311013</ulink> and
+   </para>
+   <para> 
+       <ulink url="http://xxx.lanl.gov/abs/hep-ex/0405008">
+       http://xxx.lanl.gov/abs/hep-ex/0405008</ulink>
+   </para>
+   <para>
+      The simulation software is under intensive development
+      and subject to frequent updates. Although we will do our best to keep
+      the software and User's Guide synchronized, this may not always be the 
+      case.
+      This manual is divided into several sections with 
+      self-explanatory names:
+   </para>
+   <itemizedlist>
+     <listitem>
+        <para>
+          <xref linkend="GettingStarted"/> tells you how to get the required 
+          computer accounts, obtain the software, build an executable
+          an run some simple examples. All users and developers should read
+          this.
+        </para>
+     </listitem>
+     <listitem>
+        <para>
+           <xref linkend="HowTos"/> is just that. If you encounter a problem, 
+            chances are someone also has also and wrote a How To. This is
+            a reference for developers and users.
+        </para>
+     </listitem>
+     <listitem>
+        <para>
+           <xref linkend="HW-Env"/> describes the hardware requirements
+           and the
+           development environment. This includes the CVS repository structure,
+           build tools, releases, etc. All developers must read this. 
+        </para>
+     </listitem>
+     <listitem>
+        <para>
+           <xref linkend="Structure"/> describes the overall 
+           framework of the simulation
+           package. This includes all the top-level classes, as well as 
+           naming conventions.  All developers must read this.
+        </para>
+     </listitem>      
+     <listitem>
+        <para>
+           <xref linkend="Geometry"/> describes how the geometry package is
+           structured, how to add new detector geometries, and how to 
+	   select detector geometries
+           at run-time. It also contains a description of some of the 
+	   geometries. 
+        </para>
+     </listitem>      
+     <listitem>
+        <para>
+           <xref linkend="Physics"/> describes the physics modules available
+           to the user and how to select them. 
+        </para>
+     </listitem>      
+     <listitem>
+        <para>
+           <xref linkend="IO"/> describes how to generate output to the 
+	   terminal and how to write output classes for specific
+	   detectors. It also contains a description of the existing output
+	   classes. Output classes describe the output format for event data
+	   and are associated with specific detector geometries.
+
+        </para>
+     </listitem>      
+     <listitem>
+        <para>
+           <xref linkend="Database"/> describes the interface to PostgreSQL
+	   database used by the Majorana collaboration.
+        </para>
+     </listitem>      
+     <listitem>
+        <para>
+           <xref linkend="Waveforms"/> describes the waveform generation
+	   package used for studying pulse-shapes in crystals.
+        </para>
+     </listitem>      
+     <listitem>
+        <para>
+           <xref linkend="Generators"/> describes the various event generators
+	   available in the <filename>MaGe</filename>
+	   package and how to select and initialize them.
+        </para>
+     </listitem>      
+     <listitem>
+        <para>
+           <xref linkend="Documentation"/> describes how this UDG is generated
+	   and how to write documentation for it. 
+        </para>
+     </listitem>      
+     <listitem>
+        <para>
+           <xref linkend="Results"/> contains selected results and examples 
+	   from the simulation. 
+        </para>
+     </listitem>      
+     <listitem>
+        <para>
+           <xref linkend="QAQC"/> discusses the quality assurance and control
+	   procedures for the <filename>MaGe</filename> package. 
+        </para>
+     </listitem>      
+   </itemizedlist>
+</chapter>

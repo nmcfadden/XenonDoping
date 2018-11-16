@@ -1,0 +1,58 @@
+# ============================== #
+# Runs liquid nitrogen teststand #
+# ============================== #
+
+#
+# General setup
+#
+/MG/manager/seedWithDevRandom
+/MG/manager/mglog trace
+#/random/setSavingFlag true
+#/random/setDirectoryName ./temp
+/MG/processes/realm BBdecay
+/MG/eventaction/rootschema GerdaTeststandEnergyHitsTrajectories
+/MG/eventaction/rootfilename TeststandMilchkanne.root
+/MG/eventaction/reportingfrequency 1000
+
+
+#
+# Geometry setup
+#
+
+/MG/geometry/detector MunichTestStand
+/MG/geometry/teststand/teststandtype milchkanne
+/MG/geometry/database false
+/MG/geometry/teststand/sourcedistance 10 cm
+
+#
+# Geometry modifications
+#
+
+#
+# Initialize run
+#
+
+/run/initialize
+
+#
+# generator setup
+#
+
+#/MG/generator/confine volume
+#/MG/generator/volume mikesch_crystal
+
+/MG/generator/select G4gun
+/gun/particle ion
+/gun/ion 27 60 0
+/gun/energy 0.0 keV
+
+/tracking/verbose 0
+
+# 
+# Run 
+# 
+
+/run/beamOn 1000
+#/run/beamOn 100000 rndmSave.mac
+
+

@@ -1,0 +1,30 @@
+/MG/manager/mglog trace
+/MG/geometry/detector GerdaArray
+/MG/geometry/database false
+#
+/MG/geometry/detector/geometryfile geometry.dat
+/MG/geometry/detector/matrixfile matrix_phase_ii.dat
+#
+/MG/processes/lowenergy false
+/MG/eventaction/reportingfrequency 500
+/MG/eventaction/rootschema GerdaArray
+/MG/eventaction/rootfilename testCo60Contamination.root
+/MG/generator/select G4gun
+/run/initialize
+# The source is Co60
+/grdm/fBeta  true
+/gun/particle ion
+/gun/ion 27 60
+/gun/energy 0 eV
+#
+# Source confinement
+#
+/MG/generator/confine volume
+#
+# The source is confined in "Segment_1"
+#
+/MG/generator/volume Segment_1
+#
+/tracking/verbose 0
+/run/beamOn 10000
+

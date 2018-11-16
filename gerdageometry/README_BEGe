@@ -1,0 +1,30 @@
+(Author: Bjoern Lehnert)
+
+
+This is a brief description of the BEGe implementation for Phase I
+
+The functionality so far comprises of one single outer DL and one single inner DL that can be specified. 
+No passivation layer is physically placed but has to be logically constructed and defined in the geometry.dat
+non the less. Cones and the groove are implemented and should be on opposing side. (no consistancy check is 
+done!). There are two flags to set the side of the cone and the groove which are groove on bottom (=0) and 
+cone on top (=0) by default. Switching both flags is essentially the same as constructing the BGEe upside down
+e.g. in a back to back configuration.
+
+The communication with the class is done via the geometry.dat which recycles old segmented detector parameters 
+for the cone parametrization. The beges are a new xtal type 4 and are constructed fully independently from 
+other xtals. The geometry.dat parametrization is as follows:
+
+37  GD32B	4	0.0	35.9	32.2	0.0	300.0	840e3	840e3	840e3	1e3	 7.5	10.5	2.0	0.0	0	0	0.0	EnrichedGe 	EnrichedGe 	EnrichedGe  1.0 0.001
+
+No., name, type, (not used), radius, height, corner height, innerDL, outerDL, outerDL, outerDL, passivationLayer, grooveInnerRadius, grooveOuterRadius, grooveDepth, (notUsed), cornerOnBottom=1, grooveOnTop=1, cornerRadius,  bulkMaterial, DLMaterial, passivationMaterial, (notUsed), (notUsed)
+
+
+Phase I coaxial type holders and cabling can be used with type 4 xtals. For the holders, the placement of the 
+StarHolder_UpperSpecialNut is omitted because it is crashing the drawing which suggest overlapping volumes and 
+the the StarHolder_LowerContactDisc because it is almost completely covering the p+ contact. 
+
+The new detectors are described in the geometry_PhaseIBEGes.dat and placed in the matrix_phase_i_Jul12.dat inside
+the GERDA Phase I array as of July 2012. Due to some of the coaxial Phase I xtals crashing the visualization, 
+there is also a matrix_phase_i_BEGeString.dat to place the BEGe string individual.
+
+An example macro to sample and run events in the new volumes can be found here: ./macros/Gerda/RunGerda_PhaseI_Jul12.mac

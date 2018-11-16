@@ -1,0 +1,66 @@
+#!/bin/ksh
+#-------------------------------------------------------------------------
+# this script runs MaGe 10 times and each time with different input files
+# to run this script you have to
+# 1 have MaGe at ${magepath}
+# 2 directory for your ntuples will be at targetpath
+# 3 ntuple name will be ${targetfilename}.1 to 10
+# 4 directory for your kumac file
+# 5 kumac name will be ${kumacfilename}.1 to .10
+#-------------------------------------------------------------------------
+#
+# ---> set up the paths
+#
+mageexec=/mnt/scratch/xliu/geant4/bin/Linux-g++/MaGe
+targetpath=/mnt/scratch/xliu/neutrino/ntu-MaGe/ge68-ntu
+targetfilename=ge68.100k.ntu
+logfilename=ge68.100k.log
+kumacpath=/mnt/scratch/xliu/neutrino/ntu-MaGe/ge68-ntu
+kumacfilename=ge68.MaGe.kumac
+#
+# ---> start looping
+#
+mass=1
+while ((mass<=3))
+do
+((rndmseed=92347+mass))
+#
+# ---> generate kumac file for input to MaGe
+#
+\rm temp.header
+cat > temp.header << 'EOF'
+/MG/manager/mglog trace
+/MG/geometry/detector GerdaArray
+/MG/geometry/database false
+/MG/processes/realm BBdecay
+/MG/eventaction/rootschema GerdaArrayWithTrajectory
+/MG/eventaction/rootfilename testGerda.root
+/MG/eventaction/reportingfrequency 1000
+/run/initialize
+/MG/generator/confine volume
+/MG/generator/volume Ge_det_0
+/MG/generator/select G4gun
+/gun/particle ion
+/gun/ion 31 68 0
+/gun/energy 0.0 keV
+/tracking/verbose 0
+/run/beamOn 1000
+EOF
+#
+\rm temp.rndm
+echo /MG/manager/heprandomseed ${rndmseed} > temp.rndm
+#
+\rm ${kumacfilename}.${mass}
+cat temp.rndm temp.header > ${kumacfilename}.${mass}
+#
+# ---> start MaGe
+#
+${mageexec} ${kumacfilename}.${mass} >  ${logfilename}.${mass}
+#
+mv testGerda.root ${targetpath}/${targetfilename}.${mass}
+mv ${logfilename}.${mass} ${targetpath}/.
+mv ${kumacfilename}.${mass} ${targetpath}/.
+# 
+((mass+=1))
+done
+#

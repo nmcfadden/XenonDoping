@@ -1,0 +1,29 @@
+$Id: README,v 1.2 2007-10-16 11:45:59 mjelen Exp $
+
+This file will list and explain the different directories contained in the "macros"-directory of MaGe.
+
+-------------------------------------
+     ***GDML***
+
+Contains the example macros "g42gdml.mac" and "gdml2g4.mac" which are used to illustrate the use of GDML and the conversion of data from Geant4 to GDML and back.
+A short README-file in the directory informs you in more detail.
+ 
+-------------------------------------
+     ***Gerda***
+
+Contains various macros to describe the geometries of the complete Gerda setup and of the different teststands built in Munich. They start with "Draw..." and will visualize the particular geometries.
+The "Run..." macros give you the opportunity to simulate different measurements with the Gerda geometries.
+More information about each macro can be found in the README-file of the Gerda directory.
+
+-------------------------------------
+     ***Majorana***
+
+Contains macros with geometries typical for Majorana.
+
+-------------------------------------
+     ***Samples***
+
+Contains sample files to show how to work with different particle generators (SampleGenerators.mac)and what options to use for different geometries(SampleGeometries.mac). 
+A file named "SampleTemplate.mac" shows the general structure of a MaGe macro and can also be used as a template by switching the options on and off.
+
+-------------------------------------

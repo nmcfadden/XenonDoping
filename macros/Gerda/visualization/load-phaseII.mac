@@ -1,0 +1,62 @@
+# ================================================ #
+# GERDA Phase-II reference macro                   #
+# K.v.Sturm 23.11.2017                             #
+# ================================================ #
+
+### manager ###
+/tracking/verbose                               0
+/MG/manager/mglog                               trace
+/MG/manager/heprandomseed                       0           ### change me ###
+
+### processes ###
+/MG/processes/realm                             BBdecay     ### Candidates: BBdecay, DarkMatter, CosmicRay ##
+/MG/processes/lowenergy                         true
+/MG/processes/useNoHadPhysics                   true
+
+### Geometry ###
+/MG/geometry/detector                           GerdaArray
+/MG/geometry/database                           false
+#/MG/geometry/detector/general/depth            0 cm            ### is default ###
+
+### Set 7 string Phase II lock ###
+/MG/geometry/lock/type                          PhaseII_DN500   ### is default ###
+#/MG/geometry/lock/dn500/n_strings              7               ### is default ###
+#/MG/geometry/lock/dn500/string_distance        11 cm           ### is default ###
+
+### Geometry and Matrix files ###
+/MG/geometry/detector/geometryfile              geometry_PhaseII_BEGeFCCDgrowth_CoaxPhaseI.dat
+/MG/geometry/detector/matrixfile                matrix_phase_ii_StatusDec2015_pos.dat
+#/MG/geometry/general/constructsupport          true            ### is default ###
+#/MG/geometry/general/constructcabling          true            ### is default ###
+
+### Construct liquid Argon veto and electronics plate ###
+### This activates automatically the optical processes ###
+/MG/geometry/general/constructLArInstrumentation       true
+#/MG/geometry/LArInst/SelectDesign                     hybrid     ### is default ###
+#/MG/geometry/LArInst/ConstructSegmentedFiberShroud    true       ### is default ###
+#/MG/geometry/LArInst/PhotonTracking                   false      ### is default ###
+
+### If you want to use photon tracking you just need to switch it on below you find the default settings ###
+#/MG/geometry/LArInst/PhotonTracking                   true
+#/MG/geometry/LArInst/ScaleLArXUVAbsLength             0.25         ### is default ###
+#/MG/geometry/LArInst/ScaleLArXUVLightYield            1.           ### is default ###
+#/MG/geometry/LArInst/SegmentedFiberShroudRotation     -7 deg       ### is default ###
+
+### Nylon Minishrouds ###
+/MG/geometry/general/constructMiniShroud                true
+#/MG/geometry/general/miniShroudMaterial                 Nylon       ### is default ###
+#/MG/geometry/LArInst/MinisShroudOpticalCoating          TPB         ### is default ###
+#/MG/geometry/general/adjustMinishroudToDetctorString    true        ### is default ###
+#/MG/geometry/general/miniShroudBaseThickness            0.125 mm    ### is default ###
+#/MG/geometry/general/miniShroudSideThickness            0.125 mm    ### is default ###
+
+### Individual z positions defined in second column of matrix file ###
+#/MG/geometry/detector/individualzposofdetectors         true        ### is default ###
+#/MG/geometry/detector/crystal/reverse                   true        ### is default ###
+
+### Muon Veto ###
+/MG/geometry/cherenkov                          0 ## 0 is the true configuration, -1 no u-veto ##
+
+/MG/eventaction/rootschema                      GerdaArray
+
+/run/initialize

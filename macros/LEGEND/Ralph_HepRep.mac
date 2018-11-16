@@ -1,0 +1,71 @@
+# Management 
+/MG/manager/mglog routine
+/MG/manager/seedWithUUID
+
+# Process List
+/MG/processes/realm BBdecay
+/MG/processes/lowenergy true
+
+# Configure Detector
+/MG/geometry/detector LGND_200_Baseline
+/MG/L200/CalibrationOn true
+/MG/L200/CalibrationSetSourceNumber 6
+/MG/L200/CalibrationSetSourceHeight -500 mm
+/MG/L200/CalibrationSetAbsorber false
+
+/MG/geometry/WorldMaterial Vacuum 
+
+# Initialize Geant4 and geometry
+/run/initialize
+
+/MG/eventaction/rootschema MCRun
+/MG/eventaction/rootfilename Source_test.root
+
+/vis/open HepRepFile
+
+/vis/scene/create
+#/vis/scene/add/volume World
+/vis/scene/add/extent -300 300 -300 300 -300 300 cm
+/vis/scene/add/scale 1 m x 1 0 0 auto 1 1 0 m
+/vis/scene/add/scale 1 m y 0 1 0 auto 1 1 0 m
+
+/vis/scene/add/volume Cryostat_001
+
+/vis/scene/add/volume DetectorArray_001_StringAssembly_001_MiniShroud_001
+/vis/scene/add/volume DetectorArray_001_StringAssembly_002_MiniShroud_001
+/vis/scene/add/volume DetectorArray_001_StringAssembly_003_MiniShroud_001
+/vis/scene/add/volume DetectorArray_001_StringAssembly_004_MiniShroud_001
+/vis/scene/add/volume DetectorArray_001_StringAssembly_005_MiniShroud_001
+/vis/scene/add/volume DetectorArray_001_StringAssembly_006_MiniShroud_001
+/vis/scene/add/volume DetectorArray_001_StringAssembly_007_MiniShroud_001
+/vis/scene/add/volume DetectorArray_001_StringAssembly_008_MiniShroud_001
+/vis/scene/add/volume DetectorArray_001_StringAssembly_009_MiniShroud_001
+
+/vis/scene/add/volume DetectorArray_001_StringAssembly_010_MiniShroud_001
+/vis/scene/add/volume DetectorArray_001_StringAssembly_011_MiniShroud_001
+/vis/scene/add/volume DetectorArray_001_StringAssembly_012_MiniShroud_001
+/vis/scene/add/volume DetectorArray_001_StringAssembly_013_MiniShroud_001
+/vis/scene/add/volume DetectorArray_001_StringAssembly_014_MiniShroud_001
+/vis/scene/add/volume DetectorArray_001_StringAssembly_015_MiniShroud_001
+/vis/scene/add/volume DetectorArray_001_StringAssembly_016_MiniShroud_001
+/vis/scene/add/volume DetectorArray_001_StringAssembly_017_MiniShroud_001
+/vis/scene/add/volume DetectorArray_001_StringAssembly_018_MiniShroud_001
+/vis/scene/add/volume DetectorArray_001_StringAssembly_019_MiniShroud_001
+/vis/scene/add/volume LGND_200_CalibrationTaAbsorber
+/vis/scene/add/volume LGND_200_CalibrationSourceInner
+/vis/scene/add/volume LGND_200_CalibrationSourceOuter
+
+/vis/sceneHandler/attach
+/vis/scene/add/trajectories
+/vis/scene/add/hits
+/vis/scene/endOfEventAction accumulate
+
+/vis/viewer/flush
+#/vis/viewer/update
+
+
+/MG/generator/select LGND200Calibration
+/MG/generator/LGND200Calibration/setZ 90
+/MG/generator/LGND200Calibration/setA 228
+/run/beamOn 20
+

@@ -1,0 +1,52 @@
+# =====================      #
+# Runs teststand siegfried   #
+# with neutron source        #
+# =====================      #
+
+#
+# General setup
+#
+
+/MG/manager/mglog trace
+/MG/processes/realm BBdecay
+/MG/eventaction/rootschema GerdaTeststandEnergyHitsTrajectories
+/MG/eventaction/rootfilename TeststandSiegfriedNeutron.root
+/MG/eventaction/reportingfrequency 1000
+
+#
+# Geometry setup
+#
+
+/MG/geometry/detector MunichTestStand
+/MG/geometry/teststand/teststandtype siegfried
+/MG/geometry/database false
+
+#
+# Geometry modifications
+#
+
+#
+# Initialize run
+#
+
+/run/initialize
+
+#
+# generator setup
+#
+
+/MG/generator/select AmBe
+/MG/generator/position 55.9 0.0 0.0 cm
+
+/MG/geometry/database false
+/run/initialize
+
+
+/tracking/verbose 0
+
+# 
+# Run 
+# 
+
+/run/beamOn 1000
+

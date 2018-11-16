@@ -1,0 +1,67 @@
+<chapter id="template"> <title> Clover Simulation </title>
+
+<section> <title> Introduction </title>
+<para>
+This guide help the user get started with the Majorana Clover simulation.
+</para>
+</section>
+
+<section> <title> Getting Started </title> 
+  <section> <title> Access and Systems Requirements</title>
+   <para> 
+   The simulation software resides on a CVS server at LBNL and is currently
+   only supported on the 
+   <ulink url="http://www.nersc.gov/nusers/resources/PDSF"> <citetitle> 
+   PDSF </citetitle> </ulink> 
+   facility. PDSF is a Linux cluster running RH
+   7.3 and you will need a shell terminal program to access it.
+   If you do not have accounts on these
+   machines, please follow the instructions posted on the 
+   <ulink url="http://neutrino.lbl.gov/majorana/HOW-TOs.html">
+   <citetitle> Majorana simulation
+   website </citetitle> </ulink> to obtain access. Once you have access,
+   follow the instructions on the website to set up your environment 
+   correctly.
+   </para> 
+  </section>
+
+  <section> <title> Checking out and building the simulation package. 
+  </title>
+  <para>
+  Once you have accounts on PDSF with the proper environment you can check 
+  out and build the simulation 
+  package. This process is semi-automated and can be invoked via the 
+  following set of instructions from a PDSF login shell:
+   <screen>
+      mkdir workdir
+      cd workdir
+      getRel 01.00
+      cd MJ_01.00/MJ
+      gmake installdirs
+      getPkg management
+      getPkg macros
+      gmake management.bin
+      ln -s /auto/majorana1/MJ/generators/PNNL/dat dat</screen>
+  </para>
+  </section
+
+  <section> <title> Running the simulation </title>
+  <para>
+   The simulation can be run interactively or with Geant 4 scripts.
+   There are three scripts currently in the macros package, 
+   <screen>Co60.mac</screen>, <screen>Co57.mac</screen>, <screen>
+   Th.mac</screen>. These scripts generate gammas from Co60, Co57 and Th122
+   sources places approximately 1.5 inches in front of the front face of
+   the clover face. The macros can be executed via 
+   To run icp tnteractively, type <screen> bin/MJApp </screen>
+  </para>
+  </section>
+</section>
+
+<section> <title> Preliminary Results</title> 
+<para>
+Coming soon!
+</para>
+</section>
+
+</chapter>

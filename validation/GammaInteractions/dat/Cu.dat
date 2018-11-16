@@ -1,0 +1,33 @@
+
+# material density [g/cm^3] 
+XX:Cu_density:XX	10	8.96
+
+XX:Cu_attenuation_gamma0.01MeV:XX	11	0.01	215.9
+XX:Cu_attenuation_gamma0.015MeV:XX	11	0.015	74.05
+XX:Cu_attenuation_gamma0.02MeV:XX	11	0.02	33.79
+XX:Cu_attenuation_gamma0.03MeV:XX	11	0.03	10.92
+XX:Cu_attenuation_gamma0.04MeV:XX	11	0.04	4.862
+XX:Cu_attenuation_gamma0.05MeV:XX	11	0.05	2.613
+XX:Cu_attenuation_gamma0.06MeV:XX	11	0.06	1.593
+XX:Cu_attenuation_gamma0.08MeV:XX	11	0.08	0.763
+XX:Cu_attenuation_gamma0.1MeV:XX	11	0.1	0.4584
+XX:Cu_attenuation_gamma0.15MeV:XX	11	0.15	0.2217
+XX:Cu_attenuation_gamma0.2MeV:XX	11	0.2	0.1559
+XX:Cu_attenuation_gamma0.3MeV:XX	11	0.3	0.1119
+XX:Cu_attenuation_gamma0.4MeV:XX	11	0.4	0.09413
+XX:Cu_attenuation_gamma0.5MeV:XX	11	0.5	0.08362
+XX:Cu_attenuation_gamma0.6MeV:XX	11	0.6	0.07625
+XX:Cu_attenuation_gamma0.8MeV:XX	11	0.8	0.06605
+XX:Cu_attenuation_gamma1.0MeV:XX	11	1	0.05901
+XX:Cu_attenuation_gamma1.25MeV:XX	11	1.25	0.05261
+XX:Cu_attenuation_gamma1.5MeV:XX	11	1.5	0.04803
+XX:Cu_attenuation_gamma2MeV:XX	11	2	0.04205
+XX:Cu_attenuation_gamma3MeV:XX	11	3	0.03599
+XX:Cu_attenuation_gamma4MeV:XX	11	4	0.03318
+XX:Cu_attenuation_gamma5MeV:XX	11	5	0.03177
+XX:Cu_attenuation_gamma6MeV:XX	11	6	0.03108
+XX:Cu_attenuation_gamma8MeV:XX	11	8	0.03074
+XX:Cu_attenuation_gamma10MeV:XX	11	10	0.03103
+XX:Cu_attenuation_gamma15MeV:XX	11	15	0.03247
+XX:Cu_attenuation_gamma20MeV:XX	11	20	0.03408
+

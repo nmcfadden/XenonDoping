@@ -1,0 +1,28 @@
+# identifier	type (0=gamma, 1=beta, 2=alpha, 3=secondaryelectron)	energy [keV]	intensity [%]
+
+XX:Fe59_beta84keV:XX	1	83.6	0.6	0.078	0.007
+XX:Fe59_beta131keV:XX	1	130.9	0.6	1.31	0.05
+XX:Fe59_beta274keV:XX	1	273.6	0.6	45.3	1.1
+XX:Fe59_beta466keV:XX	1	465.9	0.6	53.1	1.5
+XX:Fe59_beta1565keV:XX	1	1565.2	0.6	0.18	0.04
+
+XX:Fe59_gamma143keV:XX	0	142.651	0.002	1.02	0.04
+XX:Fe59_gamma192keV:XX	0	192.343	0.005	3.08	0.12
+XX:Fe59_gamma335keV:XX	0	334.8	0.2	0.27	0.011
+XX:Fe59_gamma382keV:XX	0	382	0.4	0.018	0.003
+XX:Fe59_gamma1099keV:XX	0	1099.245	0.003	56.5	1.8
+XX:Fe59_gamma1292keV:XX	0	1291.59	0.006	43.2	1.4
+XX:Fe59_gamma1482keV:XX	0	1481.7	0.2	0.059	0.006
+
+XX:Fe59_Auger0.75keV:XX	3	0.75	0.007	0.0805	0.0019
+XX:Fe59_Auger6.07keV:XX	3	6.07	0.06	0.0332	0.0009
+XX:Fe59_ConversionElectron135keV:XX	3	134.9421	0.002	0.015	0.0008
+XX:Fe59_ConversionElectron142keV:XX	3	141.7254	0.002	0.00151	0.00008
+XX:Fe59_ConversionElectron185keV:XX	3	184.634	0.005	0.0251	0.001
+XX:Fe59_ConversionElectron191keV:XX	3	191.417	0.005	0.00249	0.00009
+XX:Fe59_ConversionElectron327keV:XX	3	327.09	0.2	0.000473	2.20E-005
+XX:Fe59_ConversionElectron334keV:XX	3	333.87	0.2	0.0000459	1.90E-006
+XX:Fe59_ConversionElectron1092keV:XX	3	1091.536	0.003	0.009	0.0003
+XX:Fe59_ConversionElectron1284keV:XX	3	1283.881	0.006	0.00475	0.00015
+
+XX:Fe59_halflife_literature:XX 101 3844400

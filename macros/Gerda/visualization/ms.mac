@@ -1,0 +1,91 @@
+# Tubs
+/vis/scene/add/volume MiniShroudPhase2Tub_0
+/vis/scene/add/volume MiniShroudPhase2Tub_1
+/vis/scene/add/volume MiniShroudPhase2Tub_2
+/vis/scene/add/volume MiniShroudPhase2Tub_3
+/vis/scene/add/volume MiniShroudPhase2Tub_4
+/vis/scene/add/volume MiniShroudPhase2Tub_5
+/vis/scene/add/volume MiniShroudPhase2Tub_6
+
+# Bottom
+/vis/scene/add/volume MiniShroudPhase2Bottom_0
+/vis/scene/add/volume MiniShroudPhase2Bottom_1
+/vis/scene/add/volume MiniShroudPhase2Bottom_2
+/vis/scene/add/volume MiniShroudPhase2Bottom_3
+/vis/scene/add/volume MiniShroudPhase2Bottom_4
+/vis/scene/add/volume MiniShroudPhase2Bottom_5
+/vis/scene/add/volume MiniShroudPhase2Bottom_6
+
+# Top
+/vis/scene/add/volume MiniShroudPhase2Top_0
+/vis/scene/add/volume MiniShroudPhase2Top_1
+/vis/scene/add/volume MiniShroudPhase2Top_2
+/vis/scene/add/volume MiniShroudPhase2Top_3
+/vis/scene/add/volume MiniShroudPhase2Top_4
+/vis/scene/add/volume MiniShroudPhase2Top_5
+/vis/scene/add/volume MiniShroudPhase2Top_6
+
+# TopGluedRing
+/vis/scene/add/volume MiniShroudPhase2TopGluedRing_0
+/vis/scene/add/volume MiniShroudPhase2TopGluedRing_1
+/vis/scene/add/volume MiniShroudPhase2TopGluedRing_2
+/vis/scene/add/volume MiniShroudPhase2TopGluedRing_3
+/vis/scene/add/volume MiniShroudPhase2TopGluedRing_4
+/vis/scene/add/volume MiniShroudPhase2TopGluedRing_5
+/vis/scene/add/volume MiniShroudPhase2TopGluedRing_6
+
+# BottomGluedRing
+/vis/scene/add/volume MiniShroudPhase2BottomGluedRing_0
+/vis/scene/add/volume MiniShroudPhase2BottomGluedRing_1
+/vis/scene/add/volume MiniShroudPhase2BottomGluedRing_2
+/vis/scene/add/volume MiniShroudPhase2BottomGluedRing_3
+/vis/scene/add/volume MiniShroudPhase2BottomGluedRing_4
+/vis/scene/add/volume MiniShroudPhase2BottomGluedRing_5
+/vis/scene/add/volume MiniShroudPhase2BottomGluedRing_6
+
+# WLS coating
+/vis/scene/add/volume WLSOutShroudPhysical_0
+/vis/scene/add/volume WLSOutShroudPhysical_1
+/vis/scene/add/volume WLSOutShroudPhysical_2
+/vis/scene/add/volume WLSOutShroudPhysical_3
+/vis/scene/add/volume WLSOutShroudPhysical_4
+/vis/scene/add/volume WLSOutShroudPhysical_5
+/vis/scene/add/volume WLSOutShroudPhysical_6
+/vis/scene/add/volume WLSInDetShroudPhysical_0
+/vis/scene/add/volume WLSInDetShroudPhysical_1
+/vis/scene/add/volume WLSInDetShroudPhysical_2
+/vis/scene/add/volume WLSInDetShroudPhysical_3
+/vis/scene/add/volume WLSInDetShroudPhysical_4
+/vis/scene/add/volume WLSInDetShroudPhysical_5
+/vis/scene/add/volume WLSInDetShroudPhysical_6
+/vis/scene/add/volume WLSInAboveDetShroudPhysical_0
+/vis/scene/add/volume WLSInAboveDetShroudPhysical_1
+/vis/scene/add/volume WLSInAboveDetShroudPhysical_2
+/vis/scene/add/volume WLSInAboveDetShroudPhysical_3
+/vis/scene/add/volume WLSInAboveDetShroudPhysical_4
+/vis/scene/add/volume WLSInAboveDetShroudPhysical_5
+/vis/scene/add/volume WLSInAboveDetShroudPhysical_6
+
+#/vis/geometry/set/colour MiniShroudTubPhase2Logical_0 1. 1. 1. 0.1
+#/vis/geometry/set/colour MiniShroudTubPhase2Logical_1 1. 1. 1. 0.1
+#/vis/geometry/set/colour MiniShroudTubPhase2Logical_2 1. 1. 1. 0.1
+#/vis/geometry/set/colour MiniShroudTubPhase2Logical_3 1. 1. 1. 0.1
+#/vis/geometry/set/colour MiniShroudTubPhase2Logical_4 1. 1. 1. 0.1
+#/vis/geometry/set/colour MiniShroudTubPhase2Logical_5 1. 1. 1. 0.1
+#/vis/geometry/set/colour MiniShroudTubPhase2Logical_6 1. 1. 1. 0.1
+
+#/vis/geometry/set/colour MiniShroudBottomPhase2Logical_0 0.9 0. 0. 1.
+#/vis/geometry/set/colour MiniShroudBottomPhase2Logical_1 0.9 0. 0. 1.
+#/vis/geometry/set/colour MiniShroudBottomPhase2Logical_2 0.9 0. 0. 1.
+#/vis/geometry/set/colour MiniShroudBottomPhase2Logical_3 0.9 0. 0. 1.
+#/vis/geometry/set/colour MiniShroudBottomPhase2Logical_4 0.9 0. 0. 1.
+#/vis/geometry/set/colour MiniShroudBottomPhase2Logical_5 0.9 0. 0. 1.
+#/vis/geometry/set/colour MiniShroudBottomPhase2Logical_6 0.9 0. 0. 1.
+
+#/vis/geometry/set/colour MiniShroudTopPhase2Logical_0 0. 1. 0. 1.
+#/vis/geometry/set/colour MiniShroudTopPhase2Logical_1 0. 1. 0. 1.
+#/vis/geometry/set/colour MiniShroudTopPhase2Logical_2 0. 1. 0. 1.
+#/vis/geometry/set/colour MiniShroudTopPhase2Logical_3 0. 1. 0. 1.
+#/vis/geometry/set/colour MiniShroudTopPhase2Logical_4 0. 1. 0. 1.
+#/vis/geometry/set/colour MiniShroudTopPhase2Logical_5 0. 1. 0. 1.
+#/vis/geometry/set/colour MiniShroudTopPhase2Logical_6 0. 1. 0. 1.

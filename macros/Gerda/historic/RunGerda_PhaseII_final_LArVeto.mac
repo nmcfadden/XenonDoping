@@ -1,0 +1,105 @@
+#====================================================================
+# Example macro with final Phase II geometry and LAr instrumentation 
+#====================================================================
+
+/MG/manager/mglog trace
+/MG/manager/seedWithDevRandom
+
+/MG/processes/realm BBdecay
+/MG/processes/lowenergy true
+/MG/processes/useNoHadPhysics true
+
+/MG/geometry/detector GerdaArray
+/MG/geometry/database false
+/MG/geometry/detector/general/depth 0 cm
+
+/MG/geometry/lock/type PhaseII_DN500
+/MG/geometry/lock/dn500/n_strings 7
+/MG/geometry/lock/dn500/string_distance 11.0 cm
+
+### Geometry and Matrix files ###
+
+/MG/geometry/detector/geometryfile geometry_PhaseII_FCCD_growth.dat
+/MG/geometry/detector/matrixfile matrix_phase_ii_StatusDec2015_pos.dat
+
+/MG/geometry/general/constructsupport true
+/MG/geometry/general/constructcabling true
+
+### Individual z positions defined in second column of matrix file ###
+
+/MG/geometry/detector/individualzposofdetectors true
+/MG/geometry/detector/crystal/reverse true
+
+### Nylon Minishrouds ###
+/MG/geometry/general/constructMiniShroud true
+/MG/geometry/general/miniShroudMaterial Nylon
+/MG/geometry/LArInst/MinisShroudOpticalCoating TPB
+/MG/geometry/general/adjustMinishroudToDetctorString true
+/MG/geometry/general/miniShroudBaseThickness 0.125 mm 
+/MG/geometry/general/miniShroudSideThickness 0.125 mm 
+
+### Construct liquid Argon veto and electronics plate ###
+### This activates automatically the optical processes ###
+### If you turn on the LAr instrumentation (and therefore the optical processes) you need the reflectivity data files!!! ###
+### They can be found in gerda-ana-sandbox/BackgroundModel/MaGe_Datafiles together with a README.txt ###
+
+/MG/geometry/general/constructLArInstrumentation true
+/MG/geometry/LArInst/SelectDesign hybrid
+
+# The next command has to be called before /run/initialize
+# Setting to false will turn off optical procesess 
+# Complete PhaseII geometry but no optical photons.
+# Default is true. Set explicitly to false if you don't want opt. photons 
+ 
+#/MG/geometry/LArInst/PhotonTracking false
+
+### Muon Veto ###
+/MG/geometry/cherenkov -1
+
+### Output ###
+/MG/eventaction/reportingfrequency 100
+/MG/eventaction/rootschema GerdaInstrumentedArray
+/MG/eventaction/rootfilename test.root
+
+/MG/output/saveOnlyEventsWithEnergyDeposit true
+
+/run/initialize
+
+
+### Setting the volume(s) for primary vertex generation ###
+
+/MG/generator/confine volume
+/MG/generator/volume  LArInstr_FiberOuter_Physical
+
+# G4Gun
+
+/MG/generator/select G4gun
+/gun/particle ion
+/gun/ion 83 214 
+/gun/energy 0.0 keV
+
+#
+# This only tracks photons that produced hits in Germanium *and* 
+# the hits in a single crystal amount to an energy inside the specified interval
+# The default (false) implies tracking photons from events that deposit energy in the germanium, 
+# independently of the amount
+#
+/MG/output/LArInst/ApplyLArInstGeEnergyCut true
+/MG/output/LArInst/SetGeEnergyCutLow 0.1 MeV
+/MG/output/LArInst/SetGeEnergyCutHigh 2.3 MeV
+
+#
+# Track the optical photons independently whether there are hits in germanium or not.
+# Use this option to simulate p.e. spectra of diff sources. Default is false
+
+#/MG/output/LArInst/alwaysTrackPhotons true
+
+# Kill all photon tracks after one (N) hit in any PMT or SiPM
+# Default is 0 which means that all photons are tracked 
+
+/MG/output/LArInst/KillPhotonAfterNHits 1
+
+### Start the simulation ###
+
+/tracking/verbose 0
+/run/beamOn 1

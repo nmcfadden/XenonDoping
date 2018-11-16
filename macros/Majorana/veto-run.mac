@@ -1,0 +1,34 @@
+/MG/manager/mglog debugging
+/MG/geometry/detector MJDemonstrator
+/MG/processes/useNoHadPhysics true
+/MG/eventaction/rootschema MCRun
+/MG/eventaction/reportingfrequency 100
+/MG/io/MCRun/SetSensitiveIDLabelScheme askGeom 
+#/MG/io/MCRun/setWriteAllSteps
+#/MG/io/MCRun/setRunID 524
+/MG/eventaction/rootfilename veto-demo.root
+/run/initialize
+
+/MG/generator/select SUL
+
+#/geometry/test/recursive_test
+#/vis/open RayTracerX
+#/vis/rayTracer/eyePosition 4 -5 3
+#/vis/rayTracer/target 0 0 0
+#/vis/rayTracer/span 4
+#/vis/rayTracer/trace
+#/vis/ASCIITree/verbose 13
+#/vis/drawTree
+
+#/vis/open OGLIX
+#/vis/open HepRepFile
+#/vis/scene/create
+#/vis/scene/endOfEventAction accumulate 10
+#/vis/scene/add/volume 
+#/vis/scene/add/axes
+#/vis/sceneHandler/attach
+#/vis/viewer/flush
+#/vis/scene/add/trajectories
+#/vis/scene/add/hits
+
+/run/beamOn 2000

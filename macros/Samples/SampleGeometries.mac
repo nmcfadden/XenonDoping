@@ -1,0 +1,51 @@
+#------------------------------------------------------------------------------ 
+# SampleGeometries.mac
+# This file contains examples of using different geometries in MaGe
+# Some geometry classes have all attributes hard-coded, so you can't fiddle with
+# the attributes by messenger macro.  Others have many attributes that can be
+# set by messenger.
+
+#------------------------------------------------------------------------------ 
+# This just places a cube of natural germanium of size 2x2x2 m^3 in vacuum
+
+/MG/geometry/detector solidBlock
+/MG/geometry/WorldMaterial Vacuum
+
+#------------------------------------------------------------------------------ 
+# This macro shows how to place a simple ideal coax crystal into vacuum.
+# Messengers are used to define the crystals attributes
+# 
+
+
+/MG/geometry/detector idealCoax
+/MG/geometry/WorldMaterial Vacuum
+/MG/geometry/idealCoax/setDefaults
+/MG/geometry/idealCoax/deadLayerOn true
+/MG/geometry/idealCoax/cutInHalfOn false
+/MG/geometry/idealCoax/outerDeadLayer 0.05 cm
+/MG/geometry/idealCoax/coreDeadLayer 1.0 micrometer
+/MG/geometry/idealCoax/coreRadius 0.4 cm
+/MG/geometry/idealCoax/coreDepth 6.0 cm
+/MG/geometry/idealCoax/height 6.5 cm
+/MG/geometry/idealCoax/radius 3.0 cm
+/MG/geometry/idealCoax/bubbleOn true
+/MG/geometry/idealCoaxWShield/shieldOn false
+
+
+
+#------------------------------------------------------------------------------ 
+# This macro shows how one geometry class can make use of another.  The
+# MJGeometry57Banger class is an array of 57 crystals.  Rather than redefine a
+# crystal, the class uses the MGGeometryIdealCoaxCrystal class.
+
+/MG/geometry/detector MJ57Banger
+/MG/geometry/idealCoax/setDefaults
+/MG/geometry/idealCoax/deadLayerOn true
+/MG/geometry/idealCoax/cutInHalfOn false
+/MG/geometry/idealCoax/outerDeadLayer 1 micrometer
+/MG/geometry/idealCoax/coreDeadLayer 0.05 cm
+/MG/geometry/idealCoax/height 7.0 cm
+/MG/geometry/idealCoax/radius 3.0 cm
+/MG/geometry/idealCoaxWShield/shieldOn false
+
+

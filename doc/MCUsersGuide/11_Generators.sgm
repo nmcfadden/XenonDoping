@@ -1,0 +1,590 @@
+<chapter id="Generators">
+<title> Generators </title> 
+
+<section><title>Choosing a generator</title>
+<para>
+Presently nine alternative generators were implemented. The actual generator 
+to be used has to be set via the macro command
+</para>
+   <screen>
+      <cmdsynopsis>
+	<command>/MG/generator/select</command>
+           <arg><replaceable>PNNLiso</replaceable></arg> 
+           <arg><replaceable>RDMiso</replaceable></arg> 
+           <arg><replaceable>TUNLFEL</replaceable></arg> 
+           <arg><replaceable>G4gun</replaceable></arg> 
+           <arg><replaceable>decay0</replaceable></arg> 
+           <arg><replaceable>cosmicrays</replaceable></arg>
+           <arg><replaceable>musun</replaceable></arg>
+           <arg><replaceable>neutronsGS</replaceable></arg>
+           <arg><replaceable>sources4a</replaceable></arg>
+      </cmdsynopsis>
+   </screen>
+<para>
+<filename>G4gun</filename> is the default G4ParticleGun provided by Geant4.
+</para>
+</section>
+
+<section><title>PNNL Radioactive Decay Chain Generator
+   </title>
+
+  <section><title>General description</title>
+<para> 
+The PNNL radioactive decay chain generator consists of a set of G4 classes for
+sampling charged particles (beta or alpha) and associated gammas arising from 
+the decay of any radioisotopes in a user-specified radioactive decay chain.
+Information returned by the generator is currently limited to the charged
+particle type (beta+/- or alpha), charged particle energy, number of "cascade"
+gammas, and a list of gamma energies.  Currently the code is limited to linear
+decay chains, i.e. multiple branch points in a decay chain yielding distinct
+nuclear species are not (easily or naturally) supported.  (If only gammas are
+of interest, however, a multiple-branch kludge is possible if the branches
+merge in a common daughter.)  The generator code requires as input the gamma 
+cascade branching fractions for each radioisotope in the decay chain (one
+ascii-format file per radioisotope), and a master "decay chain" ascii-format
+file specifying the number of radioisotopes in the chain, the decay half-lives
+for each isotope and the names of each isotope's cascade file.  The cascade
+branching fractions can be calculated using the tool CrazyInput, written by 
+J.E. Ellis and A. Valsan of PNNL.  As currently implemented, setup of the 
+generator requires running CrazyInput once for each radioisotope in the decay 
+chain of interest.  The ascii-format files output by CrazyInput are then
+collected in a single directory and read by the generator upon initialization.
+Terminology used in this paragraph is explained in more detail below.
+</para>
+
+<para>
+The main object/data structure in the generator is a DecayChain object, 
+representing e.g. the Thorium decay chain (consisting of the radionuclides 
+Th-232, Ra-228, Ac-228, ..., Pb-208). The DecayChain's primary 
+responsibilities are to serve as a container for radioisotopes, embodied in 
+Radioisotope objects, to calculate the relative decay probability for each 
+member isotope of the chain based upon the grow-in age of the source, and to 
+sample appropriately from each Radioisotope object's decay.  Each Radioisotope
+object can decay by either beta(+/-) or alpha emission, accompanied by the 
+emission of one or more "cascade" gammas from the daughter nucleus.  A cascade
+is defined as a single decay scheme of a single radioisotope: For example, 
+beta decay to a given excited state in the daughter nucleus, followed by 
+emission of N gammas of energy E1, E2, ..., EN.  (Currently no time 
+information is associated with the cascade gammas, which are assumed emitted 
+in coincidence.) In general, a single radioisotope can decay via multiple 
+cascade schemes.  Within the generator framework, each Radioisotope object 
+thus contains one or more Cascade objects, each of which contains all of the 
+information necessary for setting up and sampling from e.g. a beta decay 
+energy distribution specific to that cascade decay scheme.  Each Cascade 
+object also contains a list of coincident gammas associated with the cascade.
+Each Radioisotope object stores a list of branching fractions for the set
+of cascade it contains, and its primary responsibility is to sample from
+the set of cascades associated with it when interrogated by the DecayChain
+object for the current event.  In turn, a particular Cascade object "knows"
+how to sample from the beta distribution associated with it.  (Mono-energetic
+alphas can also be associated with a cascade scheme.)  The logical structure 
+of the generator is thus a nesting of data structures: a DecayChain object 
+contains one or more Radioisotope objects, which in turn contain one or more 
+Cascade objects.  These objects are described in the classes 
+MGGeneratorPNNLDecayChain, MGGeneratorPNNLRadioisotope, and 
+MGGeneratorPNNLCascade, respectively.
+</para>
+
+<para>
+The three main tasks of the PNNL generator are as follows: (1) Upon 
+initialization, read a set of user-supplied files defining the decay chain and
+specifying the set of cascade schemes appropriate to each radioisotope in the 
+chain.  (2) Determine the relative activities (via standard Bateman equation 
+calculations) of each radioisotope in the decay chain, given a user-supplied
+list of the half-lives of each isotope in the chain and the grow-in time, T,
+appropriate for the material.  It is assumed that T=0 corresponds to a material
+consisting entirely of the isotope at the head of the chain.  (3) For event
+sampling, select the next radioisotope to decay (based upon relative activities
+of each isotope in the chain), and for that isotope, select a given cascade
+decay scheme (based on cascade branching fractions determined by the CrazyInput
+tool).  The energy of the decay beta (or the single energy of an alpha) is 
+then sampled from an appropriate distribution and the list of corresponding
+decay gammas (if any) retrieved from the appropriate Cascade object.  The 
+generator returns a CascadeEvent object to the calling routine (e.g. the 
+GeneratePrimaries member function of the PrimaryGeneratorAction class) for
+the current event, and all information (e.g. particle types and energies) 
+relevant to the radioactive decay can be extracted from this simple data 
+structure in preparation for adding particles to the tracking stack.
+ </para>
+ </section>
+
+ <section><title>Using the generator</title>
+
+   <section><title>Setup</title>
+
+<para>
+Setting up the generator currently requires (1) creating a set of ascii-format 
+files (one for each radioisotope in the decay chain of interest) using the 
+CrazyInput cascade branching-fraction calculation tool; (2) collecting these 
+files in a convenient sub-directory; and (3) creating a master "decay chain 
+file" to describe to the generator the number of isotopes in the chain, the
+half-life of each isotope, and the files listing the cascade branching
+fractions for each isotope.
+</para>
+
+<para>
+An example cascade branching-fraction file for Tl-208 is displayed below.
+</para>
+
+<screen>
+ 208.0   81.0   10
+ 0.49499E+00    1.79626   1   1   2
+  0.58319  2.61453
+ 0.23966E+00    1.28556   1   1   3
+  0.51077  0.58319  2.61453
+ 0.12545E+00    1.51889   1   1   2
+  0.86056  2.61453
+ 0.96121E-01    1.51889   1   1   3
+  0.27736  0.58319  2.61453
+ 0.18924E-01    1.03304   1   1   3
+  0.76313  0.58319  2.61453
+ 0.11496E-01    1.03304   1   1   4
+  0.25261  0.51077  0.58319  2.61453
+ 0.39991E-02    1.07420   1   1   4
+  0.21140  0.51077  0.58319  2.61453
+ 0.37982E-02    1.28556   1   1   2
+  1.09390  2.61453
+ 0.31466E-02    1.28556   1   1   3
+  0.23336  0.86056  2.61453
+ 0.24109E-02    1.28556   1   1   0
+</screen>
+
+<para>
+The first line of the file lists A, Z, and the number of cascades contained
+in the file.  Each cascade consists of two lines of input.  The first
+line lists, in order, the branching fraction for the cascade, the endpoint
+energy for the beta decay spectrum (or the alpha-particle energy) in MeV, the 
+charged particle type (0 for alpha, 1 for beta, 2 for positron), the angular
+momentum change, "delta(L)" (in units of hbar), suffered by the nucleus in 
+the decay, and the number of gammas associated with the de-excitation cascade 
+emitted by the daughter nucleus.  The second line of the cascade description
+lists the energies of the cascade gammas (MeV).  In the example file, 10 
+cascade decay-schemes for Tl-208 are listed.  Reading from the second and 
+third lines of the file, the first decay scheme is beta decay with an endpoint
+energy of 1.79626 MeV and delta(L) of 1.  The beta is accompanied by 2 cascade
+gammas of energy 0.58319 and 2.61453 MeV, respectively.
+</para>
+
+<para>
+In general, for a decay chain consisting of N radioisotopes, each radioisotope
+must be described by a cascade branching fraction file in the format shown
+above.  In addition to these files, an ascii-format "decay chain file" must
+be supplied to inform the generator of the general decay chain structure.  An
+example file for the Th-232 decay chain is exhibited below.
+</para>
+
+<screen>
+10
+ 1  Th-232   1.41e10  y  dat/cascades_232Th.dat
+ 2  Ra-228   5.75     y  dat/cascades_228Ra.dat
+ 3  Ac-228   6.15     h  dat/cascades_228Ac.dat
+ 4  Th-228   1.910    y  dat/cascades_228Th.dat
+ 5  Ra-224   3.64     d  dat/cascades_224Ra.dat
+ 6  Rn-220  55.0      s  dat/cascades_220Rn.dat
+ 7  Po-216   0.15     s  dat/cascades_216Po.dat
+ 8  Pb-212  10.64     h  dat/cascades_212Pb.dat
+ 9  Bi-212  60.6      m  dat/cascades_212Bi.dat
+10  Tl-208   3.05     m  dat/cascades_208Tl.dat
+</screen>
+
+<para>
+The first line in the decay chain file lists the number of radioisotopes in the
+chain (10 in this example).  Each radioisotope is described in a single line.
+The first entry in a radioisotope line is an (arbitrary) integer index which 
+is not used by the code but may be useful to the user.  The second entry is
+a string isotope label, used only in diagnostic messages output by the 
+generator.  The third and fourth entries specify the decay half-life and the
+units of the entry: (y,d,h,m,s) for (year, day, hour, minute, and second)
+respectively.  The final entry lists the name and path of the cascade branching
+fraction file for the radioisotope, relative to the directory in which the
+G4 code is to be run.  (This "main" directory will contain e.g. a macro file
+containing G4 messenger commands, as well as the master decay chain file.)
+</para>
+
+<para>
+In summary, note that the user must (currently) construct the master decay 
+chain file by hand.  The cascade branching-fraction files, one for each 
+radioisotope, are generated by running the CrazyInput tool.  Once these files
+are available and the decay chain file has been constructed, generator setup 
+for the particular decay chain of interest is complete.
+</para>
+ </section>
+
+<section><title>Initializing the generator</title>
+
+<para>
+Once the required set of input files has been prepared, initialization of the 
+generator is controlled by two messenger commands in a G4 macro file, as
+demonstrated in the example which follows:
+</para>
+
+<screen>
+/generator/PNNL/init Th232_DecayChain.dat
+/generator/PNNL/setSourceAge 5.0
+</screen>
+
+<para>
+In this example, the command "/generator/PNNL/init Th232_DecayChain.dat"
+informs the primary event generator code that the PNNL radioactive decay
+chain generator will be used in the G4 run, and initializes the generator with
+the name of the decay chain control file.  Typically this control file will
+reside in the same directory as the G4 macro file controlling the batch run.
+The command "/generator/PNNL/setSourceAge 5.0" sets the source grow-in age
+to 5.0 years in this example.  Recall that the relative activities of each
+radioisotope in the decay chain are calculated using the Bateman equations,
+with the assumption that time T=0 corresponds to a source consisting solely
+of the material at the head of the decay chain (Th-232 in this example.)  If
+the setSourceAge messenger command is not issued, the default value for the
+grow-in age is 0.  In this case, only radioactive decays from the isotope at 
+the head of the chain are sampled by the generator.
+</para>
+
+<para>
+In summary, the general messenger command structure is as follows:
+</para>
+
+<screen>
+/generator/PNNL/init [master decay chain filename]
+/generator/PNNL/setSourceAge [source grow-in age in years]
+</screen>
+</section>
+
+</section>
+</section>
+
+<section><title>Decay0 Generator
+   </title>
+<para>
+Decay0 is a primary generator developed by Vladimir Tretyak. 
+It can generate double beta decay events 
+according to a lerge number of theoretical models and background events from 
+the most common gamma/beta 
+sources (low-probability transitions are included); it can also produce 
+generic beta spectra and 
+mono-energetic particles. Decay0 accounts for the kinematic of the final state 
+(i.e. momenta of all 
+the particles) and of the time, which is relevant for chains or delayed 
+de-excitation 
+(e.g. Cs137+Ba137m). It is a FORTRAN program and the MG generator class 
+(MGDecay0Interface.hh) 
+reads from the ASCII files dumped by it: the user must take care that the 
+file contains enough 
+events for the Geant4 simulation (otherwise the program will give an 
+exception). 
+</para>
+<para>
+The decay0 generator is instantiated with the macro command:
+</para>
+   <screen>
+      <cmdsynopsis>
+         <command>/MG/generator/select decay0</command>
+      </cmdsynopsis>
+   </screen>
+<para>
+and the file to be opened is set with the command 
+</para>
+   <screen>
+      <cmdsynopsis>
+          <command>/MG/generator/decay0/filename filename</command>
+      </cmdsynopsis>
+   </screen>
+<para>
+that must be given before the /run/beamOn.
+</para>
+</section>
+
+<section><title>Cosmic rays generator
+   </title>
+<para>
+It is used to generate high-energy muons with the characteristic spectrum 
+of cosmic rays in underground sites. 
+The primary position is sampled from a disk of radius r (default = 8 m) placed 
+at the height h (default = 8.1 m). Both these values can be changed via messenger. 
+The energy spectrum is sampled using the analytical parametrization of  
+P. Lipari and T. Stanev, Phys. Rev. D 44 (1991) 3543, which applies to rock depths 
+between 1 km w.e. and 10 km w.e. The spectral index of the muon spectrum can be 
+3.7 (standard), 2.7 (Prompt sources, e.g. charm decay) or 2.0 (Exotic sources). The 
+defaults are 3400 m w.e. (Gran Sasso depth) and 3.7 respectively. 
+The angular spectrum is sampled according to the measurements performed at Gran Sasso 
+by the MACRO experiment. The MACRO data are loaded from an ASCII file in the 
+directory $MGGENERATORDATA. If the file is not present, the distribution is 
+sampled according to cos(theta)^{-1}, as described in 
+Phys. Rev. D 44 (1991) 354. 
+</para>
+<para>
+The cosmic ray generator is instantiated with the macro command:
+</para>
+   <screen>
+      <cmdsynopsis>
+         <command>/MG/generator/select cosmicrays</command>
+      </cmdsynopsis>
+   </screen>
+<para>
+The commands to change the parameters of the generator are
+</para>
+   <screen>
+      <cmdsynopsis>
+          <command>/MG/generator/cosmicray/radius </command>
+      </cmdsynopsis>
+      <cmdsynopsis>
+          <command>/MG/generator/cosmicray/height </command>
+      </cmdsynopsis>
+      <cmdsynopsis>
+          <command>/MG/generator/cosmicray/depth </command>
+      </cmdsynopsis>
+      <cmdsynopsis>
+          <command>/MG/generator/cosmicray/index </command>
+      </cmdsynopsis>
+   </screen>
+<para>
+for radius, height, depth (with unit) and spectral index respectively.
+</para>
+</section>
+
+
+<section><title> MUSUN Generator 
+   </title>
+<para>
+MUSUN is a primary generator developed by Vitaly Kudryavtsev, described 
+in Astropart. Phys. 7 (1997) 357. 
+It is FORTRAN-based and it is able to track high-energy muons through 
+large thicknesses of rock, to obtain the muon spectrum (energy and 
+direction) inside an underground Laboratory. It can also take into account 
+the depth profile of the specific Laboratory, if available, in order to 
+reproduce the possible asymmetries in the azimuth distribution. The MaGe 
+generator is istantiated with the command
+</para>
+   <screen>
+      <cmdsynopsis>
+         <command>/MG/generator/select musun</command>
+      </cmdsynopsis>
+   </screen>
+<para>
+It reads the event kinematic parameters (energy and direction) of 
+the primary muon from an ASCII file, whose name (with the path, if it is not 
+in the current directory) has to be provided using the macro command
+</para>
+   <screen>
+      <cmdsynopsis>
+          <command>/MG/generator/musun/filename filename</command>
+      </cmdsynopsis>
+   </screen>
+<para>
+The primary position is sampled from a disk of radius r (default = 8 m) placed 
+at the height h (default = 8.1 m). Both these values can be changed via messenger, 
+using the same commands described in the previous section for the CosmicRay 
+generator, i.e. 
+</para>
+   <screen>
+      <cmdsynopsis>
+          <command>/MG/generator/cosmicray/radius </command>
+      </cmdsynopsis>
+      <cmdsynopsis>
+          <command>/MG/generator/cosmicray/height </command>
+      </cmdsynopsis>
+   </screen>
+<para>
+</para>
+</section>
+
+<section><title> NeutronsGS generator
+   </title>
+<para>
+This generator produces neutrons according to the spectrum at Gran Sasso reported 
+by H. Wulandari et al., hep-ex/0401032 v1. It is instantiated with the command 
+</para>
+   <screen>
+      <cmdsynopsis>
+         <command>/MG/generator/select neutronsGS</command>
+      </cmdsynopsis>
+   </screen>
+<para>
+The data are read from ASCII files, that are looked for in the directory 
+$MGGENERATORDATA. It is possible to generate the low-energy component from 
+fission and (alpha,n) from the rock or the high-energy component induced 
+by muon interactions in the rock (default). The component to be generated 
+can be selected via messenger,
+</para>
+   <screen>
+      <cmdsynopsis>
+          <command>/MG/generator/neutrons/fission </command>
+           <arg><replaceable>true</replaceable></arg> 
+           <arg><replaceable>false</replaceable></arg> 
+      </cmdsynopsis>
+</screen>
+<para>
+The fission/alpha-n neutrons are considered to be isotropic, while the 
+angular distribution of the high-energy component is sampled according to 
+H. Wulandari et al. The position of the primary tracks is sampled from the 
+upper surface, the lower surface or the lateral surface of a cylinder; it 
+can be set with the command:
+</para>
+   <screen>
+      <cmdsynopsis>
+          <command>/MG/generator/neutrons/direction </command>
+           <arg><replaceable>roof</replaceable></arg> 
+           <arg><replaceable>floor</replaceable></arg>
+           <arg><replaceable>walls</replaceable></arg>
+      </cmdsynopsis>
+</screen>
+<para>
+The dimensions of the cylinder are 8.0 m radius and 8.0 m height. The defaults 
+can be changed with the commands
+</para>
+   <screen>
+      <cmdsynopsis>
+          <command>/MG/generator/neutrons/radius </command>
+      </cmdsynopsis>
+      <cmdsynopsis>
+          <command>/MG/generator/neutrons/height </command>
+      </cmdsynopsis>
+   </screen>
+<para>
+</para>
+</section>
+
+
+<section><title> Sources-4A Generator 
+   </title>
+<para>
+Sources-4A is a FORTRAN-based generator of neutrons produced in a given 
+material by fission and by (alpha,n) reactions on light elements. It has 
+been developed by the LANL; a large number of cross section tables for 
+various elements has been recently added in the context of the ILIAS 
+EU work. The code calculates the energy spectrum of the emitted neutrons; 
+the angular distribution is assumed to be isotropic. The explicit 
+tracking of the neutron (out of its source, for instance) is not done 
+by Sources4A but has to be performed using MaGe and Geant4. The output 
+from Sources4A is the absolute energy distribution of neutrons; the total 
+production rate is expressed in neutrons/cm3 s. The name of the output file 
+of Sources4A containing the absolute energy spectrum is "tape7". 
+The MaGe generator is istantiated with the command
+</para>
+   <screen>
+      <cmdsynopsis>
+         <command>/MG/generator/select sources4a</command>
+      </cmdsynopsis>
+   </screen>
+<para>
+In the default case, the data file to be read is called "tape7" and it is 
+looked for in the current directory. The file name can be alternatively 
+specified (with its path) using the command 
+</para>
+   <screen>
+      <cmdsynopsis>
+          <command>/MG/generator/sources4a/filename filename</command>
+      </cmdsynopsis>
+   </screen>
+<para>
+Notice that the generator also works if the normalized energy spectrum (called 
+"tape8" in the default case) is used. The only limitation of the generator is that 
+the lower egde of the lowest-energy bin must be zero. The generator does not 
+take care of the position sampling of the neutron; in most case, it will be 
+appropriate to use the uniform position sampling in a given volume, 
+which is described below.
+</para>
+</section>
+
+
+<section><title>Position sampling</title>
+<para>
+In all the generators (except the TUNLFEL beam) the position of the source is 
+fixed. The default is 
+the origin of the coordinate system, but it can be set with the appropriate 
+macro commands. For instance 
+the position for the G4gun generator can be set via 
+</para> 
+   <screen> 
+      <cmdsynopsis>
+	 <command>/gun/position positionvector</command>
+      </cmdsynopsis>
+   </screen>
+<para>
+Anyway, for some applications (e.g. simulation of internal contamination) is 
+it useful to sample the position 
+of the primary event uniformly within a given volume or a given skin surface. 
+The package provides now an 
+algorithm for it. The confinement level (noconfined, volume, surface) is set 
+with the command: 
+</para>
+<screen>
+   <cmdsynopsis>
+      <command>/MG/generator/confine</command> <arg><replaceable>noconfined</replaceable></arg> <arg><replaceable>volume</replaceable></arg> <arg><replaceable>source</replaceable></arg>
+   </cmdsynopsis>
+</screen>
+<para>
+The default is "noconfined" (e.g. primary generated in a fixed position). 
+If the confinement level is set 
+to "volume" or "surface", the physical volume has to be set with the command 
+</para>
+<screen>
+   <cmdsynopsis>
+      <command>/MG/generator/volume volumename</command>
+   </cmdsynopsis>
+</screen>
+<para>
+where volumename is the name of an existing physical volume. This command has 
+to be called after 
+/run/initialize. If the volume name is not univoque (e.g. replicas exist), 
+the copy numbered "0" will 
+be taken into account; in the future, a macro command will be added to set the 
+copy number. A preliminary 
+version for the uniform sampling from a volume is implemented, though not 
+fully tested: it may not work in 
+some situations, expecially if the volume name is not unique 
+(please report any anomalous behaviour). 
+The algorithm for the sampling from a skin surface is not available yet.
+</para>
+</section>
+
+<section><title>Direction sampling</title>
+<para>
+If <filename>G4gun</filename> is used as the generator, the particles are shot 
+along a given direction, that can be set with the macro command
+</para>
+<screen>
+   <cmdsynopsis>
+      <command>/gun/direction dx dy dz</command>
+   </cmdsynopsis>
+</screen>
+<para>
+It is not necessary that the 3 components (dx,dy,dz) are normalized. 
+For instance, the command to generate particles directed in the negative direction 
+of the z-axis is /gun/direction 0 0 -1.
+</para>
+<para>
+Alternatively, it is possible to generate particles with direction sampled isotropically 
+from a cone with given direction and given opening angle. The command to activate this 
+option, which works only for the G4Gun generator, is
+</para>
+<screen>
+   <cmdsynopsis>
+      <command>/MG/generator/g4gun/cone_on true</command>
+   </cmdsynopsis>
+</screen>
+<para>
+By default, the cone_on option is set to "false" (i.e. pencil beam). The direction can be 
+specified with the command
+</para>
+<screen>
+   <cmdsynopsis>
+      <command>/MG/generator/g4gun/coneDirection dx dy dz</command>
+   </cmdsynopsis>
+</screen>
+<para>
+The default direction is along the positive z-axis. Similarly, the opening angle of the cone is 
+set with the command
+</para>
+<screen>
+   <cmdsynopsis>
+      <command>/MG/generator/g4gun/thetaDelta [rad/deg]</command>
+   </cmdsynopsis>
+</screen>
+<para>
+The default angle is 180 degrees. In this case, the direction of the primary particles is sampled 
+isotropically in all the space, irrespectively of the specified direction. 
+</para>
+</section>
+</chapter>
+
+

@@ -1,0 +1,206 @@
+\documentclass[pdftex, a4paper, 12pt,pointlessnumbers]{scrartcl} %twoside,
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{ae}
+\usepackage[automark]{scrpage2}
+
+% use high quality equations
+\usepackage[intlimits]{amsmath}
+\usepackage{amsfonts, amssymb, amsthm, amstext}
+\usepackage[all, warning]{onlyamsmath}
+%
+% use color and graphics support packages
+\usepackage[usenames, dvipsnames]{color}
+\usepackage[pdftex]{graphicx}
+\usepackage{subfigure, wrapfig}
+
+% add support for tables spanning over more than one page
+\usepackage{longtable}
+
+\usepackage[pdftex, plainpages = false, pdfpagelabels = true, colorlinks = true,
+linkcolor = blue, citecolor = blue,
+	linktocpage, pdfstartpage = 1, pdfview = FitH, pdfpagemode =
+UseNone]{hyperref}
+
+\title{MaGe QuickCheck Report}
+\author{MaGeQuickCheck.py}
+\date{\today}
+
+\hypersetup{
+	pdfsubject = {MaGe QuickCheck Report},
+	pdftitle = {MaGe QuickCheck Report},
+	pdfauthor = {N.N.},
+	pdfcreator = {LaTeX, pdfTeX},
+	pdfproducer = {pdf2latex},
+	pdfkeywords = {MaGe QuickCheck}
+}
+
+\definecolor{White}{RGB}{255,255,255}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+ 
+\maketitle
+
+\section{Warnings and Errors}
+~\\
+\textbf{Errors:}\\
+XX:Errors:XX
+~\\
+\textbf{Warnings:}\\
+XX:Warnings:XX
+
+\section{Software Installation}
+
+\textbf{MaGe information:}\\
+\vspace*{-0.1cm}\\
+\begin{tabular}{l l}
+  MaGe Revision: & {\color{RoyalBlue}XX:MaGeRevision:XX}\\
+  MaGe SVN Tag: & {\color{RoyalBlue}XX:MaGeSVNTag:XX}\\
+  MaGe Last Updated: & {\color{RoyalBlue}XX:MaGeLastUpdated:XX}\\
+  MaGe directory: & {\color{RoyalBlue}XX:MAGEDIR:XX}\\
+\end{tabular}
+~\\
+\vspace*{0.5cm}\\
+\textbf{MGDO information:}\\
+\vspace*{-0.1cm}\\
+\begin{tabular}{l l}
+  MGDO Revision: & {\color{RoyalBlue}XX:MGDORevision:XX}\\
+  MGDO SVN Tag: & {\color{RoyalBlue}XX:MGDOSVNTag:XX}\\
+  MGDO Last Updated: & {\color{RoyalBlue}XX:MGDOLastUpdated:XX}\\
+  MGDO directory: & {\color{RoyalBlue}XX:MGDODIR:XX}\\
+\end{tabular}
+~\\
+\vspace*{0.5cm}\\
+\textbf{{\sc Geant4} information:}\\
+\vspace*{-0.1cm}\\
+\begin{tabular}{l l}
+  {\sc Geant4} version Name: & {\color{RoyalBlue}XX:Geant4VersionName:XX}\\
+  System: & {\color{RoyalBlue}XX:G4SYSTEM:XX}\\
+  {\sc Geant4} installation directory: & {\color{RoyalBlue}XX:G4INSTALL:XX}\\
+  {\sc Geant4} work directory: & {\color{RoyalBlue}XX:G4WORKDIR:XX}\\
+  GDML support enabled: & XX:G4LIB_BUILD_GDML:XX\\
+  CLHEP Version: & {\color{RoyalBlue}XX:CLHEPVersion:XX}\\
+\end{tabular}
+
+~\\
+For specific, optional physics processes {\sc Geant4} uses additional data files. Table \ref{tab:G4Inst} gives an overview of the installed data files. Please make sure that all data files are installed.
+
+{\footnotesize
+\begin{longtable}{|l|c|l|}
+	\captionabove{{\sc Geant4} data files} \label{tab:G4Inst}\\
+	\hline
+	data & installed & path \\
+	\hline
+	\endhead
+	nuclear shell effects & XX:G4ABLADATA_I:XX & XX:G4ABLADATA:XX\\
+	\hline
+	low energy electromagnetic & XX:G4LEDATA_I:XX & XX:G4LEDATA:XX\\
+	\hline
+	photon evaporation & XX:G4LEVELGAMMADATA_I:XX & XX:G4LEVELGAMMADATA:XX\\
+	\hline
+	neutron data & XX:G4NEUTRONHPDATA_I:XX & XX:G4NEUTRONHPDATA:XX\\
+	\hline
+	evaluated neutron cross sections & XX:G4NEUTRONXSDATA_I:XX & XX:G4NEUTRONXSDATA:XX\\
+	\hline
+	precise impact ionisation & XX:G4PIIDATA_I:XX & XX:G4PIIDATA:XX\\
+	\hline
+	radioactive decay & XX:G4RADIOACTIVEDATA_I:XX & XX:G4RADIOACTIVEDATA:XX\\
+	\hline
+	measured optical surface reflectance & XX:G4REALSURFACEDATA_I:XX & XX:G4REALSURFACEDATA:XX\\
+	\hline
+\end{longtable}
+}
+
+\section{Simulation Results}
+
+QuickCheck of $^{60}$Co $\beta$-decay energy and branching ratio is available in table \ref{tab:Co60beta}.
+
+{\footnotesize
+\begin{longtable}{|c|c|c|c|c|c|}
+	\captionabove{$^{60}$Co branching ratios and $\beta$-decay energies} \label{tab:Co60beta}\\
+	\hline
+	$E_{lit.}$ [keV] & $E_{sim.}$ [keV] & diff. [keV] & $I_{lit.}$ [\%] & $I_{sim.}$ [\%] & diff. [\%]\\
+	\hline
+	\endhead
+	XX:Co60_beta318keV_energy_literature:XX & XX:Co60_beta318keV_energy:XX & XX:Co60_beta318keV_energy_diff:XX & XX:Co60_beta318keV_intensity_literature:XX & XX:Co60_beta318keV_intensity:XX & XX:Co60_beta318keV_intensity_diff:XX\\
+	\hline
+\end{longtable}
+}
+
+QuickCheck of $^{60}$ $\gamma$-transition energies and branching ratios is available in table \ref{tab:Co60gamma}.
+
+{\footnotesize
+\begin{longtable}{|c|c|c|c|c|c|}
+	\captionabove{$^{60}$Co branching ratios and $\gamma$-transition energies} \label{tab:Co60gamma}\\
+	\hline
+	$E_{lit.}$ [keV] & $E_{sim.}$ [keV] & diff. [keV] & $I_{lit.}$ [\%] & $I_{sim.}$ [\%] & diff. [\%]\\
+	\hline
+	\endhead
+	XX:Co60_gamma1173keV_energy_literature:XX & XX:Co60_gamma1173keV_energy:XX & XX:Co60_gamma1173keV_energy_diff:XX & XX:Co60_gamma1173keV_intensity_literature:XX & XX:Co60_gamma1173keV_intensity:XX & XX:Co60_gamma1173keV_intensity_diff:XX\\
+	\hline
+	XX:Co60_gamma1332keV_energy_literature:XX & XX:Co60_gamma1332keV_energy:XX & XX:Co60_gamma1332keV_energy_diff:XX & XX:Co60_gamma1332keV_intensity_literature:XX & XX:Co60_gamma1332keV_intensity:XX & XX:Co60_gamma1332keV_intensity_diff:XX\\
+	\hline
+\end{longtable}
+}
+
+QuickCheck of $^{219}$Rn $\alpha$-decay energy and branching ratio is available in table \ref{tab:Rn219alpha}.
+
+{\footnotesize
+\begin{longtable}{|c|c|c|c|c|c|}
+	\captionabove{$^{219}$Rn branching ratios and $\alpha$-decay energies} \label{tab:Rn219alpha}\\
+	\hline
+	$E_{lit.}$ [keV] & $E_{sim.}$ [keV] & diff. [keV] & $I_{lit.}$ [\%] & $I_{sim.}$ [\%] & diff. [\%]\\
+	\hline
+	\endhead
+	XX:Rn219_alpha6819keV_energy_literature:XX & XX:Rn219_alpha6819keV_energy:XX & XX:Rn219_alpha6819keV_energy_diff:XX & XX:Rn219_alpha6819keV_intensity_literature:XX & XX:Rn219_alpha6819keV_intensity:XX & XX:Rn219_alpha6819keV_intensity_diff:XX\\
+	\hline
+\end{longtable}
+}
+
+QuickCheck of $^{219}$Rn secondary electron energies and branching ratios is available in table \ref{tab:Rn219second}.
+
+{\footnotesize
+\begin{longtable}{|c|c|c|c|c|c|}
+	\captionabove{$^{219}$Rn branching ratios and secondary electron energies} \label{tab:Rn219second}\\
+	\hline
+	$E_{lit.}$ [keV] & $E_{sim.}$ [keV] & diff. [keV] & $I_{lit.}$ [\%] & $I_{sim.}$ [\%] & diff. [\%]\\
+	\hline
+	\endhead
+	XX:Rn219_Auger8.3keV_energy_literature:XX & XX:Rn219_Auger8.3keV_energy:XX & XX:Rn219_Auger8.3keV_energy_diff:XX & XX:Rn219_Auger8.3keV_intensity_literature:XX & XX:Rn219_Auger8.3keV_intensity:XX & XX:Rn219_Auger8.3keV_intensity_diff:XX\\
+	\hline
+	XX:Rn219_ConversionElectron178keV_energy_literature:XX & XX:Rn219_ConversionElectron178keV_energy:XX & XX:Rn219_ConversionElectron178keV_energy_diff:XX & XX:Rn219_ConversionElectron178keV_intensity_literature:XX & XX:Rn219_ConversionElectron178keV_intensity:XX & XX:Rn219_ConversionElectron178keV_intensity_diff:XX\\
+	\hline
+\end{longtable}
+}
+
+QuickCheck of 2~MeV $\gamma$ attenuation length in natural Germanium.
+
+{\footnotesize
+\begin{longtable}{|c|c|c|c|}
+	\captionabove{attenuation length of a 2~MeV $\gamma$ in natural Ge} \label{tab:gamma}\\
+	\hline
+	$\gamma$ energy [MeV] & $\mu_{lit.}$ [1/cm] & $\mu_{sim.}$ [1/cm] & diff.[1/cm]\\
+	\hline
+	\endhead
+	XX:Ge_attenuation_gamma2MeV_energy:XX & XX:Ge_attenuation_gamma2MeV_attenuation_literature:XX & XX:Ge_attenuation_gamma2MeV_attenuation_simulation:XX & XX:Ge_attenuation_gamma2MeV_attenuation_difference:XX\\
+	\hline
+\end{longtable}
+}
+
+QuickCheck of 2~MeV electron range in natural Germanium.
+
+{\footnotesize
+\begin{longtable}{|c|c|c|c|}
+	\captionabove{range of a 2~MeV electron in natural Ge} \label{tab:electron}\\
+	\hline
+	electron energy [MeV] & $range_{lit.}$ [cm] & $range_{sim.}$ [cm] & diff.[cm]\\
+	\hline
+	\endhead
+	XX:Ge_CSDA_electron2MeV_energy:XX & XX:Ge_CSDA_electron2MeV_attenuation_literature:XX & XX:Ge_CSDA_electron2MeV_attenuation_simulation:XX & XX:Ge_CSDA_electron2MeV_attenuation_difference:XX\\
+	\hline
+\end{longtable}
+}
+
+\end{document}

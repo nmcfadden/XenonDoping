@@ -1,0 +1,49 @@
+# Simple macro to simulate Co-60 source in front of HPGe crystal.
+# Useful for getting started.
+# R. Henning, 3/12/2009
+# Management 
+
+/MG/manager/mglog routine
+/MG/eventaction/reportingfrequency 1000
+/MG/manager/seedWithDevRandom
+
+# Process List
+/MG/processes/realm BBdecay
+
+# Configure Detector.
+/MG/geometry/detector idealCoax
+
+# Define template crystal. 
+/MG/geometry/idealCoax/setDefaults
+/MG/geometry/idealCoax/deadLayerOn true
+/MG/geometry/idealCoax/cutInHalfOn false
+/MG/geometry/idealCoax/outerDeadLayer 1 micrometer
+/MG/geometry/idealCoax/coreDeadLayer 0.05 cm
+/MG/geometry/idealCoax/coreRadius 0.4 cm
+/MG/geometry/idealCoax/coreDepth 6.0 cm
+/MG/geometry/idealCoax/height 7.0 cm
+/MG/geometry/idealCoax/radius 3.1 cm
+/MG/geometry/idealCoax/bubbleOn false
+/MG/geometry/idealCoaxWShield/shieldOn false
+
+# ROOT output schema
+/MG/eventaction/rootschema MCEvent
+/MG/eventaction/rootfilename  CoaxOut.root
+/MG/io/G4Steps/setWriteSensitiveOnly true
+/MG/io/G4Steps/killAlphas true
+/MG/io/G4Steps/killBetas false
+/MG/io/G4Steps/stopNuclei false
+
+
+# Select Geant 4 RDM generator as a point source
+/MG/generator/select RDMiso
+/MG/generator/confine noconfined
+
+/run/initialize
+/gun/particle
+/grdm/ion 60 27 0
+/gun/position 0.0 0.0 5.0 cm
+
+# Select ion and position source right outside can.
+
+/run/beamOn 10000

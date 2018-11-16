@@ -1,0 +1,56 @@
+# =====================      #
+# Runs coincidence teststand #
+# between two REGe           #
+# =====================      #
+
+#
+# General setup
+#
+
+/MG/manager/mglog trace
+/MG/processes/realm BBdecay
+/MG/eventaction/rootschema GerdaTeststandSiegfriedCoincidence
+/MG/eventaction/rootfilename TeststandSiegfriedCoincidence.root
+/MG/eventaction/reportingfrequency 1000
+
+#
+# Geometry setup
+#
+
+/MG/geometry/detector MunichTestStand
+/MG/geometry/teststand/teststandtype siegfriedcoincidence
+/MG/geometry/teststand/siegfriedsourcezposition   0.0 cm
+/MG/geometry/teststand/siegfriedsourcetocanside   15.0 cm
+/MG/geometry/teststand/siegfriedsourcephiposition 90 deg
+/MG/geometry/teststand/siegfriedregedistance      15.0 cm
+/MG/geometry/database false
+
+#
+# Geometry modifications
+#
+
+#
+# Initialize run
+#
+
+/run/initialize
+
+#
+# generator setup
+#
+/MG/generator/confine volume
+/MG/generator/volume SourceAEA
+/MG/generator/select G4gun
+/gun/particle ion
+/gun/ion 81 208 0
+/gun/energy 0.0 keV
+
+
+/tracking/verbose 0
+
+# 
+# Run 
+# 
+
+/run/beamOn 100000
+

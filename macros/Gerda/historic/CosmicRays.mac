@@ -1,0 +1,14 @@
+/MG/manager/mglog trace
+/MG/geometry/detector GerdaArray
+/MG/geometry/database false
+# Sets much more relaxed cuts everywhere else 
+# than in the crystals
+/MG/processes/realm CosmicRays
+/MG/processes/lowenergy false
+/MG/eventaction/reportingfrequency 100
+/MG/eventaction/rootschema GerdaArray
+/MG/eventaction/rootfilename testCosmicRays.root
+/MG/generator/select cosmicrays
+/run/initialize
+/tracking/verbose 0
+/run/beamOn 1000

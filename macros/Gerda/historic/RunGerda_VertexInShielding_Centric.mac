@@ -1,0 +1,39 @@
+# ============================================================= #
+# Runs detector with standard geometry and calibration sources	#
+# ============================================================= # 
+
+# 
+# General setup 
+# 
+/MG/manager/mglog trace
+/MG/processes/realm BBdecay
+/MG/eventaction/rootschema GerdaArrayWithTrajectory
+/MG/eventaction/rootfilename Background_in_Watertank.root
+/MG/eventaction/reportingfrequency 100
+#
+# Geometry setup 
+#
+/MG/geometry/detector GerdaArray
+/MG/geometry/database false
+#
+# Geometry modifications 
+#
+# Initialize run 
+#
+/run/initialize
+#
+# generator setup 
+#
+#
+/MG/generator/confine volume
+/MG/generator/volume  thewatertubephysical
+#
+/MG/generator/select G4gun
+/MG/generator/g4gun/centric_effect_on true
+/MG/generator/g4gun/detector_center_position 0.0 0.0 -75.0 cm
+/MG/generator/g4gun/detector_position_smear  8.0 cm
+/gun/particle gamma
+/gun/energy 2.6 MeV
+/tracking/verbose 0
+/run/beamOn 10000
+

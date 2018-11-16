@@ -1,0 +1,13 @@
+mage-config
+config.log
+config.status
+config.status
+configure
+configure.ac
+validation/ElectronInteractions/Makefile
+validation/GammaInteractions/Makefile
+validation/AlphaInteractions/Makefile
+validation/NeutronInteractions/Makefile
+mage-config.in
+management/GNUmakefile.in
+management/GNUmakefile

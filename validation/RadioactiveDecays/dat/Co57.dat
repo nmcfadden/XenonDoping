@@ -1,0 +1,21 @@
+# identifier	type (0=gamma, 1=beta, 2=alpha, 3=secondaryelectron)	energy [keV]	intensity [%]
+
+XX:Co57_xray6.40keV:XX	0	6.40	0.01	49.7	1.0
+XX:Co57_xray7.0keV:XX	0	7.06	0.01	5.91	0.01
+XX:Co57_gamma14keV:XX	0	14.4129	0.0006	9.16	0.15	
+XX:Co57_gamma122keV:XX	0	122.06065	0.00012	85.60	0.17
+XX:Co57_gamma136keV:XX	0	136.47356	0.00029	10.68	0.08
+XX:Co57_gamma692keV:XX	0	692.41	0.07	0.149	0.01
+
+#XX:Co57_electron0.7keV:XX	3	0.67	0.01	250	5
+#XX:Co57_electron6keV:XX	3	5.62	0.01	106	2
+XX:Co57_electron7keV:XX	3	7.30095	0.00095	70.4	2.9
+XX:Co57_electron13.6keV:XX	3	13.5669	0.00051	7.2	0.3
+XX:Co57_electron14.3keV:XX	3	14.320	0.001	1.03	0.05
+XX:Co57_electron115keV:XX	3	114.949	0.001	1.81	0.07
+XX:Co57_electron129keV:XX	3	129.362	0.001	1.42	0.06
+XX:Co57_electron121keV:XX	3	121.215	0.0004	0.178	0.007
+XX:Co57_electron122keV:XX	3	121.968	0.0009	0.026	0.001
+XX:Co57_electron136keV:XX	3	135.627	0.0005	0.146	0.006
+
+XX:Co57_halflife_literature:XX 101 23480000

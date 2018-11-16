@@ -1,0 +1,82 @@
+/MG/manager/mglog routine
+/MG/eventaction/reportingfrequency 100
+/MG/manager/seedWithUUID
+/MG/processes/realm BBdecay
+/MG/processes/lowenergy true
+
+
+/MG/geometry/WorldMaterial Vacuum
+/MG/geometry/detector TSMJDemModInTank
+
+
+## Set parameters of Ton scale geometry here:
+#set parameters of the tank
+/MG/geometry/TSCylinderShieldTank/height 6 m
+/MG/geometry/TSCylinderShieldTank/radius 3 m
+#Material can also be 'Water'
+/MG/geometry/TSCylinderShieldTank/shieldmaterial LAB
+
+#set parameters of lab module
+#these set the size of the'lab space' (filled with air) where the tank sits
+/MG/geometry/TSLabModuleBox/labheight 15 m
+/MG/geometry/TSLabModuleBox/labwidth 15 m
+/MG/geometry/TSLabModuleBox/lablength 15 m
+#this sets the thickness of a layer of shotcrete around the 'lab' space
+/MG/geometry/TSLabModuleBox/shotcretedepth 0.01 m
+#this sets the amount of rock around the shotcrete
+/MG/geometry/TSLabModuleBox/rockdepth 3 m
+#sets the materials of the various components
+/MG/geometry/TSLabModuleBox/rockmaterial Rock
+/MG/geometry/TSLabModuleBox/shotcretematerial Rock
+/MG/geometry/TSLabModuleBox/labspacematerial Air
+
+
+
+#set parameters of the cryostat modules:
+#set crystal diameter
+/MG/geometry/TSMJDemModInTank/CrystalDiameter 77 mm
+
+#set crystal height
+/MG/geometry/TSMJDemModInTank/CrystalHeight 33 mm
+
+#configuration, can be MJDemonstrator, 1Ring, 2Ring, 3Ring, 4Ring
+/MG/geometry/TSMJDemModInTank/ModuleType 1Ring
+
+#number of crystals per string, defaults to 10
+/MG/geometry/TSMJDemModInTank/CrystalsPerString 10
+
+#set type of crystal mount (MJDemonstrator, TS)
+/MG/geometry/TSMJDemModInTank/CrystalAssemblyType TS
+
+#the number of modules in the array (1-4)
+/MG/geometry/TSMJDemModInTank/NumberOfModules 1
+
+#set general parameters of the ton scale setup:
+/MG/geometry/TSMJDemModInTank/TankIsActive false
+/MG/geometry/TSMJDemModInTank/TankVerticalOffset 1 m
+
+
+/MG/eventaction/rootschema MCRun
+/MG/eventaction/rootfilename junk.root
+/MG/io/MCRun/SetSensitiveIDLabelScheme askGeom
+/MG/io/MCRun/setRunID 5054
+/MG/io/MCRun/useTimeWindow true
+/MG/io/MCRun/setTimeWindow 86400 second
+/run/initialize
+/MG/generator/select RDMiso
+/gun/energy 0 eV
+#208Tl
+/grdm/ion 208 81 0
+
+
+/MG/generator/confine volume
+#/MG/generator/volume CryostatAssembly_001_CryostatHoop_001
+#/MG/generator/volume labmodulephysical
+#/MG/generator/volume ShotCretePhysical
+#/MG/generator/volume LabSpacePhysical # air in the lab
+/MG/generator/volume shieldtankphysical
+
+
+
+/run/beamOn 10000000
+

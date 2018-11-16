@@ -1,0 +1,6 @@
+# identifier	type (0=gamma, 1=electron, 2=alpha)	energy [keV]	intensity [%]
+
+XX:Co60_beta318keV:XX	1	317.9	1.0	99.88	0.03
+
+XX:Co60_gamma1173keV:XX	0	1173.228	0.003	99.85	0.03
+XX:Co60_gamma1332keV:XX	0	1332.492	0.004	99.9826	0.0006

@@ -1,0 +1,20 @@
+# specify the gdml file
+/MG/geometry/GDML/sourceFile /global/homes/g/gilliss/dev/mjswDev/MaGe_Val/MaGe/validation/GammaInteractions/macros/Ge.gdml
+
+# use low energy physics list
+/MG/processes/lowenergy true
+
+# set output schema and define file name
+/MG/eventaction/rootschema G4Steps
+/MG/eventaction/rootfilename /global/homes/g/gilliss/dev/mjswDev/MaGe_Val/MaGe/validation/GammaInteractions/dat/Ge_20MeV.root
+/MG/eventaction/writeOutFrequency 100
+
+/run/initialize
+
+/MG/generator/select SPS
+/gps/particle gamma
+/gps/energy 20 MeV
+/gps/position 0 0 0
+/gps/direction 0 0 1
+
+/run/beamOn 1000

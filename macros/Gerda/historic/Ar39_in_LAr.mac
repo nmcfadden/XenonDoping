@@ -1,0 +1,73 @@
+# ==================================== #
+# Runs detector with phase II geometry #
+# ==================================== #
+# 
+# The first line sets the verbosity level
+/MG/manager/mglog trace
+/MG/geometry/detector GerdaArray
+#
+# The default GerdaArray geometry is defined
+# Photomultipliers are not defined
+#
+/MG/geometry/database false
+/MG/geometry/detector/matrixfile matrix_phase_ii.dat
+/MG/geometry/cherenkov -1
+#
+# Output scheme and reporting frequency
+#
+/MG/eventaction/rootschema GerdaArray
+/MG/eventaction/rootfilename Ar39.root
+/MG/eventaction/reportingfrequency 1000
+#
+# Physics settings (cuts, low energy, hadronics)
+#
+/MG/processes/realm BBdecay
+/MG/processes/lowenergy false
+/MG/processes/useNoHadPhysics true
+#
+# Set the generator and initialize run
+#
+/MG/generator/select G4gun
+/run/initialize
+#
+# We want to generate Ar-39 betas (spectrum read from file)
+# in the liquid argon contained in a sphere of radius 50 cm 
+# centered in the crystal array (0,0,19.5 cm)
+# and with isotopic direction
+#
+# First, set the position sampling
+#
+/MG/generator/confine volume
+/MG/generator/volume CryoLiquidPhysical
+/MG/generator/Sampling/volume/name Sphere
+/MG/generator/Sampling/volume/outerSphereRadius 50 cm
+#
+# Notice: the center of the CryoLiquidPhysical volume in 
+# global coordinates is (0,0,0), so it has to be shifted 
+# of 19.5 cm to get at the centre of the crystal array.
+#
+/MG/generator/Sampling/volume/offsetCenterZPos 19.5 cm
+#
+# Here set the energy sampling from ar39.dat
+#
+/MG/generator/g4gun/spectrum_from_file true
+/MG/generator/g4gun/spectrum_filename ar39.dat
+#
+# Get isotopic particles. By default the axis of the cone is 
+# the z-axis, with 180 deg opening angle (= isotropic)
+#
+/MG/generator/g4gun/cone_on true
+#
+/tracking/verbose 0
+/gun/particle e-
+/run/beamOn 100000
+
+
+
+
+
+
+
+ 
+
+

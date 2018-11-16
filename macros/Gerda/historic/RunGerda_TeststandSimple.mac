@@ -1,0 +1,52 @@
+# ===================== #
+# Runs simple teststand #
+# ===================== #
+
+#
+# General setup
+#
+
+/MG/manager/mglog trace
+/MG/processes/realm BBdecay
+/MG/eventaction/rootschema GerdaTeststandEnergyOnly
+/MG/eventaction/rootfilename TeststandSimple.root
+/MG/eventaction/reportingfrequency 1000
+
+#
+# Geometry setup
+#
+
+/MG/geometry/detector MunichTestStand
+/MG/geometry/teststand/teststandtype simple 
+/MG/geometry/database false
+
+#
+# Geometry modifications
+#
+
+#
+# Initialize run
+#
+
+/run/initialize
+
+#
+# generator setup
+#
+
+/MG/generator/confine volume
+/MG/generator/volume source
+
+/MG/generator/select G4gun
+/gun/particle ion
+/gun/ion 27 60 0
+/gun/energy 0.0 keV
+
+/tracking/verbose 0
+
+# 
+# Run 
+# 
+
+/run/beamOn 100
+

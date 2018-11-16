@@ -1,0 +1,76 @@
+# =============================== 
+# Runs Collimator and Detector 
+# ===============================
+
+#General Setup
+/MG/manager/mglog trace
+/MG/processes/realm BBdecay
+/MG/eventaction/rootschema GerdaTeststandEnergyandHits
+/MG/eventaction/rootfilename testcollimator.root
+/MG/eventaction/reportingfrequency 100
+/MG/processes/useNoHadPhysics true
+
+# Geometry setup 
+/MG/geometry/detector MunichTestStand
+/MG/geometry/teststand/teststandtype collimator
+/MG/geometry/database false
+
+#Geometry Modifications
+
+#Two different positions for the collimator: 1=centered (r=0) pointing at the detector from above, 2=at z=0 pointing at det. from the side:
+/MG/geometry/teststand/collimatorposition           1
+
+#distance from surface of detector to end of collimator:
+/MG/geometry/teststand/collimatordetectordistance   5.0 mm
+
+#Pos.1: radial distance from center, Pos.2: vertical distance from z=0
+/MG/geometry/teststand/collimatordelta              20.0 mm
+
+#/MG/geometry/teststand/collimatorsystemrotation     45.0 deg
+
+#inner radius of collimator, for conical coll. radius at end of coll. tube
+/MG/geometry/teststand/collimatorinnerradius        3.0 mm
+
+#Outer radius of coll.
+/MG/geometry/teststand/collimatorouterradius       20.0 mm
+
+#length of coll. tube beginning at source
+/MG/geometry/teststand/collimatorlowerheight       50.0 mm
+
+#coll. material; "Copper", "Lead" or "Tungsten"
+/MG/geometry/teststand/collimatormaterial          Copper
+
+#collimator tube or conical coll.; "Tube" or "Conical"
+/MG/geometry/teststand/collimatortype              Conical
+
+/run/initialize
+
+# visualization
+# /vis/scene/create 
+# /vis/open HepRepXML
+# /tracking/storeTrajectory 1
+# /vis/scene/add/trajectories
+# /vis/viewer/set/viewpointThetaPhi 90 00 deg
+# /vis/viewer/zoom 0.01
+
+# /vis/drawVolume
+
+# /vis/viewer/flush 
+
+#Generator
+/MG/generator/confine volume
+/MG/generator/volume Source
+#/MG/generator/select decay0
+#/MG/generator/decay0/filename particles/photon_1000keV_750.1.txt
+#/MG/generator/select AmBe
+/MG/generator/select G4gun
+/gun/particle ion
+/gun/ion 27 60 0
+/gun/energy 0.0 keV
+/tracking/verbose 0
+/run/beamOn 1000
+
+
+
+
+
