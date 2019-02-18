@@ -1,0 +1,6 @@
+git clone https://github.com/mppmu/MGDO.git
+mkdir install
+./configure --prefix=/home/nmcfadden/MGDO/install --enable-majorana-all
+make
+make install
+

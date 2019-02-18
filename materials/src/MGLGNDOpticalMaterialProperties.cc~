@@ -270,6 +270,16 @@ void MGLGNDOpticalMaterialProperties::RegisterArgonOpticalProperties()
 
 	  fArgonLiquid->GetIonisation()->SetBirksConstant(5.1748e-4*cm/MeV);
 
+    //What is the difference between gaseous argon and liquid argon?
+    //density,triplet,...what else?
+    fArgonGas = G4Material::GetMaerial("Argon");
+    myMPT1->AddConstProperty("FASTTIMECONSTANT", tau_s);
+    myMPT1->AddConstProperty("SLOWTIMECONSTANT",2880*ns);
+
+
+
+
+
 }
 
 G4double MGLGNDOpticalMaterialProperties::LArRefIndex(const G4double lambda)

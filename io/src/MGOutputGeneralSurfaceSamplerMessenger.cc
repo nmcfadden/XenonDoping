@@ -30,13 +30,20 @@
  * CONTACT: 
  * FIRST SUBMISSION:
  * 
- * REVISION:
+ * REVISIONS:
  *
- * 11/22/2011 Include a messenger that requires the surface to be ONLY between two of the selected volumes. Bjoern Lehnert
+ * 11/22/2011 Include a messenger that requires the surface to be ONLY between
+ *   two of the selected volumes. Bjoern Lehnert
+ * 01/14/2019 Include a messenger that allows exclusion of surfaces between
+ *   volumes of the same material. Allows for a small gap between surfaces that
+ *   can be set. The impetus for this is that in the MJ geometry, the N2 volume
+ *   is modeled as two separate volumes, even though it is in fact a single
+ *   volume. Micah Buuck
  */
 
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIdirectory.hh"
 
@@ -76,6 +83,18 @@ MGOutputGeneralSurfaceSamplerMessenger::MGOutputGeneralSurfaceSamplerMessenger(M
   fSetOnlyBetweenSelectedVolumesCmd->SetGuidance("default is false");
   fSetOnlyBetweenSelectedVolumesCmd->SetParameterName("OnlyBetweenSelectedVolumesCmd", false);
 
+  // /MG/io/gss/IgnoreIdenticalMaterials
+  fIgnoreIdenticalMaterialsCmd = new G4UIcmdWithADouble("/MG/io/gss/IgnoreIdenticalMaterials", this);
+  fIgnoreIdenticalMaterialsCmd->SetGuidance("If set, generates only positions on surfaces of added volumes that touch a volume of a different material. If the average of the dot product of the step vector with the pre-step volume and post-step volume normal vectors is smaller than the argument, the position is skipped.");
+  fIgnoreIdenticalMaterialsCmd->SetGuidance("default is 0 mm");
+  fIgnoreIdenticalMaterialsCmd->SetParameterName("IgnoreIdenticalMaterialsCmd", 0*CLHEP::mm);
+
+
+  // /MG/io/gss/DefaultVolumeName
+  fSetDefaultVolumeNameCmd = new G4UIcmdWithAString("/MG/io/gss/DefaultVolumeName", this);
+  fSetDefaultVolumeNameCmd->SetGuidance("Set to name of default detector volume to ignore steps in for IgnoreIdenticalMaterials.");
+  fSetDefaultVolumeNameCmd->SetGuidance("default is Detector");
+  fSetDefaultVolumeNameCmd->SetParameterName("SetDefaultVolumeNameCmd", "Detector");
 }
 
 MGOutputGeneralSurfaceSamplerMessenger::~MGOutputGeneralSurfaceSamplerMessenger()
@@ -85,6 +104,8 @@ MGOutputGeneralSurfaceSamplerMessenger::~MGOutputGeneralSurfaceSamplerMessenger(
   delete fSetMaxIntersectionsCmd;
   delete fOutputGeneralSurfaceSamplerDirectory;
   delete fSetOnlyBetweenSelectedVolumesCmd;
+  delete fIgnoreIdenticalMaterialsCmd;
+  delete fSetDefaultVolumeNameCmd;
 
 }
 
@@ -101,6 +122,12 @@ void MGOutputGeneralSurfaceSamplerMessenger::SetNewValue(G4UIcommand* cmd, G4Str
   }
   if( cmd == fSetOnlyBetweenSelectedVolumesCmd ) {
     fOutputGeneralSurfaceSampler->SetOnlyBetweenSelectedVolumes(fSetOnlyBetweenSelectedVolumesCmd->GetNewBoolValue(str));
+  }
+  if( cmd == fIgnoreIdenticalMaterialsCmd ) {
+    fOutputGeneralSurfaceSampler->IgnoreIdenticalMaterials(fIgnoreIdenticalMaterialsCmd->GetNewDoubleValue(str));
+  }
+  if( cmd == fSetDefaultVolumeNameCmd ) {
+    fOutputGeneralSurfaceSampler->SetDefaultVolumeName(str);
   }
 
 }

@@ -34,8 +34,14 @@
  * CONTACT: 
  * FIRST SUBMISSION: 
  * 
- * REVISION:
- * 11/22/2011 Include a messenger that requires the surface to be ONLY between two of the selected volumes. Bjoern Lehnert
+ * REVISIONS:
+ * 11/22/2011 Include a messenger that requires the surface to be ONLY between
+ *   two of the selected volumes. Bjoern Lehnert
+ * 01/14/2019 Include a messenger that allows exclusion of surfaces between
+ *   volumes of the same material. Allows for a small gap between surfaces that
+ *   can be set. The impetus for this is that in the MJ geometry, the N2 volume
+ *   is modeled as two separate volumes, even though it is in fact a single
+ *   volume. Micah Buuck
  */
 
 #ifndef _GeneralSurfaceSamplerOUTPUTROOT_HH
@@ -66,7 +72,10 @@ class MGOutputGeneralSurfaceSampler: public MGOutputRoot
     void AddVolume(G4String aVolName);
     void RemoveVolume(G4String aVolName);
     void SetOnlyBetweenSelectedVolumes(G4bool aBool);
-    void SetMaxIntersections(G4int Nmax){fNmax = Nmax;} 
+    void SetMaxIntersections(G4int Nmax){fNmax = Nmax;}
+    void IgnoreIdenticalMaterials(G4double aDouble)
+      { fIgnoreIdenticalMaterials = aDouble; fStepSizeToIgnore = aDouble; }
+    void SetDefaultVolumeName(std::string aString){ fDefaultVolumeName = aString; } 
     //void GetPreviousProcesses(vector<const G4VProcess*> &) const; 
 
   protected:
@@ -83,6 +92,14 @@ class MGOutputGeneralSurfaceSampler: public MGOutputRoot
     G4double fY_cm;
     G4double fZ_cm;
     G4bool fOnlyBetweenSelectedVolumes;
+    G4double fIgnoreIdenticalMaterials;
+    G4double fStepSizeToIgnore;
+    G4Material* fLastMaterial;
+    G4VPhysicalVolume* fLastVolume;
+    bool fSavedLastStep;
+    G4VPhysicalVolume* fWorldVolume;
+    G4VPhysicalVolume* fDefaultVolume;
+    std::string fDefaultVolumeName;
 
     MGOutputGeneralSurfaceSamplerMessenger *fMessenger;
 };

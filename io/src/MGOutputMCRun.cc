@@ -612,8 +612,13 @@ void MGOutputMCRun::RootSteppingAction(const G4Step* step)
 
   G4StepPoint* stepPoint = step->GetPostStepPoint();
 
+  //-------------------------------------------------------------------
+  //This has been commented out because it can generate a segfault when
+  //setWriteAllSteps is enabled and the track is in the World volume.
+  //N. McFadden please fix or verify that this line is not necessary.
+  //-------------------------------------------------------------------
   //for Optical Photon detection -N. McFadden
-  physVolName = stepPoint->GetPhysicalVolume()->GetName();
+  //physVolName = stepPoint->GetPhysicalVolume()->GetName();
 
   double t = stepPoint->GetGlobalTime();
   double kineticE = stepPoint->GetKineticEnergy();

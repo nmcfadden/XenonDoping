@@ -465,11 +465,10 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
   G4StepPoint* postStepPoint = step->GetPostStepPoint();
   G4StepPoint* preStepPoint = step->GetPreStepPoint();
 
-  G4VPhysicalVolume* physicalVolume =postStepPoint->GetPhysicalVolume();
+  G4VPhysicalVolume* physicalVolume = postStepPoint->GetPhysicalVolume();
 
   int sensVolID = fSensitiveIDOfPhysicalVol[physicalVolume];
   double eDep = step->GetTotalEnergyDeposit();
- 
   //add Primary Information using prestep
   //prestep for primary step has not been stepped through the Stepping Action
   if(track->GetTrackID() == 1 &&  track->GetParentID() == 0 && fPrimaryWriteFlag){
@@ -507,7 +506,6 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
 
     MGLog(debugging)<< physVolName<<", KE = "<<kineticE/eV<<"@ ("<<position.x()<<","<<position.y()<<","<<position.z()<<")"<<endlog;
   }
- 
   const G4VProcess* creator = track->GetCreatorProcess();
   G4String creatorName;
   if(creator) creatorName = creator->GetProcessName();
@@ -547,9 +545,13 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
     trackWeight = 2;
   }
   //If you use the pre point you never find tracks that stop in the SiPM,
-  G4String physVolName = postStepPoint->GetPhysicalVolume()->GetName();
-  G4String prePhysVolName = preStepPoint->GetPhysicalVolume()->GetName();
-  
+  G4String physVolName;
+  if(postStepPoint->GetPhysicalVolume() != NULL)
+    physVolName = postStepPoint->GetPhysicalVolume()->GetName();
+  G4String prePhysVolName;
+  if(preStepPoint->GetPhysicalVolume()  != NULL)
+    prePhysVolName = preStepPoint->GetPhysicalVolume()->GetName();
+
 
   if( stepIndex == 0 ){ 
     recordPreStep = true;
@@ -577,18 +579,38 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
 
   G4ThreeVector localPosition = step->GetPreStepPoint()->GetTouchableHandle()->GetHistory()->
   GetTopTransform().TransformPoint(position);
-  G4cout<<"creatorName = "<<creatorName<<", iStep "<<iStep<<endl;
-  if(creatorName != "Scintillation" && iStep > 0) {
-    if ( !fWriteAllSteps){
-      if(fWriteAllStepsInEventsThatDepositEnergy && eDep == 0) return;
-      else if(sensVolID == 0 && fWriteAllSensitiveSteps){
-        return;
-      }
-      else if( (sensVolID  == 0 || eDep == 0) && !fWriteAllSensitiveSteps && !fWriteAllStepsInEventsThatDepositEnergy){
-        return;
-      }
+  //Kill all tracks after first step
+  if(fKillAll){
+    step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
+      fWriteFlag = true;
+  }
+
+  if ( !fWriteAllSteps){
+    if(fWriteAllStepsInEventsThatDepositEnergy && eDep == 0) return;
+    else if(sensVolID == 0 && fWriteAllSensitiveSteps){
+      return;
     }
-  } 
+    else if( (sensVolID  == 0 || eDep == 0) && !fWriteAllSensitiveSteps && !fWriteAllStepsInEventsThatDepositEnergy){
+      return;
+    }
+  }
+  
+  if(sensVolID == 0) {
+    // Kill alpha or e- track  or stop nuclei if user requires it.
+    if((fKillAlphas && pid == 100004002) ||
+       (fKillBetas && pid == 11) ||
+       (fKillGammas && pid == 22) ||
+       (fKillNeutrons && pid == 2112)||
+       (iStep >= fNSteps-1 )) {
+      step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
+    }
+    else if(fStopNuclei && pid > 100000000) step->GetTrack()->SetKineticEnergy(0.0);
+  }
+  // Kill (anti)neutrinos regardless
+  if(pid == -12 || pid == 12) step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
+  
+
+
   fWriteFlag = true;
 
   fMCEventSteps->AddStep( 
@@ -613,30 +635,10 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
     iStep,
     trackWeight
   );
- 
-  if(sensVolID == 0) {
-    // Kill alpha or e- track  or stop nuclei if user requires it.
-    if((fKillAlphas && pid == 100004002) ||
-       (fKillBetas && pid == 11) ||
-       (fKillGammas && pid == 22) ||
-       (fKillNeutrons && pid == 2112)||
-       (iStep >= fNSteps-1 )) {
-      step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
-    }
-    else if(fStopNuclei && pid > 100000000) step->GetTrack()->SetKineticEnergy(0.0);
-  }
 
   if( (sensVolID > 0) && (eDep > 0) ){
     fMCEventHeader->AddEnergyToDetectorID( sensVolID, eDep);
     fMCEventHeader->AddEnergyToTotalEnergy( eDep );
-  }
-
-  // Kill (anti)neutrinos regardless
-  if(pid == -12 || pid == 12) step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
-  
-  //Kill all tracks after first step
-  if(fKillAll && iStep > 0){
-    step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
   }
   
 }

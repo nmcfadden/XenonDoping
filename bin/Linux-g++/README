@@ -1,0 +1,1 @@
+ java -jar -mx1000M HepRApp.jar

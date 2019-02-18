@@ -354,47 +354,45 @@ void MGOutputG4Steps::AssignG4StepsDataValues(const G4Step* step)
 
 void MGOutputG4Steps::OutputDebuggingInfo(const G4Step* step)
 {
-  if(MGLogger::GetSeverity() != MGLogger::debugging) return;
-
-  G4cout << "Step Information:" << G4endl;
-  G4cout << "-----------------" << G4endl;
-  G4cout << "fMaxArrayLength: " << fMaxArrayLength << G4endl;
-  G4cout << "fStepIndex: " << fStepIndex << G4endl;
-  G4cout << "fRecordPreStep: " << fRecordPreStep << G4endl;
-  G4cout << "fOverflowReported: " << fOverflowReported << G4endl;
-  G4cout << "fEventID: " << fEventID << G4endl;
-  G4cout << "fParticleID: " << fT->fParticleID[fStepIndex]<<G4endl;
-  G4cout << "fPreviousTrackID: " 
-         << fT->fPreviousTrackID[fStepIndex] << G4endl;
-  G4cout << "fTrackID: " << fT->fTrackID[fStepIndex] << G4endl;
-  G4cout << "fX (cm): " << fT->fX[fStepIndex] << G4endl;
-  G4cout << "fY (cm): " << fT->fY[fStepIndex] << G4endl;  
-  G4cout << "fZ (cm): " << fT->fZ[fStepIndex] << G4endl;    
-  G4cout << "fPx (keV): " << fT->fPx[fStepIndex] << G4endl;
-  G4cout << "fPy (keV): " << fT->fPy[fStepIndex] << G4endl;  
-  G4cout << "fPz (keV): " << fT->fPz[fStepIndex] << G4endl;    
-  G4cout << "fEdep (keV): " << fT->fEdep[fStepIndex] << G4endl;
-  G4cout << "fMaxProcArrayLength: " << fMaxProcArrayLength << G4endl;
-  G4cout << "fT->fProcessNamePos: " << fT->fProcessNamePos << G4endl;
+  MGLog(debugging) << "Step Information:" << endlog;
+  MGLog(debugging) << "-----------------" << endlog;
+  MGLog(debugging) << "fMaxArrayLength: " << fMaxArrayLength << endlog;
+  MGLog(debugging) << "fStepIndex: " << fStepIndex << endlog;
+  MGLog(debugging) << "fRecordPreStep: " << fRecordPreStep << endlog;
+  MGLog(debugging) << "fOverflowReported: " << fOverflowReported << endlog;
+  MGLog(debugging) << "fEventID: " << fEventID << endlog;
+  MGLog(debugging) << "fParticleID: " << fT->fParticleID[fStepIndex]<<endlog;
+  MGLog(debugging) << "fPreviousTrackID: " 
+         << fT->fPreviousTrackID[fStepIndex] << endlog;
+  MGLog(debugging) << "fTrackID: " << fT->fTrackID[fStepIndex] << endlog;
+  MGLog(debugging) << "fX (cm): " << fT->fX[fStepIndex] << endlog;
+  MGLog(debugging) << "fY (cm): " << fT->fY[fStepIndex] << endlog;  
+  MGLog(debugging) << "fZ (cm): " << fT->fZ[fStepIndex] << endlog;    
+  MGLog(debugging) << "fPx (keV): " << fT->fPx[fStepIndex] << endlog;
+  MGLog(debugging) << "fPy (keV): " << fT->fPy[fStepIndex] << endlog;  
+  MGLog(debugging) << "fPz (keV): " << fT->fPz[fStepIndex] << endlog;    
+  MGLog(debugging) << "fEdep (keV): " << fT->fEdep[fStepIndex] << endlog;
+  MGLog(debugging) << "fMaxProcArrayLength: " << fMaxProcArrayLength << endlog;
+  MGLog(debugging) << "fT->fProcessNamePos: " << fT->fProcessNamePos << endlog;
   const G4VProcess* processDefinedStep = (fRecordPreStep) ? 
     step->GetPreStepPoint()->GetProcessDefinedStep() :
     step->GetPostStepPoint()->GetProcessDefinedStep();
  
   G4String procName = (processDefinedStep) ?
     processDefinedStep->GetProcessName() : ""; 
-  G4cout << "procName: " << procName << G4endl;
-  G4cout << "fT->fVolumeNamePos: " << fT->fVolumeNamePos << G4endl;
-  G4cout << "volName: " << step->GetTrack()->GetVolume()->GetName() << G4endl;
-  G4cout << "fLocalX (cm): " << fT->fLocalX[fStepIndex] << G4endl;
-  G4cout << "fLocalY (cm): " << fT->fLocalY[fStepIndex] << G4endl;  
-  G4cout << "fLocalZ (cm): " << fT->fLocalZ[fStepIndex] << G4endl;    
-  G4cout << "fStatus01: " << fT->fStatus01[fStepIndex] << G4endl;
-  G4cout << "fMaterialIndex: " 
-         << fT->fMaterialIndex[fStepIndex] << G4endl;
-  G4cout << "fGlobalTime (s): " 
-         << fT->fGlobalTime[fStepIndex] << G4endl;
-  G4cout << "fOffsetTime (s): " 
-         << fT->fOffsetTime[fStepIndex] << G4endl;
+  MGLog(debugging) << "procName: " << procName << endlog;
+  MGLog(debugging) << "fT->fVolumeNamePos: " << fT->fVolumeNamePos << endlog;
+  MGLog(debugging) << "volName: " << step->GetTrack()->GetVolume()->GetName() << endlog;
+  MGLog(debugging) << "fLocalX (cm): " << fT->fLocalX[fStepIndex] << endlog;
+  MGLog(debugging) << "fLocalY (cm): " << fT->fLocalY[fStepIndex] << endlog;  
+  MGLog(debugging) << "fLocalZ (cm): " << fT->fLocalZ[fStepIndex] << endlog;    
+  MGLog(debugging) << "fStatus01: " << fT->fStatus01[fStepIndex] << endlog;
+  MGLog(debugging) << "fMaterialIndex: " 
+         << fT->fMaterialIndex[fStepIndex] << endlog;
+  MGLog(debugging) << "fGlobalTime (s): " 
+         << fT->fGlobalTime[fStepIndex] << endlog;
+  MGLog(debugging) << "fOffsetTime (s): " 
+         << fT->fOffsetTime[fStepIndex] << endlog;
 }
 
 //---------------------------------------------------------------------------//  

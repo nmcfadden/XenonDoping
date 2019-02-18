@@ -6,7 +6,7 @@
 # Process List
 /MG/processes/realm DarkMatter
 /MG/processes/lowenergy true
-#/MG/processes/optical true
+/MG/processes/optical true
 #/MG/processes/opticalOnly true
 
 # Configure Detector
@@ -15,12 +15,15 @@
 /run/initialize
 
 /MG/eventaction/rootschema MCOpticalRun
-/MG/eventaction/reportingfrequency 100
+/MG/eventaction/reportingfrequency 1
 /MG/eventaction/rootfilename 1MeVBeta100000Events.root
 
 #/MG/io/MCOpticalRun/SetSensitiveIDLabelScheme askGeom
 /MG/io/MCOpticalRun/SetSensitiveIDLabelScheme manual
-/MG/io/MCOpticalRun/AddSensitiveVolnameID Detector 201
+#/MG/io/MCOpticalRun/AddSensitiveVolnameID Detector 201
+#/MG/io/MCOpticalRun/AddSensitiveVolnameID argonGasPhysical 202
+/MG/io/MCOpticalRun/AddSensitiveVolnameID physicalPMT_1 101
+/MG/io/MCOpticalRun/AddSensitiveVolnameID physicalPMT_0 100
 /MG/io/MCOpticalRun/setRunID 001
 /MG/io/MCOpticalRun/useTimeWindow true
 /MG/io/MCOpticalRun/setTimeWindow 86400 second
@@ -31,13 +34,21 @@
 #/MG/io/MCOpticalRun/setWriteAllSensitiveSteps
 
 #generate radioactivbe decays in the stainless steel of the cryostat
-#/MG/generator/select RDMiso
-#/gun/energy 0 eV
-#/grdm/ion 224 88 0
-#/grdm/nucleusLimits 208 224 81 88
+#/grdm/ion 60 27 0
+#/grdm/nucleusLimits 60 28
+#Radon 222 will not work for argon checks
 #/grdm/ion 222 86 0
 #/grdm/nucleusLimits 206 224 82 86
-#/MG/generator/position 0. 0. 0.
+#/MG/generator/position 0. 0. 30.48 cm
+/MG/generator/select GSS
+/MG/generator/gss/boundingR 26 cm
+/MG/generator/gss/origin 0. 0. 0. cm
+/MG/generator/gss/boundvol cryostat
+/MG/generator/select RDMiso
+/gun/energy 0 eV
+/grdm/ion 210 84 0
+/grdm/nucleusLimits 206 82
+
 #/MG/generator/confine volume
 #/MG/generator/volume cryostat
 #/MG/generator/select RDMiso
@@ -45,11 +56,11 @@
 #/grdm/ion 224 88 0
 #/grdm/nucleusLimits 208 224 81 88
 #generate particles in the liquid argon
-/MG/generator/select LGNDLiquidArgon
-/MG/generator/LGNDLiquidArgon/SetParticle beta
-/MG/generator/LGNDLiquidArgon/SetEnergy 1 MeV
+#/MG/generator/select LGNDLiquidArgon
+#/MG/generator/LGNDLiquidArgon/SetParticle beta
+#/MG/generator/LGNDLiquidArgon/SetEnergy 1 MeV
 #/tracking/verbose 2
-/run/beamOn 100000
+/run/beamOn 10
 #/MG/generator/select SPS
 #/gps/particle opticalphoton
 #/gps/ene/type Gauss

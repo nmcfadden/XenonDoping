@@ -37,9 +37,15 @@
  * CONTACT: 
  * FIRST SUBMISSION: 
  * 
- * REVISION:
- * 11/22/2011 Include a messenger that requires the surface to be ONLY between two of the selected volumes. Bjoern Lehnert
- */
+ * REVISIONS:
+ * 11/22/2011 Include a messenger that requires the surface to be ONLY between
+ *   two of the selected volumes. Bjoern Lehnert
+ * 01/14/2019 Include a messenger that allows exclusion of surfaces between
+ *   volumes of the same material. Allows for a small gap between surfaces that
+ *   can be set. The impetus for this is that in the MJ geometry, the N2 volume
+ *   is modeled as two separate volumes, even though it is in fact a single
+ *   volume. Micah Buuck
+*/
 
 #include "G4PhysicalVolumeStore.hh"
 #include "G4Geantino.hh"
@@ -56,6 +62,14 @@ MGOutputGeneralSurfaceSampler::MGOutputGeneralSurfaceSampler() : MGOutputRoot(tr
   fMessenger = new MGOutputGeneralSurfaceSamplerMessenger( this );
   fNmax = 0;
   fOnlyBetweenSelectedVolumes = false;
+  fIgnoreIdenticalMaterials = false;
+  fStepSizeToIgnore = 0;
+  fSavedLastStep = false;
+  fLastMaterial = nullptr;
+  fLastVolume = nullptr;
+  fWorldVolume = nullptr;
+  fDefaultVolume = nullptr;
+  fDefaultVolumeName = "Detector";
 }
 
 MGOutputGeneralSurfaceSampler::~MGOutputGeneralSurfaceSampler()
@@ -75,6 +89,15 @@ void MGOutputGeneralSurfaceSampler::BeginOfRunAction()
     volumes += " ";
   }
   MGLog(routine) << volumes << endlog;
+
+  //Find default volume
+  G4PhysicalVolumeStore* volStore = G4PhysicalVolumeStore::GetInstance();
+  for(size_t n = 0; n < volStore->size(); n++) {
+    if(MatchesWildcard((*volStore)[n]->GetName(), fDefaultVolumeName)) {
+      fDefaultVolume = (*volStore)[n];
+    }
+  }
+
 }
 
 void MGOutputGeneralSurfaceSampler::DefineSchema()
@@ -119,9 +142,43 @@ void MGOutputGeneralSurfaceSampler::RootSteppingAction(const G4Step* step)
   bool preStepVolCheck = fInterestingVolMap[preStepVolume];
   bool postStepVolCheck = fInterestingVolMap[postStepVolume];
 
+  //If fIgnoreIdenticalMaterials is set, then ignore surfaces between parts of
+  //idential material. Because the parts all have small gaps between them, we
+  //have to keep track of the last step point.
+  if( fIgnoreIdenticalMaterials && preStepVolume!=nullptr
+      && postStepVolume!=nullptr && preStepVolume->GetMotherLogical()!=nullptr
+      && postStepVolume->GetMotherLogical()!=nullptr ) {
+    G4Material* preStepMaterial = step->GetPreStepPoint()->GetMaterial();
+    G4ThreeVector preStepPosition = step->GetPreStepPoint()->GetPosition();
+    G4ThreeVector postStepPosition = step->GetPostStepPoint()->GetPosition();
+    G4ThreeVector stepVector = postStepPosition - preStepPosition;
+    G4ThreeVector preStepNormal = preStepVolume->GetLogicalVolume()->GetSolid()->SurfaceNormal(preStepPosition);
+    G4ThreeVector postStepNormal = postStepVolume->GetLogicalVolume()->GetSolid()->SurfaceNormal(postStepPosition);
+    double stepDistance = (abs(stepVector.dot(preStepNormal))+abs(stepVector.dot(postStepNormal)))/2.0;
+
+    if(postStepVolume==fDefaultVolume) {
+      fLastMaterial = preStepMaterial;
+      fLastVolume = preStepVolume;
+    }
+    G4Material* postStepMaterial = step->GetPostStepPoint()->GetMaterial();
+  
+    if(stepDistance<fStepSizeToIgnore) {
+      if(preStepMaterial==postStepMaterial) return;
+      if(preStepVolume==fDefaultVolume && fLastMaterial!=nullptr && fLastMaterial==postStepMaterial && fLastVolume!=postStepVolume) {
+        if(fSavedLastStep) {
+          fCoordVector.pop_back();
+          fPostVolumeVector.pop_back();
+          fPreVolumeVector.pop_back();
+        }
+        return;
+      }
+    }
+  }
+
   //Now to see whether any of the volumes are interesting, and if so, that the
   //interesting volume is not a mother of the boundary volume
   if(!preStepVolCheck && !postStepVolCheck){
+    fSavedLastStep = false;
     return; // neither volume at the boundary is interesting
   } 
   else if(preStepVolCheck && postStepVolCheck){
@@ -129,6 +186,7 @@ void MGOutputGeneralSurfaceSampler::RootSteppingAction(const G4Step* step)
     fCoordVector.push_back( step->GetPostStepPoint()->GetPosition() );
     fPostVolumeVector.push_back( step->GetPostStepPoint()->GetPhysicalVolume());
     fPreVolumeVector.push_back( step->GetPreStepPoint()->GetPhysicalVolume());
+    fSavedLastStep = true;
   } 
   else if(!fOnlyBetweenSelectedVolumes){ //process not if two interesting volumes are required 
     // only one of the volumes is interesting
@@ -140,12 +198,15 @@ void MGOutputGeneralSurfaceSampler::RootSteppingAction(const G4Step* step)
       fCoordVector.push_back( step->GetPostStepPoint()->GetPosition() );
       fPostVolumeVector.push_back( step->GetPostStepPoint()->GetPhysicalVolume());
       fPreVolumeVector.push_back( step->GetPreStepPoint()->GetPhysicalVolume());
+      fSavedLastStep = true;
     } else if(postStepVolCheck && !postIsMotherOfpre) {
       //then the poststepvolume is interesting and not a mother.  golden!
       fCoordVector.push_back( step->GetPostStepPoint()->GetPosition() );
       fPostVolumeVector.push_back( step->GetPostStepPoint()->GetPhysicalVolume());
       fPreVolumeVector.push_back( step->GetPreStepPoint()->GetPhysicalVolume());
+      fSavedLastStep = true;
     }
+    else fSavedLastStep = false;
   }
 }
 

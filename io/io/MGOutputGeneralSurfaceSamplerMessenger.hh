@@ -37,9 +37,14 @@
  * CONTACT: 
  * FIRST SUBMISSION: 
  * 
- * REVISION:
- * 11/22/2011 Include a messenger that requires the surface to be ONLY between two of the selected volumes. Bjoern Lehnert
- * 
+ * REVISIONS:
+ * 11/22/2011 Include a messenger that requires the surface to be ONLY between
+ *   two of the selected volumes. Bjoern Lehnert
+ * 01/14/2019 Include a messenger that allows exclusion of surfaces between
+ *   volumes of the same material. Allows for a small gap between surfaces that
+ *   can be set. The impetus for this is that in the MJ geometry, the N2 volume
+ *   is modeled as two separate volumes, even though it is in fact a single
+ *   volume. Micah Buuck 
  */
 
 #ifndef _MGOUTPUTGENERICSURFACEMESSENGER_HH
@@ -51,6 +56,7 @@ class MGOutputGeneralSurfaceSampler;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
+class G4UIcmdWithADouble;
 class G4UIcmdWithABool;
 
 class MGOutputGeneralSurfaceSamplerMessenger : public G4UImessenger
@@ -68,5 +74,7 @@ class MGOutputGeneralSurfaceSamplerMessenger : public G4UImessenger
     G4UIcmdWithAString *fRemoveVolumeCmd;
     G4UIcmdWithAnInteger* fSetMaxIntersectionsCmd;
     G4UIcmdWithABool* fSetOnlyBetweenSelectedVolumesCmd;
+    G4UIcmdWithADouble* fIgnoreIdenticalMaterialsCmd;
+    G4UIcmdWithAString* fSetDefaultVolumeNameCmd;
 };
 #endif

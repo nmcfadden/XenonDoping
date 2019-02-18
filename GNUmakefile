@@ -61,7 +61,7 @@ sharedlibslink:
 	@cd lib; for l in $(PACKAGES); do if [ -f $(MGTMPDIR)/$$l/lib$$l.$(MGLIBEXTSHARED) ]; then ln -f -s $(MGTMPDIR)/$$l/lib$$l.$(MGLIBEXTSHARED); fi; done 
 	@echo Done.
 
-#include /mnt/mjdDisk1/Majorana/soft/geant4.10.04.p02-build/share/Geant4-10.4.2/geant4make/config/binmake.gmk
+#include /usr/local/share/Geant4-10.4.0/geant4make/config/binmake.gmk
 
 
 install:

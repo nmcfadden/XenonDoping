@@ -35,12 +35,12 @@ ROOTPCMFILE = ../analysis/$(ROOTPCMNAME)
 DICTNAME = DICT_$(ROOTSOFILEBASE)
 ROOTDICTCC = src/$(DICTNAME).cc
 ROOTDICTHH = $(name)/$(DICTNAME).h
-MGROOTSODEPLIBS = $(foreach package, $(MGROOTSODEPS), /mnt/mjdDisk1/Majorana/users/nmcfadden/gitBACoN/XenonDoping/tmp/Linux-g++/$(package)/lib$(package).$(MGLIBEXT))
-#MGROOTSODEPLIBS = $(foreach package, $(MGROOTSODEPS), /mnt/mjdDisk1/Majorana/users/nmcfadden/gitBACoN/XenonDoping/tmp/Linux-g++/$(package)/lib$(package).$(SHEXT))
-ROOTCFLAGS = -pthread -std=c++11 -m64 -I/mnt/mjdDisk1/Majorana/soft/root-6.12.06-build/include
-ROOTLIBS = -L/mnt/mjdDisk1/Majorana/soft/root-6.12.06-build/lib -lCore -lImt -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lTreePlayer -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lThread -lMultiProc -pthread -lm -ldl -rdynamic
-ROOTCINT = /mnt/mjdDisk1/Majorana/soft/root-6.12.06-build/bin/rootcint
-ROOTCLING = /mnt/mjdDisk1/Majorana/soft/root-6.12.06-build/bin/rootcling
+MGROOTSODEPLIBS = $(foreach package, $(MGROOTSODEPS), /home/nmcfadden/XenonDoping/tmp/Linux-g++/$(package)/lib$(package).$(MGLIBEXT))
+#MGROOTSODEPLIBS = $(foreach package, $(MGROOTSODEPS), /home/nmcfadden/XenonDoping/tmp/Linux-g++/$(package)/lib$(package).$(SHEXT))
+ROOTCFLAGS = -pthread -std=c++11 -m64 -I/usr/local/root/include
+ROOTLIBS = -L/usr/local/root/lib -lCore -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lThread -lMultiProc -pthread -lm -ldl -rdynamic
+ROOTCINT = /usr/local/root/bin/rootcint
+ROOTCLING = /usr/local/root/bin/rootcling
 
 .PHONY: rootso cleanrootdict FORCE
 

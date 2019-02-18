@@ -14,6 +14,6 @@ MGROOTSODEPS = io
 # unfortunately, rootso depends upon lib and so lib must be made first
 all: lib rootso 
 
-include /mnt/mjdDisk1/Majorana/soft/geant4.10.04.p02-build/share/Geant4-10.4.2/geant4make/config/binmake.gmk
+include /usr/local/share/Geant4-10.4.0/geant4make/config/binmake.gmk
 include ../buildTools/rootsomake.mk
 include ../buildTools/install.mk

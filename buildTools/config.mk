@@ -52,15 +52,15 @@ GREP = /usr/bin/grep
 SED = /usr/bin/sed
 
 
-MAGEDIR=/mnt/mjdDisk1/Majorana/users/nmcfadden/gitBACoN/XenonDoping
+MAGEDIR=/home/nmcfadden/XenonDoping
 
-CLHEP_BASE_DIR = /opt/CLHEP/2.4.0.1/install
-CLHEP_INCLUDE_DIR = /opt/CLHEP/2.4.0.1/install/include
-CLHEP_LIB_DIR = /opt/CLHEP/2.4.0.1/install/lib
+CLHEP_BASE_DIR = /usr/local
+CLHEP_INCLUDE_DIR = /usr/local/include
+CLHEP_LIB_DIR = /usr/local/lib
 
-G4INSTALL = /mnt/mjdDisk1/Majorana/soft/geant4.10.04.p02-build/share/Geant4-10.4.2/geant4make
-G4INCLUDE = /mnt/mjdDisk1/Majorana/soft/geant4.10.04.p02-build/include/Geant4
-G4LIB = /mnt/mjdDisk1/Majorana/soft/geant4.10.04.p02-build/lib64/Geant4-10.4.2
+G4INSTALL = /usr/local/share/Geant4-10.4.0/geant4make
+G4INCLUDE = /usr/local/include/Geant4
+G4LIB = /usr/local/lib64/Geant4-10.4.0
 G4SYSTEM = Linux-g++
 
 #list of packages to exclude from the build
@@ -73,7 +73,7 @@ PACKAGES := $(subst $(MAGEDIR)/,, $(PACKAGES))
 PACKAGES := $(subst /,, $(PACKAGES))
 PACKAGES := $(filter-out $(PKG_SKIP), $(PACKAGES))
 
-G4WORKDIR=/mnt/mjdDisk1/Majorana/users/nmcfadden/gitBACoN/XenonDoping
+G4WORKDIR=/home/nmcfadden/XenonDoping
 G4SYSTEM=Linux-g++
 MGTMPDIR=$(G4WORKDIR)/tmp/$(G4SYSTEM)
 
@@ -85,12 +85,12 @@ MGCPPFLAGS := $(addprefix -I$(MAGEDIR)/, $(PACKAGES))
 CPPFLAGS += -O2 -fPIC $(MGCPPFLAGS)
 
 # ROOT
-CPPFLAGS += -pthread -std=c++11 -m64 -I/mnt/mjdDisk1/Majorana/soft/root-6.12.06-build/include 
-EXTRALIBS += -L/mnt/mjdDisk1/Majorana/soft/root-6.12.06-build/lib -lCore -lImt -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lTreePlayer -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lThread -lMultiProc -pthread -lm -ldl -rdynamic 
+CPPFLAGS += -pthread -std=c++11 -m64 -I/usr/local/root/include 
+EXTRALIBS += -L/usr/local/root/lib -lCore -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lThread -lMultiProc -pthread -lm -ldl -rdynamic 
 
 # MGDO
-CPPFLAGS += -I/mnt/mjdDisk1/Majorana/soft/MGDO/install/include/mgdo
-EXTRALIBS += -L/mnt/mjdDisk1/Majorana/soft/MGDO/install/lib -lMGDOBase -lMGDOTransforms -lMGDORoot -lMGDOGerda
+CPPFLAGS += -I/home/nmcfadden/MGDO/install/include/mgdo
+EXTRALIBS += -L/home/nmcfadden/MGDO/install/lib -lMGDOBase -lMGDOTransforms -lMGDORoot -lMGDOGerda
 
 # GDML
 CPPFLAGS += -DMG_NO_G4GDML

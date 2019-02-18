@@ -11,7 +11,7 @@
 
 #EXTRA_LINK_DEPENDENCIES += $(PACKAGES)
 
-MGBINDIR = /mnt/mjdDisk1/Majorana/users/nmcfadden/gitBACoN/XenonDoping/bin/Linux-g++
+MGBINDIR = /home/nmcfadden/XenonDoping/bin/Linux-g++
 # here dealing with the circular dependencies.
 # we remove multiple declarations
 MGTARGETDEPSORTED := $(sort $(MGTARGETDEPS))

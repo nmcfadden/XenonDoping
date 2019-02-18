@@ -95,6 +95,15 @@ void BACON_Baseline::ConstructDetector()
   cryostatLogical->SetVisAttributes(cryoVisAtt);
 
   G4VPhysicalVolume* cryostatPhysical = new G4PVPlacement(0, G4ThreeVector(0,0,0), cryostatLogical, "cryostat", theDetectorLogical, false, 0);
+  //Liquid height 23*119/1.3954/105 = 18.68 inch
+  //23-18.68 
+  G4double gasHeight = 4.31*inch;
+  G4Material *argonGas = G4Material::GetMaterial("Argon");
+  G4Tubs* argonGasSolid = new G4Tubs("argonGasSolid",0,fCryoID/2,gasHeight/2.,0,2*pi);
+  G4LogicalVolume* argonGasLogical = new G4LogicalVolume(argonGasSolid,argonGas,"argonGasLogical");
+  G4VisAttributes* argonGasVisAtt = new G4VisAttributes(G4Colour(1, 0., 1., 0.1));//gray, 1% opaque
+  argonGasLogical->SetVisAttributes(argonGasVisAtt);
+  G4VPhysicalVolume* argonGasPhysical = new G4PVPlacement(0, G4ThreeVector(0,0,gasHeight/2), argonGasLogical, "argonGasPhysical", theDetectorLogical, false, 0);
 
   G4Element* elC = new G4Element("Carbon","C",6.,12.011*g/mole);
   G4Element* elH = new G4Element("Hydrogen","H",1.,1.00794*g/mole);
@@ -174,6 +183,7 @@ void BACON_Baseline::ConstructDetector()
   airSpacePhys->CheckOverlaps(1000,0,true);
 
   cryostatPhysical->CheckOverlaps(1000,0,true);
+  argonGasPhysical->CheckOverlaps(1000,0,true);
 
 
   //PMT glass:QE taken from PMT_r11065 data sheet
