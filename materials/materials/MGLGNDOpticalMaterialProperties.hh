@@ -53,6 +53,7 @@ class MGLGNDOpticalMaterialProperties{
   private:
     static const G4double LambdaE;
     G4Material *fArgonLiquid;
+    G4Material *fArgonGas;
     G4Material *fXenonArgonLiquid;
     G4Material *fTPB;
     G4Material *fFiber_material;
