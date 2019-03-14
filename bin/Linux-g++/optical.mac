@@ -1,0 +1,58 @@
+# Management 
+/MG/manager/mglog routine
+
+/MG/manager/seedWithUUID
+#/MG/manager/useInternalSeed 10
+
+
+
+# Process List
+/MG/processes/realm DarkMatter #CosmicRays #BBdecay #DarkMatter
+/MG/processes/lowenergy false
+#/MG/processes/optical true
+/MG/processes/opticalOnly true
+
+# Configure Detector
+/MG/geometry/detector BACON
+
+# Initialize Geant4 and geometry
+/run/initialize
+
+
+/MG/eventaction/rootschema MCOpticalRun
+#/MG/eventaction/rootschema MCRun
+/MG/eventaction/reportingfrequency 100000
+/MG/eventaction/rootfilename OpticalRun.root
+
+#/MG/io/MCRun/SetSensitiveIDLabelScheme askGeom
+#/MG/io/MCRun/setRunID 001
+#/MG/io/MCRun/useTimeWindow true
+#/MG/io/MCRun/setTimeWindow 86400 second
+#/MG/io/MCRun/setNSteps 1000000
+#/MG/io/MCRun/setWriteAllSteps
+#/MG/io/MCRun/setWriteAllStepsInEventsThatDepositEnergy
+#/MG/io/MCRun/setWriteAllSensitiveSteps
+
+#/MG/io/MCOpticalRun/SetSensitiveIDLabelScheme askGeom
+/MG/io/MCOpticalRun/SetSensitiveIDLabelScheme manual
+#/MG/io/MCOpticalRun/AddSensitiveVolnameID Detector 201
+/MG/io/MCOpticalRun/AddSensitiveVolnameID physicalPMT_0 100
+/MG/io/MCOpticalRun/setRunID 001
+/MG/io/MCOpticalRun/useTimeWindow true
+/MG/io/MCOpticalRun/setTimeWindow 86400 second
+/MG/io/MCOpticalRun/setNSteps 50000
+#/MG/io/MCOpticalRun/KillAll
+#/MG/io/MCOpticalRun/setWriteAllSteps
+#/MG/io/MCOpticalRun/setWriteAllStepsInEventsThatDepositEnergy
+/MG/io/MCOpticalRun/setWriteAllSensitiveSteps
+
+
+/MG/generator/select LGNDLiquidArgon
+#/MG/generator/LGNDLiquidArgon/SetScintMean 175.  
+#/MG/generator/LGNDLiquidArgon/SetScintSigma 8.6 
+#/MG/generator/LGNDLiquidArgon/SetRadius 320. mm
+#/MG/generator/LGNDLiquidArgon/SetHeight 400. mm
+#/MG/generator/LGNDLiquidArgon/SetCenterVector 0.0 0.0 200.0 mm
+
+#/tracking/verbose 2
+/run/beamOn 100000

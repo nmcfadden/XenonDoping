@@ -1,0 +1,18 @@
+/MG/manager/mglog routine
+/MG/manager/seedWithUUID
+/MG/processes/realm DarkMatter
+/MG/processes/lowenergy false
+/MG/processes/opticalOnly true
+/MG/geometry/detector BACON
+/run/initialize
+/MG/eventaction/rootschema MCOpticalRun
+/MG/eventaction/reportingfrequency 10000
+/MG/eventaction/rootfilename OpticalRun0.root
+/MG/io/MCOpticalRun/SetSensitiveIDLabelScheme askGeom
+/MG/io/MCOpticalRun/setRunID 001
+/MG/io/MCOpticalRun/useTimeWindow true
+/MG/io/MCOpticalRun/setTimeWindow 86400 second
+/MG/io/MCOpticalRun/setNSteps 50000
+/MG/io/MCOpticalRun/setWriteAllSensitiveSteps
+/MG/generator/select LGNDLiquidArgon
+/run/beamOn 4000000

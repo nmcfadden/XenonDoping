@@ -181,7 +181,7 @@ G4bool MGGeneratorLGNDLiquidArgon::IsInArgon(G4ThreeVector rpos)
     if(sname == "World") continue;
     // if this is a volume to reject, see if it is inside
     G4String material = pVol->GetLogicalVolume()->GetMaterial()->GetName();
-    if( sname != "Detector"){
+    if( sname != "Detector" && sname != "argonGasPhysical"){
       G4VSolid *solid = pVol->GetLogicalVolume()->GetSolid();
       G4ThreeVector rtran  = pVol->GetTranslation();
       G4ThreeVector rel = rpos - rtran; // point relative to center of solid

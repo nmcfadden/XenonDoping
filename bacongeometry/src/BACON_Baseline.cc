@@ -86,7 +86,7 @@ void BACON_Baseline::ConstructDetector()
   G4Material *steel = G4Material::GetMaterial("Steel");
   
   G4Tubs* cryoTubeOuter = new G4Tubs("cryoTubOuter",0,fCryoOD/2.,fCryoHeight/2.,0,2*pi);
-  G4Tubs* cryoTubeInner = new G4Tubs("cryoTubInner",0,fCryoID/2,fCryoHeight/2.,0,2*pi);
+  G4Tubs* cryoTubeInner = new G4Tubs("cryoTubInner",0,fCryoID/2,fCryoHeight/2.-fCryoThickness,0,2*pi);
   G4SubtractionSolid *cryostatSolid = new G4SubtractionSolid("CryostatSolid",cryoTubeOuter,cryoTubeInner);
   
   G4VisAttributes* cryoVisAtt = new G4VisAttributes(G4Colour(0.8, 0.8, 0.8, 0.1));
@@ -103,7 +103,7 @@ void BACON_Baseline::ConstructDetector()
   G4LogicalVolume* argonGasLogical = new G4LogicalVolume(argonGasSolid,argonGas,"argonGasLogical");
   G4VisAttributes* argonGasVisAtt = new G4VisAttributes(G4Colour(1, 0., 1., 0.1));//gray, 1% opaque
   argonGasLogical->SetVisAttributes(argonGasVisAtt);
-  G4VPhysicalVolume* argonGasPhysical = new G4PVPlacement(0, G4ThreeVector(0,0,fCryoHeight/2-gasHeight/2), argonGasLogical, "argonGasPhysical", theDetectorLogical, false, 0);
+  G4VPhysicalVolume* argonGasPhysical = new G4PVPlacement(0, G4ThreeVector(0,0,fCryoHeight/2-gasHeight/2-fCryoThickness), argonGasLogical, "argonGasPhysical", theDetectorLogical, false, 0);
 
   G4Element* elC = new G4Element("Carbon","C",6.,12.011*g/mole);
   G4Element* elH = new G4Element("Hydrogen","H",1.,1.00794*g/mole);
@@ -256,7 +256,7 @@ int BACON_Baseline::GetSensitiveVolumeID(const string& volName)
   G4String material = pVol->GetLogicalVolume()->GetMaterial()->GetName();
 
   ///*
-  if( volName.find("physicalPMT") != string::npos){
+  if( volName.find("physicalPMT_0") != string::npos){
     sensVolID = 100;
     size_t found = volName.find("PMT_");
     sensVolID += atoi(volName.substr(found+4).c_str());
