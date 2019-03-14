@@ -139,7 +139,7 @@ void MGGeneratorLGNDLiquidArgon::PositionDecider()
     fRadius = cryostat->GetCryostatID()/2.;
 
   delete cryostat;
-
+  //G4cout<<"fRadius "<<fRadius<<", fInnerHeight "<<fInnerHeight<<G4endl;
   G4ThreeVector rpos(1,1,1);
   G4bool isIn = false;
   int errorCounter = 0;
@@ -181,14 +181,21 @@ G4bool MGGeneratorLGNDLiquidArgon::IsInArgon(G4ThreeVector rpos)
     if(sname == "World") continue;
     // if this is a volume to reject, see if it is inside
     G4String material = pVol->GetLogicalVolume()->GetMaterial()->GetName();
-    if( sname != "Detector" && sname != "argonGasPhysical"){
+    //if( sname != "Detector" && sname != "argonGasPhysical"){
+    if(sname != ""){
       G4VSolid *solid = pVol->GetLogicalVolume()->GetSolid();
       G4ThreeVector rtran  = pVol->GetTranslation();
       G4ThreeVector rel = rpos - rtran; // point relative to center of solid
       if(solid->Inside(rel)== EInside::kInside){
-        isit = false;
-        //Uncomment for debugging
-        //G4cout<<solid->DistanceToOut(rpos)<<" "<<solid->DistanceToIn(rpos)<<" "<<pVol->GetName()<<" "<<rtran<<" "<<rpos<<" "<<rel<<G4endl;
+        if(sname == "argonGasPhysical" || sname == "Detector"){
+          isit = true;
+          //G4cout<<"Found point in solid "<<solid->DistanceToOut(rpos)<<" "<<solid->DistanceToIn(rpos)<<" "<<pVol->GetName()<<" "<<rtran<<" "<<rpos<<" "<<rel<<G4endl;
+        }
+        else{
+          isit = false;
+          //Uncomment for debugging
+          //G4cout<<solid->DistanceToOut(rpos)<<" "<<solid->DistanceToIn(rpos)<<" "<<pVol->GetName()<<" "<<rtran<<" "<<rpos<<" "<<rel<<G4endl;
+        }
         break;
       }
     }
