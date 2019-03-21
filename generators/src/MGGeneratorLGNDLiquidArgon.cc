@@ -172,6 +172,13 @@ void MGGeneratorLGNDLiquidArgon::PositionDecider()
 G4bool MGGeneratorLGNDLiquidArgon::IsInArgon(G4ThreeVector rpos)
 {
   bool isit = false;
+    //This is how Geant4 suggests you should randomly generate a point in a volume
+  G4ThreeVector myPoint = rpos;
+  G4Navigator* theNavigator = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
+  G4VPhysicalVolume* myVolume = theNavigator->LocateGlobalPointAndSetup(myPoint);
+  if(myVolume->GetName() == "Detector") isit = true;
+  if(myVolume->GetName() == "argonGasPhysical") isit = true;
+  /*
   // list of all volumes
   G4PhysicalVolumeStore* theStore = G4PhysicalVolumeStore::GetInstance();
   G4VPhysicalVolume *pVol = theStore->GetVolume("argonGasPhysical",false);
@@ -190,6 +197,7 @@ G4bool MGGeneratorLGNDLiquidArgon::IsInArgon(G4ThreeVector rpos)
     //G4cout<<"Found point in solid "<<solid->DistanceToOut(rpos)<<" "<<solid->DistanceToIn(rpos)<<" "<<pVol->GetName()<<" "<<rtran<<" "<<rpos<<" "<<rel<<G4endl;
     isit=true;  
   }
+  */
   /*
   for(G4int istore = 0; istore< int(theStore->size()) ; ++istore ){
     G4VPhysicalVolume *pVol = theStore->at(istore);
