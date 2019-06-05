@@ -36,7 +36,7 @@ BACON_Baseline::BACON_Baseline(G4String version):
   //if lid thickness of top and bottom are added in 
   //correct value is 24.5 inches
   //fCryoHeight = 22.5*inch;
-  fCryoHeight = 24.5*inch;
+  fCryoHeight = 23*inch;//24.5*inch;
   fDelta = 0.000001*m;
 }
 
@@ -77,8 +77,9 @@ void BACON_Baseline::ConstructDetector()
   G4double wellHeight = 8.*inch +2.*fCryoThickness ;
   G4double wellThickness = 0.25*inch;
   const G4int cryoN = 6;
-  G4double cryoZ[cryoN] = {-fCryoHeight/2,-fCryoHeight/2+2*fCryoThickness,-fCryoHeight/2+2*fCryoThickness,
-                            fCryoHeight/2-2*fCryoThickness,fCryoHeight/2-2*fCryoThickness,fCryoHeight/2};
+  //Lid is 1" thick, walls are 1/2" thick,fCryoThickness = 1/2"
+  G4double cryoZ[cryoN] = {-fCryoHeight/2,-fCryoHeight/2+fCryoThickness,-fCryoHeight/2+fCryoThickness,
+                            fCryoHeight/2,fCryoHeight/2,fCryoHeight/2+2.*fCryoThickness};
   G4double cryoRmin[cryoN] = {0,0,fCryoID/2,fCryoID/2,wellOD/2.,wellOD/2.};
   G4double cryoRmax[cryoN] = {fCryoOD/2,fCryoOD/2,fCryoOD/2,fCryoOD/2,fCryoOD/2,fCryoOD/2};
   G4Polycone * cryostatSolid = new G4Polycone("",0,2*pi,cryoN,cryoZ,cryoRmin,cryoRmax);
@@ -99,10 +100,10 @@ void BACON_Baseline::ConstructDetector()
   wellLogical->SetVisAttributes(wellVisAtt);  
 
   G4VPhysicalVolume* cryostatPhysical = new G4PVPlacement(0, G4ThreeVector(0,0,0), cryostatLogical, "cryostat", theDetectorLogical, false, 0);
-  G4VPhysicalVolume* wellPhysical     = new G4PVPlacement(0, G4ThreeVector(0,0,fCryoHeight/2-wellHeight/2.),wellLogical,"Well",theDetectorLogical,false,0);
+  G4VPhysicalVolume* wellPhysical     = new G4PVPlacement(0, G4ThreeVector(0,0,fCryoHeight/2-wellHeight/2.+2*fCryoThickness),wellLogical,"Well",theDetectorLogical,false,0);
 
-  //placing the outer can for the guard vacuum
-  //not really needed for LAr light, but important for muon simulations
+  //Dumb thing about having the Guard Vacuum Can off center, is that all the other volumes that are cut out volumes also have to be off center...
+  //canShift is the variable to define this offset
   G4double canOD = 22.750*inch;
   G4double canHeight = 32.41*inch;
   G4double canThickness = 0.25*inch;
@@ -116,8 +117,6 @@ void BACON_Baseline::ConstructDetector()
 
   G4VPhysicalVolume* canPhysical = new G4PVPlacement(0, G4ThreeVector(0,0,canShift),canLogical,"Can",theDetectorLogical,false,0);
 
-  //Dumb thing about having the Guard Vacuum Can off center, is that all the other volumes that are cut out volumes also have to be off center...
-  //canShift is the variable to define this offset
   G4Material *rock = G4Material::GetMaterial("Rock");
 //  G4Box* outerBox = new G4Box("outerBox", 100.*m - fDelta, 100.*m -fDelta, 100.*m-fDelta);
   G4Box* outerBox = new G4Box("outerBox", 100.*m , 100.*m , 100.*m);
@@ -141,12 +140,14 @@ void BACON_Baseline::ConstructDetector()
   airLog->SetVisAttributes(airVisAtt);
   G4PVPlacement* airSpacePhys = new G4PVPlacement(0, G4ThreeVector(0,0,canShift), airLog, "airSpace", theDetectorLogical, false, 0);
 
+  //placing the outer can for the guard vacuum
+  //not really needed for LAr light, but important for muon simulations
   G4Material *vacuum = G4Material::GetMaterial("Vacuum");
   const G4int vacN = 6;
   G4double gapLow = canHeight/2. - fCryoHeight/2. - canShift-2*fCryoThickness;
   G4double gapHi  = canHeight/2. - fCryoHeight/2. + canShift-2*fCryoThickness;
   
-  G4double vacZ[vacN] = {-fCryoHeight/2.-gapLow,-fCryoHeight/2.,-fCryoHeight/2.,fCryoHeight/2.,fCryoHeight/2.,fCryoHeight/2.+gapHi};
+  G4double vacZ[vacN] = {-fCryoHeight/2.-gapLow,-fCryoHeight/2.,-fCryoHeight/2.,fCryoHeight/2.+2*fCryoThickness,fCryoHeight/2.+2*fCryoThickness,fCryoHeight/2.+gapHi};
   G4double vacRmin[vacN] = {0,0,fCryoOD/2.,fCryoOD/2.,0,0};
   G4double vacRmax[vacN] = {canOD/2.-canThickness,canOD/2.-canThickness,canOD/2.-canThickness,canOD/2.-canThickness,canOD/2.-canThickness,canOD/2.-canThickness};
 
@@ -160,7 +161,7 @@ void BACON_Baseline::ConstructDetector()
   G4Tubs* vacWellSolid = new G4Tubs("vacWellSolid",0,wellOD/2.-wellThickness,wellHeight/2.-wellThickness/2.,0,2*pi);
   G4LogicalVolume* vacWellLogical = new G4LogicalVolume(vacWellSolid,vacuum,"vacuumWellLogical");
   vacWellLogical->SetVisAttributes(vacuumVisAtt);
-  G4VPhysicalVolume* vacWellPhysical = new G4PVPlacement(0,G4ThreeVector(0,0,fCryoHeight/2-wellHeight/2.+wellThickness/2.),vacWellLogical,"vacuumWell",theDetectorLogical,false,0);
+  G4VPhysicalVolume* vacWellPhysical = new G4PVPlacement(0,G4ThreeVector(0,0,fCryoHeight/2-wellHeight/2.+wellThickness/2.+2*fCryoThickness),vacWellLogical,"vacuumWell",theDetectorLogical,false,0);
   //Liquid height 23*119/1.3954/105 = 18.68 inch
   //23-18.68 
   G4double gasHeight = 4.31*inch;
@@ -169,7 +170,7 @@ void BACON_Baseline::ConstructDetector()
   G4LogicalVolume* argonGasLogical = new G4LogicalVolume(argonGasSolid,argonGas,"argonGasLogical");
   G4VisAttributes* argonGasVisAtt = new G4VisAttributes(G4Colour(1, 0., 1., 0.1));//gray, 1% opaque
   argonGasLogical->SetVisAttributes(argonGasVisAtt);
-  G4VPhysicalVolume* argonGasPhysical = new G4PVPlacement(0, G4ThreeVector(0,0,fCryoHeight/2-gasHeight/2-2*fCryoThickness), argonGasLogical, "argonGasPhysical", theDetectorLogical, false, 0);
+  G4VPhysicalVolume* argonGasPhysical = new G4PVPlacement(0, G4ThreeVector(0,0,fCryoHeight/2-gasHeight/2), argonGasLogical, "argonGasPhysical", theDetectorLogical, false, 0);
 
   G4Element* elC = new G4Element("Carbon","C",6.,12.011*g/mole);
   G4Element* elH = new G4Element("Hydrogen","H",1.,1.00794*g/mole);
@@ -255,6 +256,7 @@ void BACON_Baseline::ConstructDetector()
   argonGasPhysical->CheckOverlaps(1000,0,true);
   wellPhysical->CheckOverlaps(1000,0,true);
   canPhysical->CheckOverlaps(1000,0,true);
+  vacuumPhysical->CheckOverlaps(1000,0,true);
   vacWellPhysical->CheckOverlaps(1000,0,true);
 
 
