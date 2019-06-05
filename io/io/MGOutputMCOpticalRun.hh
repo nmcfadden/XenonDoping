@@ -191,6 +191,10 @@ private:
   G4String    fRunDescription;
 
   G4int       fEventCounter;
+  G4int       fPastTrackPrimaryID;
+  G4double    fPrimX;
+  G4double    fPrimY;
+  G4double    fPrimZ;
   G4bool      fWriteFlag;
   G4bool      fPrimaryWriteFlag;
   G4bool      fWriteAllSteps;          // Write steps in all volumes.

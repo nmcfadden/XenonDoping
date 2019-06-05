@@ -31,6 +31,11 @@
 /vis/scene/add/volume physicalHousingPMT_1
 /vis/scene/add/volume physicalWLS_0
 /vis/scene/add/volume physicalWLS_1
+/vis/scene/add/volume Well
+/vis/scene/add/volume Can
+/vis/scene/add/volume airSpace
+/vis/scene/add/volume Vacuum
+/vis/scene/add/volume vacuumWell
 
 /vis/sceneHandler/attach
 /vis/scene/add/trajectories

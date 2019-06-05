@@ -50,6 +50,7 @@
 #include "G4UImessenger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWith3VectorAndUnit.hh"
+#include "G4UIcmdWithADouble.hh"
 
 //---------------------------------------------------------------------------//
 
@@ -72,12 +73,13 @@ private:
 	MGGeneratorLGNDLiquidArgon	*fLiquidArgonGenerator;
 	G4UIdirectory	*fLiquidArgonDirectory;
   G4UIcmdWithADoubleAndUnit *fLiquidArgonSetRadius;
+  G4UIcmdWithADoubleAndUnit *fLiquidArgonSetRadiusMin;
   G4UIcmdWithADoubleAndUnit *fLiquidArgonSetHeight;
   G4UIcmdWith3VectorAndUnit *fLiquidArgonSetCenterVector;
   G4UIcmdWithAString *fLiquidArgonSetParticle;
   G4UIcmdWithADoubleAndUnit *fLiquidArgonSetEnergy;
-  G4UIcmdWithADoubleAndUnit *fLiquidArgonSetScintMean;
-  G4UIcmdWithADoubleAndUnit *fLiquidArgonSetScintSigma;
+  G4UIcmdWithADoubleAndUnit *fLiquidArgonSetBinWidth;
+  G4UIcmdWithADouble        *fLiquidArgonSetNParticles;
 	//G4UIcmdWithAString	*fSetSurfaceVolumeCmd;
 
 };

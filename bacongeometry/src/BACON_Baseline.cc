@@ -32,7 +32,11 @@ BACON_Baseline::BACON_Baseline(G4String version):
   fCryoOD = 20*inch;
   fCryoThickness = 0.5*inch;
   fCryoID = fCryoOD-2*fCryoThickness;
-  fCryoHeight = 23*inch;
+  //Inner height is measured to be 22.5,
+  //if lid thickness of top and bottom are added in 
+  //correct value is 24.5 inches
+  //fCryoHeight = 22.5*inch;
+  fCryoHeight = 24.5*inch;
   fDelta = 0.000001*m;
 }
 
@@ -59,6 +63,61 @@ void BACON_Baseline::ConstructDetector()
   //theDetectorLogical = new G4LogicalVolume(exptBox, xenonDopedArgon, "theDetectorLogical");
   theDetectorLogical->SetVisAttributes(ArVisAtt);
 
+
+
+  G4Material *steel = G4Material::GetMaterial("Steel");
+  
+  /*
+  G4Tubs* cryoTubeOuter = new G4Tubs("cryoTubOuter",0,fCryoOD/2.,fCryoHeight/2.,0,2*pi);
+  //Lid is 1.0 inch thick, walls are 0.5 inches thick
+  G4Tubs* cryoTubeInner = new G4Tubs("cryoTubInner",0,fCryoID/2,fCryoHeight/2.-2*fCryoThickness,0,2*pi);
+  G4SubtractionSolid *cryostatSolid = new G4SubtractionSolid("CryostatSolid",cryoTubeOuter,cryoTubeInner);
+  */
+  G4double wellOD = 5*inch;
+  G4double wellHeight = 8.*inch +2.*fCryoThickness ;
+  G4double wellThickness = 0.25*inch;
+  const G4int cryoN = 6;
+  G4double cryoZ[cryoN] = {-fCryoHeight/2,-fCryoHeight/2+2*fCryoThickness,-fCryoHeight/2+2*fCryoThickness,
+                            fCryoHeight/2-2*fCryoThickness,fCryoHeight/2-2*fCryoThickness,fCryoHeight/2};
+  G4double cryoRmin[cryoN] = {0,0,fCryoID/2,fCryoID/2,wellOD/2.,wellOD/2.};
+  G4double cryoRmax[cryoN] = {fCryoOD/2,fCryoOD/2,fCryoOD/2,fCryoOD/2,fCryoOD/2,fCryoOD/2};
+  G4Polycone * cryostatSolid = new G4Polycone("",0,2*pi,cryoN,cryoZ,cryoRmin,cryoRmax);
+  
+  G4VisAttributes* cryoVisAtt = new G4VisAttributes(G4Colour(0.8, 0.8, 0.8, 0.1));
+  cryoVisAtt->SetForceWireframe(true);
+  G4LogicalVolume* cryostatLogical = new G4LogicalVolume(cryostatSolid,steel,"CryostatLogical");
+  cryostatLogical->SetVisAttributes(cryoVisAtt);
+
+  const G4int wellN = 4;
+  G4double wellZ[wellN] = {-wellHeight/2.,-wellHeight/2.+wellThickness,-wellHeight/2.+wellThickness,wellHeight/2.};
+  G4double wellRmin[wellN] = {0,0,wellOD/2.-wellThickness,wellOD/2.-wellThickness};
+  G4double wellRmax[wellN] = {wellOD/2.,wellOD/2.,wellOD/2.,wellOD/2.};
+
+  G4Polycone * wellSolid = new  G4Polycone("",0,2*pi,wellN,wellZ,wellRmin,wellRmax);
+  G4LogicalVolume* wellLogical = new G4LogicalVolume(wellSolid,steel,"WellLogical");
+  G4VisAttributes* wellVisAtt  = new G4VisAttributes(G4Colour(0.8, 0.8, 0.8, 0.1));
+  wellLogical->SetVisAttributes(wellVisAtt);  
+
+  G4VPhysicalVolume* cryostatPhysical = new G4PVPlacement(0, G4ThreeVector(0,0,0), cryostatLogical, "cryostat", theDetectorLogical, false, 0);
+  G4VPhysicalVolume* wellPhysical     = new G4PVPlacement(0, G4ThreeVector(0,0,fCryoHeight/2-wellHeight/2.),wellLogical,"Well",theDetectorLogical,false,0);
+
+  //placing the outer can for the guard vacuum
+  //not really needed for LAr light, but important for muon simulations
+  G4double canOD = 22.750*inch;
+  G4double canHeight = 32.41*inch;
+  G4double canThickness = 0.25*inch;
+  G4double canShift = 2.5*inch;
+  G4Tubs * outerCanSolid = new G4Tubs("outerCanSolid",0,canOD/2.,canHeight/2.,0,2*pi);
+  G4Tubs * innerCanSolid = new G4Tubs("innerCanSolid",0,canOD/2.-canThickness,canHeight/2.-2*fCryoThickness,0,2*pi);
+  G4SubtractionSolid *canSolid = new G4SubtractionSolid("canSolid",outerCanSolid,innerCanSolid);
+
+  G4LogicalVolume* canLogical = new G4LogicalVolume(canSolid,steel,"canLogical");
+  canLogical->SetVisAttributes(wellVisAtt);
+
+  G4VPhysicalVolume* canPhysical = new G4PVPlacement(0, G4ThreeVector(0,0,canShift),canLogical,"Can",theDetectorLogical,false,0);
+
+  //Dumb thing about having the Guard Vacuum Can off center, is that all the other volumes that are cut out volumes also have to be off center...
+  //canShift is the variable to define this offset
   G4Material *rock = G4Material::GetMaterial("Rock");
 //  G4Box* outerBox = new G4Box("outerBox", 100.*m - fDelta, 100.*m -fDelta, 100.*m-fDelta);
   G4Box* outerBox = new G4Box("outerBox", 100.*m , 100.*m , 100.*m);
@@ -68,42 +127,49 @@ void BACON_Baseline::ConstructDetector()
   G4LogicalVolume* labLog = new G4LogicalVolume(lab, rock, "CavernRockLogical");
   rockVisAtt->SetForceWireframe( true );
   labLog->SetVisAttributes(rockVisAtt);
-  /*G4PVPlacement* labPhys =*/ new G4PVPlacement(0, G4ThreeVector(0,0,0), labLog, "lab", theDetectorLogical, false, 0);
-
+  /*G4PVPlacement* labPhys =*/ new G4PVPlacement(0, G4ThreeVector(0,0,canShift), labLog, "lab", theDetectorLogical, false, 0);
 
   G4Material *air = G4Material::GetMaterial("Air");
   //G4Box* airboundary = new G4Box("airboundary", 20.0*m - fDelta, 20.0*m - fDelta, 20.0*m - fDelta);
   //G4Tubs* cryostatvoid = new G4Tubs("cryostatvoid", 0, fCryoOD/2.+fDelta, fCryoHeight/2. +fDelta, 0, 2*pi);
   G4Box* airboundary = new G4Box("airboundary", 20.0*m , 20.0*m, 20.0*m);
-  G4Tubs* cryostatvoid = new G4Tubs("cryostatvoid", 0, fCryoOD/2., fCryoHeight/2. , 0, 2*pi);
+  G4Tubs* cryostatvoid = new G4Tubs("cryostatvoid", 0, canOD/2., canHeight/2. , 0, 2*pi);
   G4SubtractionSolid *airspace = new G4SubtractionSolid("airspace", airboundary, cryostatvoid);
   G4VisAttributes* airVisAtt = new G4VisAttributes(G4Colour(0.64, 0.64, 0.64, 0.01));//gray, 1% opaque
   G4LogicalVolume* airLog = new G4LogicalVolume(airspace, air, "LabAirLogical");
   airVisAtt->SetForceWireframe(true);
   airLog->SetVisAttributes(airVisAtt);
-  G4PVPlacement* airSpacePhys = new G4PVPlacement(0, G4ThreeVector(0,0,0), airLog, "airSpace", theDetectorLogical, false, 0);
+  G4PVPlacement* airSpacePhys = new G4PVPlacement(0, G4ThreeVector(0,0,canShift), airLog, "airSpace", theDetectorLogical, false, 0);
 
-  G4Material *steel = G4Material::GetMaterial("Steel");
+  G4Material *vacuum = G4Material::GetMaterial("Vacuum");
+  const G4int vacN = 6;
+  G4double gapLow = canHeight/2. - fCryoHeight/2. - canShift-2*fCryoThickness;
+  G4double gapHi  = canHeight/2. - fCryoHeight/2. + canShift-2*fCryoThickness;
   
-  G4Tubs* cryoTubeOuter = new G4Tubs("cryoTubOuter",0,fCryoOD/2.,fCryoHeight/2.,0,2*pi);
-  G4Tubs* cryoTubeInner = new G4Tubs("cryoTubInner",0,fCryoID/2,fCryoHeight/2.-fCryoThickness,0,2*pi);
-  G4SubtractionSolid *cryostatSolid = new G4SubtractionSolid("CryostatSolid",cryoTubeOuter,cryoTubeInner);
-  
-  G4VisAttributes* cryoVisAtt = new G4VisAttributes(G4Colour(0.8, 0.8, 0.8, 0.1));
-  cryoVisAtt->SetForceWireframe(true);
-  G4LogicalVolume* cryostatLogical = new G4LogicalVolume(cryostatSolid,steel,"CryostatLogical");
-  cryostatLogical->SetVisAttributes(cryoVisAtt);
+  G4double vacZ[vacN] = {-fCryoHeight/2.-gapLow,-fCryoHeight/2.,-fCryoHeight/2.,fCryoHeight/2.,fCryoHeight/2.,fCryoHeight/2.+gapHi};
+  G4double vacRmin[vacN] = {0,0,fCryoOD/2.,fCryoOD/2.,0,0};
+  G4double vacRmax[vacN] = {canOD/2.-canThickness,canOD/2.-canThickness,canOD/2.-canThickness,canOD/2.-canThickness,canOD/2.-canThickness,canOD/2.-canThickness};
 
-  G4VPhysicalVolume* cryostatPhysical = new G4PVPlacement(0, G4ThreeVector(0,0,0), cryostatLogical, "cryostat", theDetectorLogical, false, 0);
+  G4Polycone * vaccumSolid = new G4Polycone("",0,2*pi,vacN,vacZ,vacRmin,vacRmax);
+  G4LogicalVolume* vacuumLogical = new G4LogicalVolume(vaccumSolid,vacuum,"vacuumLogical");
+  G4VisAttributes* vacuumVisAtt = new G4VisAttributes(G4Colour(1,0,0));
+  vacuumLogical->SetVisAttributes(vacuumVisAtt);
+  G4VPhysicalVolume* vacuumPhysical = new G4PVPlacement(0, G4ThreeVector(0,0,0),vacuumLogical,"Vacuum",theDetectorLogical,false,0);
+
+
+  G4Tubs* vacWellSolid = new G4Tubs("vacWellSolid",0,wellOD/2.-wellThickness,wellHeight/2.-wellThickness/2.,0,2*pi);
+  G4LogicalVolume* vacWellLogical = new G4LogicalVolume(vacWellSolid,vacuum,"vacuumWellLogical");
+  vacWellLogical->SetVisAttributes(vacuumVisAtt);
+  G4VPhysicalVolume* vacWellPhysical = new G4PVPlacement(0,G4ThreeVector(0,0,fCryoHeight/2-wellHeight/2.+wellThickness/2.),vacWellLogical,"vacuumWell",theDetectorLogical,false,0);
   //Liquid height 23*119/1.3954/105 = 18.68 inch
   //23-18.68 
   G4double gasHeight = 4.31*inch;
   G4Material *argonGas = G4Material::GetMaterial("Argon");
-  G4Tubs* argonGasSolid = new G4Tubs("argonGasSolid",0,fCryoID/2,gasHeight/2.,0,2*pi);
+  G4Tubs* argonGasSolid = new G4Tubs("argonGasSolid",wellOD/2.,fCryoID/2,gasHeight/2.,0,2*pi);
   G4LogicalVolume* argonGasLogical = new G4LogicalVolume(argonGasSolid,argonGas,"argonGasLogical");
   G4VisAttributes* argonGasVisAtt = new G4VisAttributes(G4Colour(1, 0., 1., 0.1));//gray, 1% opaque
   argonGasLogical->SetVisAttributes(argonGasVisAtt);
-  G4VPhysicalVolume* argonGasPhysical = new G4PVPlacement(0, G4ThreeVector(0,0,fCryoHeight/2-gasHeight/2-fCryoThickness), argonGasLogical, "argonGasPhysical", theDetectorLogical, false, 0);
+  G4VPhysicalVolume* argonGasPhysical = new G4PVPlacement(0, G4ThreeVector(0,0,fCryoHeight/2-gasHeight/2-2*fCryoThickness), argonGasLogical, "argonGasPhysical", theDetectorLogical, false, 0);
 
   G4Element* elC = new G4Element("Carbon","C",6.,12.011*g/mole);
   G4Element* elH = new G4Element("Hydrogen","H",1.,1.00794*g/mole);
@@ -118,9 +184,12 @@ void BACON_Baseline::ConstructDetector()
 
   ///*
   G4double pmtRadius = (3.215/2.)*inch;
-  G4double pmtHeight = 5.* inch;
+  G4double pmtHeight = 6.* inch;
   G4double pmtThickness = 1*um;
   G4double pmtHousingThickness = 1.*mm;
+  G4double pmtSpacing = 0.5*inch;
+  //Lid is double the thickness of the sides of the cryostat
+  G4double pmtPlacing = pmtHeight/2.+2*fCryoThickness;
   //*/
   /*
   G4double pmtHousingThickness = 1.*mm;
@@ -135,8 +204,8 @@ void BACON_Baseline::ConstructDetector()
   pmtVisAtt->SetForceSolid(true);
 
   
-  G4VPhysicalVolume* pmtPhysical0 = new G4PVPlacement(0,G4ThreeVector(0, (1./2.)*fCryoID/2,-(fCryoHeight/2.)+1.5*pmtHeight-pmtThickness/2.-2*inch),pmtLogical,"physicalPMT_0",theDetectorLogical,false,0);
-  G4VPhysicalVolume* pmtPhysical1 = new G4PVPlacement(0,G4ThreeVector(0,-(1./2.)*fCryoID/2,-(fCryoHeight/2.)+1.5*pmtHeight-pmtThickness/2.-2*inch),pmtLogical,"physicalPMT_1",theDetectorLogical,false,0);
+  G4VPhysicalVolume* pmtPhysical0 = new G4PVPlacement(0,G4ThreeVector(0, (1./2.)*fCryoID/2,-(fCryoHeight/2.)+0.5*pmtHeight+pmtPlacing-pmtThickness/2.+pmtSpacing),pmtLogical,"physicalPMT_0",theDetectorLogical,false,0);
+  G4VPhysicalVolume* pmtPhysical1 = new G4PVPlacement(0,G4ThreeVector(0,-(1./2.)*fCryoID/2,-(fCryoHeight/2.)+0.5*pmtHeight+pmtPlacing-pmtThickness/2.+pmtSpacing),pmtLogical,"physicalPMT_1",theDetectorLogical,false,0);
   
   //G4VPhysicalVolume* pmtPhysical0 = new G4PVPlacement(0,G4ThreeVector(0, 0,-(fCryoHeight/2.)+1.5*pmtHeight-pmtThickness/2.),pmtLogical,"physicalPMT_0",theDetectorLogical,false,0);
 
@@ -154,8 +223,8 @@ void BACON_Baseline::ConstructDetector()
 
   //G4VPhysicalVolume* pmtHousingPhysical0 = new G4PVPlacement(0,G4ThreeVector(0, 0,-(fCryoHeight/2.)+pmtHeight),pmtHousingLogical,"physicalHousingPMT_0",theDetectorLogical,false,0);
 
-  G4VPhysicalVolume* pmtHousingPhysical0 = new G4PVPlacement(0,G4ThreeVector(0, (1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtHeight-2*inch),pmtHousingLogical,"physicalHousingPMT_0",theDetectorLogical,false,0);
-  G4VPhysicalVolume* pmtHousingPhysical1 = new G4PVPlacement(0,G4ThreeVector(0,-(1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtHeight-2*inch),pmtHousingLogical,"physicalHousingPMT_1",theDetectorLogical,false,0);
+  G4VPhysicalVolume* pmtHousingPhysical0 = new G4PVPlacement(0,G4ThreeVector(0, (1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtPlacing+pmtSpacing),pmtHousingLogical,"physicalHousingPMT_0",theDetectorLogical,false,0);
+  G4VPhysicalVolume* pmtHousingPhysical1 = new G4PVPlacement(0,G4ThreeVector(0,-(1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtPlacing+pmtSpacing),pmtHousingLogical,"physicalHousingPMT_1",theDetectorLogical,false,0);
 
   //Place TPB disks
   G4double wlsThickness = 1*um;
@@ -167,8 +236,8 @@ void BACON_Baseline::ConstructDetector()
   wlsLogical->SetVisAttributes(wlsVisAtt);
 
 //  G4VPhysicalVolume* wlsPhysical0 = new G4PVPlacement(0,G4ThreeVector(0, 0,-(fCryoHeight/2.)+pmtHeight+pmtHeight/2+wlsThickness/2),wlsLogical,"physicalWLS_0",theDetectorLogical,false,0);
-  G4VPhysicalVolume* wlsPhysical0 = new G4PVPlacement(0,G4ThreeVector(0, (1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtHeight+pmtHeight/2+wlsThickness/2-2*inch),wlsLogical,"physicalWLS_0",theDetectorLogical,false,0);
-  G4VPhysicalVolume* wlsPhysical1 = new G4PVPlacement(0,G4ThreeVector(0,-(1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtHeight+pmtHeight/2+wlsThickness/2-2*inch),wlsLogical,"physicalWLS_1",theDetectorLogical,false,0);
+  G4VPhysicalVolume* wlsPhysical0 = new G4PVPlacement(0,G4ThreeVector(0, (1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing),wlsLogical,"physicalWLS_0",theDetectorLogical,false,0);
+  G4VPhysicalVolume* wlsPhysical1 = new G4PVPlacement(0,G4ThreeVector(0,-(1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing),wlsLogical,"physicalWLS_1",theDetectorLogical,false,0);
 
   
   pmtPhysical0->CheckOverlaps(1000, 0, true);
@@ -184,6 +253,9 @@ void BACON_Baseline::ConstructDetector()
 
   cryostatPhysical->CheckOverlaps(1000,0,true);
   argonGasPhysical->CheckOverlaps(1000,0,true);
+  wellPhysical->CheckOverlaps(1000,0,true);
+  canPhysical->CheckOverlaps(1000,0,true);
+  vacWellPhysical->CheckOverlaps(1000,0,true);
 
 
   //PMT glass:QE taken from PMT_r11065 data sheet
@@ -243,6 +315,10 @@ void BACON_Baseline::ConstructDetector()
 
   new G4LogicalBorderSurface("Cryo_Argon",cryostatPhysical,theDetectorPhysical,SSOptSurface);
   new G4LogicalBorderSurface("Argon_Cryo",theDetectorPhysical,cryostatPhysical,SSOptSurface);
+
+  new G4LogicalBorderSurface("Well_Argon",wellPhysical,theDetectorPhysical,SSOptSurface);
+  new G4LogicalBorderSurface("Argon_Well",theDetectorPhysical,wellPhysical,SSOptSurface);
+
 
 
 }

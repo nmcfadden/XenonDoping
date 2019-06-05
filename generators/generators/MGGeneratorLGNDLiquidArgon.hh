@@ -101,17 +101,19 @@ class MGGeneratorLGNDLiquidArgon : public MGVGenerator
     void DirectionDecider();
     void EnergyDecider();
     void PositionDecider();
+    void PositionDecider(G4double x,G4double y,G4double z,G4double binWidth); 
     void ParticleDecider();
     G4bool IsInArgon(G4ThreeVector rp);
     
     //Messenger Commands
-    void SetRadius(G4double r){fRadius = r;}
-    void SetHeight(G4double h){fInnerHeight = h;}
+    void SetRadius(G4double r){fRadiusMax = r;}
+    void SetRadiusMin(G4double r){fRadiusMin = r;}
+    void SetHeight(G4double h){fZ = h;}
     void SetCenterVector(G4ThreeVector vec){fCenterVector = vec;}
     void SetParticleType(G4String str){fParticleType = str;}
     void SetParticleEnergy(G4double nrg){fEnergy = nrg;}
-    void SetMean(G4double mean){fMean = mean;}
-    void SetSigma(G4double sigma){fSigma = sigma;}
+    void SetBinWidth(G4double width) {fBinWidth = width;}
+    void SetNParticles(G4double N) {fNParticles = N;}
 
 
 
@@ -122,13 +124,14 @@ class MGGeneratorLGNDLiquidArgon : public MGVGenerator
     G4double  fCurrentEnergy; // energy of current particle
     G4ThreeVector fCurrentPosition; // current position of particle
     G4ThreeVector fDirection; // direction of momentum
-    G4double fRadius = 0;
-    G4double fInnerHeight = 0;
+    G4double fRadiusMax = 0;
+    G4double fRadiusMin = 0;
+    G4double fZ = 0;
+    G4double fBinWidth = 0;
+    G4double fNParticles = 1;
     G4ThreeVector fCenterVector;
     G4String fParticleType = "opticalphoton";
     G4double fEnergy = 0;
-    G4double fMean = 0;
-    G4double fSigma = 0;
 
 };
 #endif

@@ -77,6 +77,10 @@ MGOutputMCOpticalRun::MGOutputMCOpticalRun(G4bool isMother) :
   fNSteps(0),
   fRunDescription(""),
   fEventCounter(0),
+  fPastTrackPrimaryID(-1),
+  fPrimX(0),
+  fPrimY(0),
+  fPrimZ(0),
   fWriteFlag(false),
   fPrimaryWriteFlag(true),
   fWriteAllSteps(false),
@@ -97,12 +101,12 @@ MGOutputMCOpticalRun::MGOutputMCOpticalRun(G4bool isMother) :
   fMCEventSteps = new MGTMCEventSteps();
   //moved to BeginOfRunAction
   // initialize array of steps; reserve default number of steps:
-  fMCEventSteps->InitializeArray();
+  fMCEventSteps->InitializeArray(1e7);
   
   // allocate event primaries object:
   fMCEventPrimaries = new MGTMCEventSteps();
-  // initialize array of primaries; reserve space for 10 primaries::
-  fMCEventPrimaries->InitializeArray(10);
+  // initialize array of primaries; reserve space for 1e6 primaries::
+  fMCEventPrimaries->InitializeArray(1e7);
 
   fMessenger = new MGOutputMCOpticalRunMessenger(this);
   fMCOpticalRun = new MGTMCRun();
@@ -448,7 +452,8 @@ void MGOutputMCOpticalRun::EndOfRunAction()
    // credit to Bryan Zhu
    TNamed nevents("NumberOfEvents",to_string(fNevents));
    nevents.Write();
-
+   TNamed nprimaries("NumberOfPrimaries",to_string(fEventCounter));
+   nprimaries.Write();
   WriteEvent();
   MGLog(routine)<<fEventCounter<<" events written"<<endlog;
   if(IsMother()) {
@@ -471,7 +476,7 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
   double eDep = step->GetTotalEnergyDeposit();
   //add Primary Information using prestep
   //prestep for primary step has not been stepped through the Stepping Action
-  if(track->GetTrackID() == 1 &&  track->GetParentID() == 0 && fPrimaryWriteFlag){
+  if(fPastTrackPrimaryID != track->GetTrackID() && track->GetParentID() == 0){
     int pid = GetMaGeParticleID(track->GetDefinition());
     int trackID = track->GetTrackID();
     G4String physVolName = preStepPoint->GetPhysicalVolume()->GetName();
@@ -481,6 +486,7 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
     G4ThreeVector position = preStepPoint->GetPosition();
     G4ThreeVector localPosition = step->GetPreStepPoint()->GetTouchableHandle()->GetHistory()->GetTopTransform().TransformPoint(position);
     G4ThreeVector momentum = preStepPoint->GetMomentumDirection();
+    fPrimX = position.x();fPrimY = position.y();fPrimZ = position.z();
     fMCEventPrimaries->AddStep(
         false, 
         pid, 
@@ -502,10 +508,13 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
         -1, // step number
         -1.0 // track weight
     );
+    //count number of primaries per event
+    fEventCounter++;
     fPrimaryWriteFlag = false;
-
     MGLog(debugging)<< physVolName<<", KE = "<<kineticE/eV<<"@ ("<<position.x()<<","<<position.y()<<","<<position.z()<<")"<<endlog;
   }
+  if(fPastTrackPrimaryID != track->GetTrackID())
+    fPastTrackPrimaryID = track->GetTrackID();
   const G4VProcess* creator = track->GetCreatorProcess();
   G4String creatorName;
   if(creator) creatorName = creator->GetProcessName();
@@ -523,7 +532,6 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
     }
   }
   */
-  //G4cout<<"Write Flag"<<G4endl;
  
   int pid = GetMaGeParticleID(track->GetDefinition());
   int trackID = track->GetTrackID();
@@ -570,7 +578,6 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
   double kineticE = postStepPoint->GetKineticEnergy();
 
   //if(prePhysVolName.find("WLS")  != string::npos && physVolName.find("physicalPMT") != string::npos)
-  //  G4cout<<"PMT hit, edep "<<eDep/MeV<<", pid "<<pid<<", KE "<<kineticE<<G4endl;
   const G4VProcess* processDefinedStep = postStepPoint->GetProcessDefinedStep();
   string procName = (processDefinedStep) ?  processDefinedStep->GetProcessName() : "";
   G4ThreeVector position = postStepPoint->GetPosition();
@@ -585,7 +592,7 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
        (fKillNeutrons && pid == 2112)||
        (iStep >= fNSteps-1 )) {
       step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
-      G4cout<<"Killing track for max Nstep...iStep "<<iStep<<" fNSteps "<<fNSteps<<G4endl;
+      G4cout<<"Killing track for max Nstep...iStep "<<iStep<<" fNSteps "<<fNSteps<<", last volume step was in is "<<physVolName<<G4endl;
     }
     else if(fStopNuclei && pid > 100000000) step->GetTrack()->SetKineticEnergy(0.0);
   } 
@@ -604,14 +611,14 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
     }
   }
   fWriteFlag = true;
-
+  //G4cout<<"\t"<<fPrimX<<","<<fPrimY<<","<<fPrimZ<<endl;
   fMCEventSteps->AddStep( 
     recordPreStep, 
     pid, 
     trackID, 
     parentTrackID, 
-    prePhysVolName,
     //procName,//replaced procName with preStep physical volume so if photon goes from wls to pmt its a hit! In Root step->GetProcessName(); 
+    prePhysVolName,
     physVolName, 
     copyNo,
     sensVolID,
@@ -622,12 +629,13 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
     stepLength,
     totalTrackLength,
     position.x(), position.y(), position.z(), 
-    localPosition.x(), localPosition.y(), localPosition.z(), 
+    //localPosition.x(), localPosition.y(), localPosition.z(), 
+    //changing local position to intial position of primary particle
+    fPrimX,fPrimY,fPrimZ,
     momentum.x(), momentum.y(), momentum.z(),
     iStep,
     trackWeight
   );
-
   if( (sensVolID > 0) && (eDep > 0) ){
     fMCEventHeader->AddEnergyToDetectorID( sensVolID, eDep);
     fMCEventHeader->AddEnergyToTotalEnergy( eDep );
@@ -638,7 +646,6 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
   if(fKillAll &&iStep > 0){
     step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
   }
-  
 }
 
 //---------------------------------------------------------------------------//
@@ -652,7 +659,8 @@ void MGOutputMCOpticalRun::WriteEvent()
   if(IsMother()){
     FillTree();
     fWriteFlag = false;
-    fEventCounter++;
+    //moved to where primary step is filled
+    //fEventCounter++;
   }
 }
 
@@ -724,4 +732,3 @@ void MGOutputMCOpticalRun::ReadSensIDFile(const char* filename)
 
   file.close();
 }
-
