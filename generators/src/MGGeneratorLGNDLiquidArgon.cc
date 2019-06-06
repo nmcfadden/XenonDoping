@@ -69,6 +69,8 @@
 #include "G4TransportationManager.hh"
 #include "G4Navigator.hh"
 
+#include "TH2D.h"
+#include "TFile.h"
 //---------------------------------------------------------------------------//
 
 
@@ -97,11 +99,6 @@ MGGeneratorLGNDLiquidArgon::~MGGeneratorLGNDLiquidArgon()
 
 void MGGeneratorLGNDLiquidArgon::DirectionDecider()
 {
-  /*
-  G4double px = 2*G4UniformRand() -1;//-1 to 1
-  G4double py = 2*G4UniformRand() -1;//-1 to 1
-  G4double pz = 2*G4UniformRand() -1;//-1 to 1
-  */
   G4double phi = 2*pi*G4UniformRand();
   G4double costheta = 2*G4UniformRand() -1;
   G4double theta = acos(costheta);//pi*G4UniformRand();
@@ -214,6 +211,7 @@ G4bool MGGeneratorLGNDLiquidArgon::IsInArgon(G4ThreeVector rpos)
   G4VPhysicalVolume* myVolume = theNavigator->LocateGlobalPointAndSetup(myPoint);
   if(myVolume->GetName() == "Detector") isit = true;
   if(myVolume->GetName() == "argonGasPhysical") isit = true;
+
   return isit;
 }
 
@@ -252,21 +250,24 @@ void MGGeneratorLGNDLiquidArgon::GeneratePrimaryVertex(G4Event *event)
   G4double xMax = fRadiusMax, xMin = -fRadiusMax;
   G4double xBins = fRadiusMax*2/fBinWidth; //(fRadiusMax-fRadiusMin)*2/fBinWidth;
   G4double yBins = fRadiusMax*2/fBinWidth;//(fRadiusMax-fRadiusMin)*2/fBinWidth;
+
   if(event->GetEventID() == 0)
-    MGLog(routine)<<"N bins XY "<<xBins*yBins<<" x/y Max "<<xMax/cm<<"(cm), x/y Min "<<fRadiusMin/cm<<"(cm), Z "<<fZ<<
+    MGLog(routine)<<"N bins XY "<<xBins*yBins<<" x/y Max "<<xMax/cm<<"(cm), x/y Min "<<fRadiusMin/cm<<"(cm), Z "<<fZ/cm<<
     "(cm), binWidth "<<fBinWidth/cm<<"(cm)..."<< fNParticles<<" particles per voxel, with "<<fNParticles*xBins*yBins<<" photons generated"<<endl;
   for(int k = 0; k < yBins;k++){
     for(int j = 0; j < xBins;j++){
       G4double x;
       x = xMin + j*fBinWidth;
       G4double y;
-      
+      y = yMin + k*fBinWidth; 
       if(sqrt(x*x+y*y) < fRadiusMin){
         continue;
       }
+      /*
       if(sqrt(x*x+y*y) > fRadiusMax){
         continue;
       }
+      */
       MGLog(debugging)<<"Generating point randomly ("<<x<<","<<y<<","<<fZ<<")"<<endlog;
       //G4cout<<"Generating point randomly ("<<x<<","<<y<<","<<fZ<<")"<<G4endl;
       for(int i = 0; i < fNParticles; i++){
@@ -296,4 +297,5 @@ void MGGeneratorLGNDLiquidArgon::GeneratePrimaryVertex(G4Event *event)
       }
     }
   }
+
 }
