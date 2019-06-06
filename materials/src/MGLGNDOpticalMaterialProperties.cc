@@ -164,8 +164,7 @@ void MGLGNDOpticalMaterialProperties::RegisterArgonOpticalProperties()
     //LAr_ABSL_xuv *= LAr_att_scale;
 
 	  MGLog(debugging)  << "Rayleigh scattering lenght [m]:" << endlog;
-	  for (ji = 0; ji < NUMENTRIES; ji++)
-	    {
+	  for (ji = 0; ji < NUMENTRIES; ji++){
 	      e = PPCKOVLowE + ((G4double)ji) * de;
 	      LAr_PPCK[ji] = e;
 	      LAr_RIND[ji] = LArRefIndex((LambdaE / e));
@@ -178,10 +177,11 @@ void MGLGNDOpticalMaterialProperties::RegisterArgonOpticalProperties()
 
 	      if (((LambdaE / e)/nm) < 200.0) {
 	    	  LAr_ABSL[ji] =LAr_ABSL_xuv;
-	      } else {
+	      } 
+        else {
 	    	  LAr_ABSL[ji] = LAr_ABSL_vis;
 	      }
-	     }
+    }
     MGLog(debugging) << "XUV attenuation length: " << LAr_ABSL_xuv/cm << " cm" << endlog;
     MGLog(debugging) << "VIS attenuation length: " << LAr_ABSL_vis/m << " m" << endlog;
 
@@ -271,8 +271,10 @@ void MGLGNDOpticalMaterialProperties::RegisterArgonOpticalProperties()
 	  fArgonLiquid->GetIonisation()->SetBirksConstant(5.1748e-4*cm/MeV);
 
     //What is the difference between gaseous argon and liquid argon?
-    //density,triplet,IndexOfRefraction...what else?
+    //density,triplet,IndexOfRefraction,Rayleigh,abslength...what else?
+    G4MaterialPropertiesTable* myMPT2 = new G4MaterialPropertiesTable();
     for (ji = 0; ji < NUMENTRIES; ji++){
+      e = PPCKOVLowE + ((G4double)ji) * de;
       //according to 
       //https://refractiveindex.info/?shelf=main&book=Ar&page=Bideau-Mehu
       //Argon gas does not really change index of refraction much 1.0004 @ 140 nm and 1.00028 @ 500 nm
@@ -281,17 +283,21 @@ void MGLGNDOpticalMaterialProperties::RegisterArgonOpticalProperties()
       LAr_RAYL[ji] = 781.95*LAr_RAYL[ji];
       if (((LambdaE / e)/nm) < 200.0) {
           LAr_ABSL[ji] =781.95*LAr_ABSL_xuv;
-        } else {
+      } 
+      else {
           LAr_ABSL[ji] = 781.95*LAr_ABSL_vis;
       }
+      G4cout<<"Ray "<<LAr_RAYL[ji]/cm<<", Atten "<<LAr_ABSL[ji]/cm<<", wavelength "<< (LambdaE / e)/nm<<G4endl;
     }
-    myMPT1->AddProperty("RINDEX",        LAr_PPCK, LAr_RIND, NUMENTRIES);
-    myMPT1->AddProperty("RAYLEIGH",      LAr_PPCK, LAr_RAYL, NUMENTRIES);
-    myMPT1->AddProperty("ABSLENGTH",     LAr_PPCK, LAr_ABSL, NUMENTRIES);
+    myMPT2->AddProperty("RINDEX",        LAr_PPCK, LAr_RIND, NUMENTRIES);
+    myMPT2->AddProperty("RAYLEIGH",      LAr_PPCK, LAr_RAYL, NUMENTRIES);
+    myMPT2->AddProperty("ABSLENGTH",     LAr_PPCK, LAr_ABSL, NUMENTRIES);
+    myMPT2->AddConstProperty("FASTTIMECONSTANT", tau_s);
+    myMPT2->AddConstProperty("SLOWTIMECONSTANT",2880*ns);
+    //What is the photon yeild for GAr? assuming same as LAr
+    myMPT2->AddConstProperty("SCINTILLATIONYIELD",photon_yield);
     fArgonGas = G4Material::GetMaterial("Argon");
-    myMPT1->AddConstProperty("FASTTIMECONSTANT", tau_s);
-    myMPT1->AddConstProperty("SLOWTIMECONSTANT",2880*ns);
-    fArgonGas->SetMaterialPropertiesTable(myMPT1);
+    fArgonGas->SetMaterialPropertiesTable(myMPT2);
 
 
 
