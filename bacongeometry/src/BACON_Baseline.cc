@@ -315,11 +315,22 @@ void BACON_Baseline::ConstructDetector()
   new G4LogicalBorderSurface("Argon_TPB_1",theDetectorPhysical,wlsPhysical1,WLSoptSurf);
   new G4LogicalBorderSurface("TPB_Argon_1",wlsPhysical1,theDetectorPhysical,WLSoptSurf);
 
+  new G4LogicalBorderSurface("Argon_GAr",theDetectorPhysical,argonGasPhysical,WLSoptSurf);
+  new G4LogicalBorderSurface("GAr_Argon",argonGasPhysical,theDetectorPhysical,WLSoptSurf);
+
   new G4LogicalBorderSurface("Cryo_Argon",cryostatPhysical,theDetectorPhysical,SSOptSurface);
   new G4LogicalBorderSurface("Argon_Cryo",theDetectorPhysical,cryostatPhysical,SSOptSurface);
 
+  new G4LogicalBorderSurface("Cryo_GasArgon",cryostatPhysical,argonGasPhysical,SSOptSurface);
+  new G4LogicalBorderSurface("GasArgon_Cryo",argonGasPhysical,cryostatPhysical,SSOptSurface);
+
   new G4LogicalBorderSurface("Well_Argon",wellPhysical,theDetectorPhysical,SSOptSurface);
   new G4LogicalBorderSurface("Argon_Well",theDetectorPhysical,wellPhysical,SSOptSurface);
+
+  new G4LogicalBorderSurface("Well_GasArgon",wellPhysical,argonGasPhysical,SSOptSurface);
+  new G4LogicalBorderSurface("GasArgon_Well",argonGasPhysical,wellPhysical,SSOptSurface);
+
+  
 
 
 
