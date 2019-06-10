@@ -121,15 +121,6 @@ void MGLGNDOpticalMaterialProperties::RegisterArgonOpticalProperties()
 	  /*G4double yield_ratio = 0.23; // For gammas and electrons*/
 
 
-	  // New value based on the triplet lifetime from Mark Heisel
-	  // Redefine the values to res-scale according to Mark's calculation
-	  // TODO - what is the correct yield value?
-    // G4double LAr_LY_scale = fDetectorDB->GetLArInstArgonLYScale();
-	  // photon_yield = 28120. * LAr_LY_scale;
-  
-	  tau_s = 5.95*ns;
-	  tau_l = 922*ns;
-
 	  /*
     ** TODO - 
     G4double LAr_att_scale = fDetectorDB->GetLArInstArgonAbsLScale();
@@ -158,10 +149,7 @@ void MGLGNDOpticalMaterialProperties::RegisterArgonOpticalProperties()
 	  G4double LAr_ABSL[(NUMENTRIES)];
 
 	  G4double LAr_ABSL_xuv = 60*cm;
-	  //G4double LAr_ABSL_xuv = 110*cm;
 	  G4double LAr_ABSL_vis = 1000*m;
-	  //TODO
-    //LAr_ABSL_xuv *= LAr_att_scale;
 
 	  MGLog(debugging)  << "Rayleigh scattering lenght [m]:" << endlog;
 	  for (ji = 0; ji < NUMENTRIES; ji++){
@@ -287,7 +275,7 @@ void MGLGNDOpticalMaterialProperties::RegisterArgonOpticalProperties()
       else {
           LAr_ABSL[ji] = 781.95*LAr_ABSL_vis;
       }
-      G4cout<<"Ray "<<LAr_RAYL[ji]/cm<<", Atten "<<LAr_ABSL[ji]/cm<<", wavelength "<< (LambdaE / e)/nm<<G4endl;
+      //G4cout<<"Ray "<<LAr_RAYL[ji]/cm<<", Atten "<<LAr_ABSL[ji]/cm<<", wavelength "<< (LambdaE / e)/nm<<G4endl;
     }
     myMPT2->AddProperty("RINDEX",        LAr_PPCK, LAr_RIND, NUMENTRIES);
     myMPT2->AddProperty("RAYLEIGH",      LAr_PPCK, LAr_RAYL, NUMENTRIES);
