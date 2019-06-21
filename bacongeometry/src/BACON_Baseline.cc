@@ -140,6 +140,18 @@ void BACON_Baseline::ConstructDetector()
   airLog->SetVisAttributes(airVisAtt);
   G4PVPlacement* airSpacePhys = new G4PVPlacement(0, G4ThreeVector(0,0,canShift), airLog, "airSpace", theDetectorLogical, false, 0);
 
+
+  //Scintillator Patels
+  //
+  G4Box* scintPanel = new G4Box("scintPanel",8.0/2*inch,32.0/2*inch,2.0/2*inch); //x,y,z
+  G4VisAttributes* scintVis = new G4VisAttributes(G4Colour(1,0,0));
+  G4LogicalVolume* scintLogical = new G4LogicalVolume(scintPanel,G4Material::GetMaterial("PolystyreneFiber"),"LogicalPanel");
+  scintLogical->SetVisAttributes(scintVis);
+  G4PVPlacement* physicalScintPanel1 = new G4PVPlacement(0,G4ThreeVector(0,0,canHeight/2. + 4*inch),scintLogical,"ScintPanel1",airLog,false,0);
+  G4RotationMatrix* scintRotation = new G4RotationMatrix();
+  scintRotation->rotateZ(pi/2);
+  G4PVPlacement* physicalScintPanel2 = new G4PVPlacement(scintRotation,G4ThreeVector(0,0,-canHeight/2. - 4*inch),scintLogical,"ScintPanel2",airLog,false,0);
+
   //placing the outer can for the guard vacuum
   //not really needed for LAr light, but important for muon simulations
   G4Material *vacuum = G4Material::GetMaterial("Vacuum");
@@ -258,6 +270,7 @@ void BACON_Baseline::ConstructDetector()
   canPhysical->CheckOverlaps(1000,0,true);
   vacuumPhysical->CheckOverlaps(1000,0,true);
   vacWellPhysical->CheckOverlaps(1000,0,true);
+  physicalScintPanel1->CheckOverlaps(1000,0,true);
 
 
   //PMT glass:QE taken from PMT_r11065 data sheet

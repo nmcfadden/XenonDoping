@@ -471,7 +471,7 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
   G4StepPoint* preStepPoint = step->GetPreStepPoint();
 
   G4VPhysicalVolume* physicalVolume =postStepPoint->GetPhysicalVolume();
-
+  
   int sensVolID = fSensitiveIDOfPhysicalVol[physicalVolume];
   double eDep = step->GetTotalEnergyDeposit();
   //add Primary Information using prestep
@@ -609,6 +609,12 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
     else if( (sensVolID  == 0 || eDep == 0) && !fWriteAllSensitiveSteps && !fWriteAllStepsInEventsThatDepositEnergy){
       return;
     }
+  }
+  //Kill all muons that get below the cryostat
+  if(position.z() < -60.0*cm){
+    step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
+    G4cout<<"Kill pid "<<pid<<", KE "<<kineticE/MeV<<" in "<<physVolName<<G4endl;
+    return;
   }
   fWriteFlag = true;
   //G4cout<<"\t"<<fPrimX<<","<<fPrimY<<","<<fPrimZ<<endl;
