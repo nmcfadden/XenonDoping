@@ -25,7 +25,13 @@
 #define _MGOutputMCOpticalRun_HH
 
 #include <string>
+#include "TMath.h"
 #include "TTree.h"
+#include "TDirectory.h"
+#include "TH1D.h"
+#include "TH2D.h"
+#include "TH3D.h"
+
 
 #include "io/MGOutputRoot.hh"
 #include "MGTMCEventHeader.hh"
@@ -178,12 +184,31 @@ public:
   /// Return whether particle is a germanium nucleus.
   static bool MaGeParticleIDIsGeNucleus(int pid);
 
+  //Add root histograms for optical maps
+  TDirectory *opticalDir;
+
+  TH3D* hMapUnscaled;
+  TH2D* h2DMapRZUnscaled;
+  TH2D* h2DMapXYUnscaled;
+  TH2D* h2DMapYZUnscaled;
+  TH3D* hMapNorm;
+  TH2D* h2DMapRZNorm;
+  TH2D* h2DMapXYNorm;
+  TH2D* h2DMapYZNorm;
+  TH3D* hMap;
+  TH2D* h2DMapRZ;
+  TH2D* h2DMapXY;
+  TH2D* h2DMapYZ;
+  TH1D* hWeight;
+
 
 private:
   MGTMCRun          *fMCOpticalRun;             // MGDO encapsulation of run-level info 
   MGTMCEventHeader  *fMCEventHeader;     // MGDO encapsulation of event-level info
   MGTMCEventSteps   *fMCEventSteps;      // MGDO encapsulation of steps 
   MGTMCEventSteps   *fMCEventPrimaries;  // MGDO encapsulation of steps 
+  
+  static const G4double LambdaE;
 
   G4int       fRunID;
   G4int       fNSteps;
@@ -211,6 +236,15 @@ private:
   G4bool      fKillNeutrons;           // Kill all neutron tracks outside sensitive volume after one step.
   G4bool      fStopNuclei;             // Stop nuclei outside sensitive volume, but don't kill them. This allows them to decay.
   G4bool      fKillAll;
+  
+  //Variables for optical map
+  G4double    gridSpacing, maxX ,minX,maxY,minY,maxZ,minZ,minR,maxR;
+  G4double    QE;
+  G4int nbinsX;
+  G4int nbinsY;
+  G4int nbinsZ;
+  G4int nbinsR;
+
 
   G4UImessenger *fMessenger; 
 

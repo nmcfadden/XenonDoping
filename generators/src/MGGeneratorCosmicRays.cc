@@ -46,6 +46,7 @@
 #include "generators/MGGeneratorMuonsFromFile.hh"
 #include "generators/MGGeneratorCosmicRayMuons.hh"
 #include "generators/MGGeneratorMeiHimeMu.hh"
+#include "generators/MGGeneratorCosmicSurfMuons.hh"
 #include "generators/MGGeneratorShowersFromFile.hh"
 
 //---------------------------------------------------------------------------//
@@ -62,10 +63,10 @@ MGGeneratorCosmicRays::MGGeneratorCosmicRays(MGMuonGeneratorType choice)
     fParticleGun = new MGGeneratorMeiHimeMu();
   else if (choice == showerfile)
     fParticleGun = new MGGeneratorShowersFromFile();
-	//fParticleGun = new MGGeneratorMuonsFromFile();
+  else if (choice == surf) 
+    fParticleGun = new MGGeneratorCosmicSurfMuons();
 
-  MGLog(trace) << "MGGeneratorCosmicRays created. Choice = "
-	       << choice << endlog;
+   MGLog(trace) << "MGGeneratorCosmicRays created. Choice = " << choice << endlog;
 
 }
 

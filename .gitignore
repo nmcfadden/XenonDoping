@@ -121,3 +121,5 @@ waveform/waveform/GNUmakefileGen
 MJD.JSON
 MJD.json
 install
+*~
+*swp

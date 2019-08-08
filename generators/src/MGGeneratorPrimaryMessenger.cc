@@ -88,6 +88,7 @@
 #include "generators/MGGeneratorBaryonDecay.hh"
 #include "generators/MGGeneratorCable.hh"
 #include "generators/MGGeneratorLGNDLiquidArgon.hh"
+#include "generators/MGGeneratorBACoNSurfaceMuons.hh"
 #include "generators/MGGeneratorLGND200Calibration.hh"
 
 #include "io/MGLogger.hh"
@@ -116,6 +117,7 @@ MGGeneratorPrimaryMessenger::MGGeneratorPrimaryMessenger
   fSelectCmd->SetGuidance("G4gun: Standard G4 gun.");
   fSelectCmd->SetGuidance("decay0: decay0 generator.");
   fSelectCmd->SetGuidance("cosmicrays: cosmic-ray muons generator.");
+  fSelectCmd->SetGuidance("cosmicsurf: cosmics ray muons on surface generator.");
   fSelectCmd->SetGuidance("musun: MUSUN cosmic-ray muons generator.");
   fSelectCmd->SetGuidance("MuonsFromFile: G4 gun for dangerous muons.");
   fSelectCmd->SetGuidance("MeiHimeMu: Mei-Hime cosmic-ray muons generator.");
@@ -132,10 +134,12 @@ MGGeneratorPrimaryMessenger::MGGeneratorPrimaryMessenger
   fSelectCmd->SetGuidance("Cable: Signal and HV cables");
   fSelectCmd->SetGuidance("BaryonDecay: decay of 76Ge via two or three baryon decay");
   fSelectCmd->SetGuidance("LGNDLiquidArgon: Generates events inside the cryostat's liquid argon");
+  fSelectCmd->SetGuidance("BACoNSurfaceMuons: Generates muons over BACON");
+
 
 
   G4String candidates = "PNNLiso RDMiso TUNLFEL MJDCalibration G4gun decay0 cosmicrays musun MuonsFromFile MeiHimeMu ShowersFromFile ";
-  candidates += "SPS neutronsGS wangneutrons AmBe sources4a GSS Pb210 DoubleBeta0 DoubleBeta2 Cable BaryonDecay LGNDLiquidArgon";
+  candidates += "SPS neutronsGS wangneutrons AmBe sources4a GSS Pb210 DoubleBeta0 DoubleBeta2 Cable BaryonDecay LGNDLiquidArgon BACoNSurfaceMuons";
   fSelectCmd->SetGuidance("LGND200Calibration: source in a GERDA-style source container");
 
   // /MG/generator/name
@@ -266,6 +270,9 @@ void MGGeneratorPrimaryMessenger::SetNewValue(G4UIcommand *command,
     else if(newValues == "decay0") {
       fGeneratorPrimary->SetMGGenerator(new MGGeneratorDecay0);
     }
+    else if(newValues == "cosmicsurf") {
+      fGeneratorPrimary->SetMGGenerator(new MGGeneratorCosmicRays(surf));
+    }
     else if(newValues == "cosmicrays") {
       fGeneratorPrimary->SetMGGenerator(new MGGeneratorCosmicRays(standard));
     }
@@ -316,7 +323,10 @@ void MGGeneratorPrimaryMessenger::SetNewValue(G4UIcommand *command,
     }
     else if(newValues == "LGNDLiquidArgon"){
       fGeneratorPrimary->SetMGGenerator(new MGGeneratorLGNDLiquidArgon);
-    }   
+    }
+    else if(newValues == "BACoNSurfaceMuons"){
+      fGeneratorPrimary->SetMGGenerator(new MGGeneratorBACoNSurfaceMuons);
+    }
     else if(newValues == "LGND200Calibration") {
       fGeneratorPrimary->SetMGGenerator(new MGGeneratorLGND200Calibration() );
     }  

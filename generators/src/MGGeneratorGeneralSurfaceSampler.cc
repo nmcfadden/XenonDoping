@@ -36,7 +36,7 @@
 //---------------------------------------------------------------------------//
 
 #include "Randomize.hh"
-#include "G4Geantino.hh"
+#include "G4Gamma.hh"
 
 #include "generators/MGGeneratorGeneralSurfaceSampler.hh"
 #include "generators/MGGeneratorGeneralSurfaceSamplerMessenger.hh"
@@ -52,6 +52,15 @@ MGGeneratorGeneralSurfaceSampler::MGGeneratorGeneralSurfaceSampler()
   fMessenger = new MGGeneratorGeneralSurfaceSamplerMessenger(this);
   fOrigin.set(0, 0, 0);
   fBoundingRadius = 0.0;
+  lineEnergy[0]=0.159;
+  lineEnergy[1]=0.460;
+  lineEnergy[2]=1.460;
+  lineProb[0]=0.354;
+  lineProb[1]=0.333;
+  lineProb[2]=1.0-lineProb[0]-lineProb[1];
+  MGLog(routine) << " ****** GSS GeneralSurfaceSampler *****   " << endlog;
+  MGLog(routine) << " GSS line energy prob  " << endlog;
+  for(int il=0; il<NLINES; ++il) MGLog(routine) << " GSS line " << il << "  " << lineEnergy[il] << " , " << lineProb[il] << endlog;
 }
 
 void MGGeneratorGeneralSurfaceSampler::GeneratePrimaryVertex(G4Event* event)
@@ -80,9 +89,13 @@ void MGGeneratorGeneralSurfaceSampler::GeneratePrimaryVertex(G4Event* event)
 
   // pos has to be pushed now in case the volumes are not centered at (0,0,0)
   pos += fOrigin;
-
-  fParticleGun.SetParticleDefinition(G4Geantino::Geantino());
-  fParticleGun.SetParticleEnergy(1.0*GeV); // doesn't matter, as long as it has some energy
+  double prob  = G4UniformRand();
+  fParticleGun.SetParticleDefinition(G4Gamma::Gamma());
+  // MGOLD modify for array of energies
+  if(prob<lineProb[0])  fParticleGun.SetParticleEnergy(lineEnergy[0]); // Ti-208 line
+  else if(prob<lineProb[1]) fParticleGun.SetParticleEnergy(lineEnergy[1]);
+  else fParticleGun.SetParticleEnergy(lineEnergy[2]);
+  //fParticleGun.SetParticleEnergy(0.51); // Ti-208 line
   fParticleGun.SetParticlePosition(pos);
   fParticleGun.SetParticleMomentumDirection(dir);
   fParticleGun.GeneratePrimaryVertex(event);

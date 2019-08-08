@@ -71,6 +71,7 @@ class MGGeneratorGeneralSurfaceSamplerMessenger;
 class MGGeneratorGeneralSurfaceSampler : public MGVGenerator
 {
   public:
+    enum {NLINES=3};
     MGGeneratorGeneralSurfaceSampler();
     virtual ~MGGeneratorGeneralSurfaceSampler() {}
 
@@ -86,6 +87,8 @@ class MGGeneratorGeneralSurfaceSampler : public MGVGenerator
     G4ThreeVector fOrigin;
     G4double fBoundingRadius;
     G4ParticleGun fParticleGun;
+    G4double lineEnergy[NLINES];
+    G4double lineProb[NLINES];
 };
 
 #endif

@@ -39,7 +39,7 @@
 #include "G4VPrimaryGenerator.hh"
 #include "generators/MGVGenerator.hh"
 
-enum MGMuonGeneratorType {standard, musun, file, meihime, showerfile};
+enum MGMuonGeneratorType {standard, musun, file, meihime, showerfile, surf};
 
 //---------------------------------------------------------------------------//
 

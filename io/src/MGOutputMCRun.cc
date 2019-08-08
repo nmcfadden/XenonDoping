@@ -532,12 +532,27 @@ void MGOutputMCRun::RootSteppingAction(const G4Step* step)
   G4Track* track = step->GetTrack();
   G4VPhysicalVolume* physicalVolume = track->GetVolume();
 
+  double r = std::sqrt(std::pow(step->GetPreStepPoint()->GetPosition().x(),2) + std::pow(step->GetPreStepPoint()->GetPosition().y(),2)+std::pow(step->GetPreStepPoint()->GetPosition().z(),2));
+
+  /*
+  G4cout<<"R is "<<r<<", ("<<step->GetPreStepPoint()->GetPosition().x()<<","
+                          <<step->GetPreStepPoint()->GetPosition().y()<<","
+                          <<step->GetPreStepPoint()->GetPosition().z()<<")"<<G4endl;
+  */
+
+  if(r > 60.0*cm){
+    step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
+    //G4cout<<"Cutting Track because it is past the radius of the experiement"<<G4endl;
+    return;
+  }
+
   int sensVolID = fSensitiveIDOfPhysicalVol[physicalVolume];
   double eDep = step->GetTotalEnergyDeposit();
   if ( !fWriteAllSteps){
     if(fWriteAllStepsInEventsThatDepositEnergy && eDep == 0) return;
     else if(sensVolID  == 0 || eDep == 0) return;
   }
+
 
  
   int pid = GetMaGeParticleID(track->GetDefinition());

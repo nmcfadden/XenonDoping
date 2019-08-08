@@ -99,8 +99,8 @@ void BACON_Baseline::ConstructDetector()
   G4VisAttributes* wellVisAtt  = new G4VisAttributes(G4Colour(0.8, 0.8, 0.8, 0.1));
   wellLogical->SetVisAttributes(wellVisAtt);  
 
-  G4VPhysicalVolume* cryostatPhysical = new G4PVPlacement(0, G4ThreeVector(0,0,0), cryostatLogical, "cryostat", theDetectorLogical, false, 0);
-  G4VPhysicalVolume* wellPhysical     = new G4PVPlacement(0, G4ThreeVector(0,0,fCryoHeight/2-wellHeight/2.+2*fCryoThickness),wellLogical,"Well",theDetectorLogical,false,0);
+  G4VPhysicalVolume* cryostatPhysical = new G4PVPlacement(0, G4ThreeVector(0,0,0), cryostatLogical, "Cryostat", theDetectorLogical, false, 0);
+  G4VPhysicalVolume* wellPhysical     = new G4PVPlacement(0, G4ThreeVector(0,0,fCryoHeight/2-wellHeight/2.+2*fCryoThickness),wellLogical,"CryoWell",theDetectorLogical,false,0);
 
   //Dumb thing about having the Guard Vacuum Can off center, is that all the other volumes that are cut out volumes also have to be off center...
   //canShift is the variable to define this offset
@@ -115,7 +115,7 @@ void BACON_Baseline::ConstructDetector()
   G4LogicalVolume* canLogical = new G4LogicalVolume(canSolid,steel,"canLogical");
   canLogical->SetVisAttributes(wellVisAtt);
 
-  G4VPhysicalVolume* canPhysical = new G4PVPlacement(0, G4ThreeVector(0,0,canShift),canLogical,"Can",theDetectorLogical,false,0);
+  G4VPhysicalVolume* canPhysical = new G4PVPlacement(0, G4ThreeVector(0,0,canShift),canLogical,"CryoCan",theDetectorLogical,false,0);
 
   G4Material *rock = G4Material::GetMaterial("Rock");
 //  G4Box* outerBox = new G4Box("outerBox", 100.*m - fDelta, 100.*m -fDelta, 100.*m-fDelta);
@@ -147,6 +147,8 @@ void BACON_Baseline::ConstructDetector()
   G4VisAttributes* scintVis = new G4VisAttributes(G4Colour(1,0,0));
   G4LogicalVolume* scintLogical = new G4LogicalVolume(scintPanel,G4Material::GetMaterial("PolystyreneFiber"),"LogicalPanel");
   scintLogical->SetVisAttributes(scintVis);
+  //Do not need to add canShift because the motherVolume is the airSpace
+  //airSpace is already shifted when placed.
   G4PVPlacement* physicalScintPanel1 = new G4PVPlacement(0,G4ThreeVector(0,0,canHeight/2. + 4*inch),scintLogical,"ScintPanel1",airLog,false,0);
   G4RotationMatrix* scintRotation = new G4RotationMatrix();
   scintRotation->rotateZ(pi/2);
@@ -252,7 +254,12 @@ void BACON_Baseline::ConstructDetector()
   G4VPhysicalVolume* wlsPhysical0 = new G4PVPlacement(0,G4ThreeVector(0, (1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing),wlsLogical,"physicalWLS_0",theDetectorLogical,false,0);
   G4VPhysicalVolume* wlsPhysical1 = new G4PVPlacement(0,G4ThreeVector(0,-(1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing),wlsLogical,"physicalWLS_1",theDetectorLogical,false,0);
 
+  //LEAD Housing for Co-60 source
+  //
+  //
+
   
+
   pmtPhysical0->CheckOverlaps(1000, 0, true);
   pmtPhysical1->CheckOverlaps(1000, 0, true);
 
@@ -271,6 +278,7 @@ void BACON_Baseline::ConstructDetector()
   vacuumPhysical->CheckOverlaps(1000,0,true);
   vacWellPhysical->CheckOverlaps(1000,0,true);
   physicalScintPanel1->CheckOverlaps(1000,0,true);
+  physicalScintPanel2->CheckOverlaps(1000,0,true);
 
 
   //PMT glass:QE taken from PMT_r11065 data sheet

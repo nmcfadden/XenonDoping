@@ -67,6 +67,8 @@ using namespace std;
 
 using namespace CLHEP;
 
+const G4double MGOutputMCOpticalRun::LambdaE = twopi *1.973269602e-16 * m * GeV;
+
 MGOutputMCOpticalRun::MGOutputMCOpticalRun(G4bool isMother) :
   MGOutputRoot(isMother),
   fMCOpticalRun(NULL),
@@ -411,6 +413,42 @@ void MGOutputMCOpticalRun::DefineSchema()
 {
   MGLog(routine) << "defining MGOutputMCOpticalRun schema..." << endlog;
   if(!SchemaDefined()) {
+
+    //defining Optical Maps
+    TDirectory *topDir = gDirectory;
+    opticalDir = GetRootFile()->mkdir("OpticalOutput");
+    opticalDir->cd();
+    //TODO need to make a messenger command for all these parameters...
+    maxX = 300.;
+    minX = -300.;
+    maxY=300.;
+    minY = -300;
+    maxZ= 850;
+    minZ = -850;
+    minR = 0;
+    maxR = 300.;
+    gridSpacing = 5;//*mm
+    QE=1;
+    nbinsX = (maxX-minX)/gridSpacing;
+    nbinsY = (maxY-minY)/gridSpacing;
+    nbinsZ = (maxZ-minZ)/gridSpacing;
+    nbinsR = (maxR-minR)/gridSpacing;
+    hMap = new TH3D("OpticalMap","OpticalMap",nbinsX,minX,maxX,nbinsY,minY,maxY,nbinsZ,minZ,maxZ);
+    hMapUnscaled = (TH3D*) hMap->Clone("OpticalMapUnScaled");
+    hMapNorm = (TH3D*) hMap->Clone("OpticalMapNorm");
+    h2DMapRZ = new TH2D("2DOpticalMapRZ","2DOpticalMapRZ",nbinsR,minR,maxR,nbinsZ,minZ,maxZ);
+    h2DMapRZUnscaled = (TH2D*) h2DMapRZ->Clone("2DOpticalMapRZUnscaled");
+    h2DMapRZNorm = (TH2D*) h2DMapRZ->Clone("2DOpticalMapRZNorm");  
+    h2DMapXY = new TH2D("2DOpticalMapXY","2DOpticalMapXY",nbinsX,minX,maxX,nbinsY,minY,maxY);
+    h2DMapXYUnscaled = (TH2D*) h2DMapXY->Clone("2DOpticalMapXYUnscaled");
+    h2DMapXYNorm = (TH2D*) h2DMapXY->Clone("2DOpticalMapXYNorm");
+    h2DMapYZ = new TH2D("2DOpticalMapYZ","2DOpticalMapYZ",nbinsY,minY,maxY,nbinsZ,minZ,maxZ);
+    h2DMapYZUnscaled = (TH2D*) h2DMapYZ->Clone("2DOpticalMapYZUnscaled");
+    h2DMapYZNorm = (TH2D*) h2DMapYZ->Clone("2DOpticalMapYZNorm"); 
+    hWeight = new TH1D("rWeight","rWeight",h2DMapRZ->GetNbinsX(),minR,maxR);
+    MGLog(routine) << " INITIALIZATION file has:"  << endl;
+    topDir->cd();
+
     // Create output Tree if it has not been assigned.
     if(fTree == NULL) {
       if(!IsMother()) MGLog(warning) << "No tree assigned to child output class." << endlog;
@@ -421,7 +459,7 @@ void MGOutputMCOpticalRun::DefineSchema()
     fTree->Branch("eventHeader", "MGTMCEventHeader", &fMCEventHeader, 32000, 3);
     fTree->Branch("eventSteps", "MGTMCEventSteps", &fMCEventSteps, 32000, 3);
     fTree->Branch("eventPrimaries", "MGTMCEventSteps", &fMCEventPrimaries, 32000, 3);
-    //fTree->Branch("eventTotal","EventTotal",&fNevents,32000,1);
+    //fTree->Branch("eventTotal","EventTotal",&fNevents,32000,1);  
 
     SetSchemaDefined(true);
     MGLog(debugging) << "MGDO MGTMCRun output schema defined." << G4endl; 
@@ -456,7 +494,61 @@ void MGOutputMCOpticalRun::EndOfRunAction()
    nprimaries.Write();
   WriteEvent();
   MGLog(routine)<<fEventCounter<<" events written"<<endlog;
+
+    // normalize maps 
+  //weight 3Dhistogram
+  G4int n3D = 0, nXY = 0, nYZ = 0, nRZ = 0;
+  G4double totalPrimaries = GetTree()->GetBranch("eventPrimaries")->GetEntries();
+  MGLog(routine)<< " totalPrimaries " << totalPrimaries << endlog;
+  MGLog(routine)<< "MapX " <<hMap->GetNbinsX()<<" MapY "<<hMap->GetNbinsY()
+    <<" MapZ "<<hMap->GetNbinsZ()<<" rBins "<<h2DMapRZUnscaled->GetNbinsX()<<endlog;
+  for(int i = 0; i < hMap->GetNbinsX();i++){
+    for(int j = 0; j < hMap->GetNbinsY();j++){
+      for(int k = 0; k < hMap->GetNbinsZ();k++){
+        G4double binNorm =  hMapNorm->GetBinContent(i+1,j+1,k+1);
+        G4double binVal  = hMapUnscaled->GetBinContent(i+1,j+1,k+1)*QE;
+        if(binVal == 0) n3D++;
+        if(binNorm>0) hMap->SetBinContent(i+1,j+1,k+1,binVal/binNorm);
+      }
+    }
+  }
+  MGLog(routine)<<"finished XYZ Histogram"<<endlog;
+  for(int i = 0; i < h2DMapXY->GetNbinsX();i++){
+    for(int j = 0; j < h2DMapXY->GetNbinsY();j++){
+      G4double binNorm = h2DMapXYNorm->GetBinContent(i+1,j+1);
+      G4double binVal = h2DMapXYUnscaled->GetBinContent(i+1,j+1)*QE;
+      if(binVal == 0) nXY++;
+      if(binNorm>0) h2DMapXY->SetBinContent(i+1,j+1,binVal/binNorm);
+    }
+  }
+  MGLog(routine)<<"finished XY Histogram"<<endlog;
+  for(int i = 0; i < h2DMapYZ->GetNbinsX();i++){
+    for(int j = 0; j < h2DMapYZ->GetNbinsY();j++){
+      G4double binNorm = h2DMapYZNorm->GetBinContent(i+1,j+1);
+      G4double binVal = h2DMapYZUnscaled->GetBinContent(i+1,j+1)*QE;
+      if(binVal == 0) nYZ++;
+      if(binNorm>0) h2DMapYZ->SetBinContent(i+1,j+1,binVal/binNorm);
+    }
+  }
+  MGLog(routine)<<"finished YZ Histogram"<<endlog;
+  for(int i = 0; i < h2DMapRZ->GetNbinsX();i++){
+    for(int j = 0; j < h2DMapRZ->GetNbinsY();j++){
+      G4double binNorm = h2DMapRZNorm->GetBinContent(i+1,j+1);
+      G4double binVal = h2DMapRZUnscaled->GetBinContent(i+1,j+1)*QE;
+      G4double r = gridSpacing*(i+1)+minR;
+      G4double weight = ((r+gridSpacing)*(r+gridSpacing)-r*r)/(maxR*maxR-minR*minR);
+      binVal /= weight;
+      if(binVal==0) nRZ++; 
+      hWeight->SetBinContent(i+1,weight);
+      if(binNorm>0) h2DMapRZ->SetBinContent(i+1,j+1,binVal/binNorm);
+    }
+  }
+  MGLog(routine)<<"finished RZ Histogram"<<endlog;
+  MGLog(routine)<<"Zero bins found..."<<nXY<<" XY, "<<nYZ<<" YZ, "<<nRZ<<" RZ bins, "<<n3D <<", xyz bins"<<endlog;
   if(IsMother()) {
+    GetRootFile()->ls();
+    MGLog(routine) << " number of map entries  " <<  hMap->GetEntries() << " norm entries " << hMapNorm->GetEntries() << endlog;
+    GetRootFile()->Write();
     CloseFile();
     SetSchemaDefined(false);
   }
@@ -471,18 +563,22 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
   G4StepPoint* preStepPoint = step->GetPreStepPoint();
 
   G4VPhysicalVolume* physicalVolume =postStepPoint->GetPhysicalVolume();
-  
+
   int sensVolID = fSensitiveIDOfPhysicalVol[physicalVolume];
   double eDep = step->GetTotalEnergyDeposit();
   //add Primary Information using prestep
-  //prestep for primary step has not been stepped through the Stepping Action
-  if(fPastTrackPrimaryID != track->GetTrackID() && track->GetParentID() == 0){
+  //A Unique primary is defined as:
+  //---having a unique trackID
+  //---having no Parent (poor primary)
+  //---current step number is 1
+  if(fPastTrackPrimaryID != track->GetTrackID() && track->GetParentID() == 0 && track->GetCurrentStepNumber() == 1){
     int pid = GetMaGeParticleID(track->GetDefinition());
     int trackID = track->GetTrackID();
     G4String physVolName = preStepPoint->GetPhysicalVolume()->GetName();
     int t = preStepPoint->GetGlobalTime();
     int copyNo = 0; //  kineticE = preStepPoint->GetKineticEnergy();
-    double kineticE = postStepPoint->GetKineticEnergy();
+    double kineticE = preStepPoint->GetKineticEnergy();
+    //Prestep point used for intial position of primary
     G4ThreeVector position = preStepPoint->GetPosition();
     G4ThreeVector localPosition = step->GetPreStepPoint()->GetTouchableHandle()->GetHistory()->GetTopTransform().TransformPoint(position);
     G4ThreeVector momentum = preStepPoint->GetMomentumDirection();
@@ -510,11 +606,20 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
     );
     //count number of primaries per event
     fEventCounter++;
-    fPrimaryWriteFlag = false;
-    MGLog(debugging)<< physVolName<<", KE = "<<kineticE/eV<<"@ ("<<position.x()<<","<<position.y()<<","<<position.z()<<")"<<endlog;
+    
+    //Count photons that were detected and store their intial position 
+    G4double r = sqrt(fPrimX*fPrimX+fPrimY*fPrimY);
+    hMapNorm->Fill(fPrimX,fPrimY,fPrimZ);
+    h2DMapRZNorm->Fill(r,fPrimZ);
+    h2DMapXYNorm->Fill(fPrimX,fPrimY);
+    h2DMapYZNorm->Fill(fPrimY,fPrimZ);
+
+    MGLog(debugging)<<physVolName<<", KE = "<<kineticE/keV<<"@ ("<<position.x()<<","<<position.y()
+      <<","<<position.z()<<")...Step number "<<track->GetCurrentStepNumber()<<endlog;
   }
-  if(fPastTrackPrimaryID != track->GetTrackID())
+  if(fPastTrackPrimaryID != track->GetTrackID()){
     fPastTrackPrimaryID = track->GetTrackID();
+  }
   const G4VProcess* creator = track->GetCreatorProcess();
   G4String creatorName;
   if(creator) creatorName = creator->GetProcessName();
@@ -546,11 +651,22 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
   //G4String creatorName;
   if(creator)
     creatorName = creator->GetProcessName();
+
+  //Use track weight to pass optical creator processes to root output
+  //note that creator processes are different than step processes...
+  //step process is reflection, compton scatter, ect..
+  //creator Process is Scintillation, radioactive decay, WLS
+  //...
+  //note that WLS can be both a creator and a step process because a 
+  //new track is created through WLS and an old track is terminated through WLS
   if(creatorName == "Scintillation") {
     trackWeight = 1;
   }
   else if (creatorName == "OpWLS"){
     trackWeight = 2;
+  }
+  else if (creatorName == "Cerenkov"){
+    trackWeight = 3;
   }
   //If you use the pre point you never find tracks that stop in the SiPM,
   G4String physVolName;
@@ -577,7 +693,6 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
   double t = postStepPoint->GetGlobalTime();
   double kineticE = postStepPoint->GetKineticEnergy();
 
-  //if(prePhysVolName.find("WLS")  != string::npos && physVolName.find("physicalPMT") != string::npos)
   const G4VProcess* processDefinedStep = postStepPoint->GetProcessDefinedStep();
   string procName = (processDefinedStep) ?  processDefinedStep->GetProcessName() : "";
   G4ThreeVector position = postStepPoint->GetPosition();
@@ -610,21 +725,13 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
       return;
     }
   }
-  //Kill all muons that get below the cryostat
-  if(position.z() < -60.0*cm){
-    step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
-    G4cout<<"Kill pid "<<pid<<", KE "<<kineticE/MeV<<" in "<<physVolName<<G4endl;
-    return;
-  }
   fWriteFlag = true;
-  //G4cout<<"\t"<<fPrimX<<","<<fPrimY<<","<<fPrimZ<<endl;
   fMCEventSteps->AddStep( 
     recordPreStep, 
     pid, 
     trackID, 
     parentTrackID, 
-    //procName,//replaced procName with preStep physical volume so if photon goes from wls to pmt its a hit! In Root step->GetProcessName(); 
-    prePhysVolName,
+    procName, 
     physVolName, 
     copyNo,
     sensVolID,
@@ -642,6 +749,14 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
     iStep,
     trackWeight
   );
+  //Fill histograms is hit is found in SiPM
+  G4double r = sqrt(fPrimX*fPrimX+fPrimY*fPrimY);
+  hMapUnscaled->Fill(fPrimX,fPrimY,fPrimZ);
+  h2DMapRZUnscaled->Fill(r,fPrimZ);
+  h2DMapXYUnscaled->Fill(fPrimX,fPrimY);
+  h2DMapYZUnscaled->Fill(fPrimY,fPrimZ);
+  if(r > 100*cm)
+    step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
   if( (sensVolID > 0) && (eDep > 0) ){
     fMCEventHeader->AddEnergyToDetectorID( sensVolID, eDep);
     fMCEventHeader->AddEnergyToTotalEnergy( eDep );
