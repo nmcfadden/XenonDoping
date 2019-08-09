@@ -71,6 +71,11 @@
 
 using namespace CLHEP;
 const G4double MGLGNDOpticalMaterialProperties::LambdaE = twopi *1.973269602e-16 * m * GeV;
+const G4int    MGLGNDOpticalMaterialProperties::NUMENTRIES = 69;
+const G4int    MGLGNDOpticalMaterialProperties::NUMENTRIES_1 = 5;
+const G4int    MGLGNDOpticalMaterialProperties::NUMENTRIES_2 = 500;
+const G4int    MGLGNDOpticalMaterialProperties::NUMENTRIES_3 = 29;
+
 
 MGLGNDOpticalMaterialProperties::MGLGNDOpticalMaterialProperties()
   :fSuccessfulInitialization(false)
@@ -83,10 +88,12 @@ MGLGNDOpticalMaterialProperties::~MGLGNDOpticalMaterialProperties()
 
 void MGLGNDOpticalMaterialProperties::ConstructionOpticalProperties()
 {
-  InitializeTPBSpectra();
-  InitializeFiberSpectra();
+  ph_energies = new G4double[NUMENTRIES_2];
+  //Energy Array used for all materials from 115 nm to 650 nm with 500 points (1.07 nm/bin)
+  for (int i = 0; i < NUMENTRIES_2; i++) {
+    ph_energies[i] = LambdaE/(650*nm) + i*((LambdaE/(115*nm) - (LambdaE/(650*nm)))/(NUMENTRIES_2-1));
+  }
   RegisterArgonOpticalProperties();
-  RegisterXeDopedArgonOpticalProperties();
   Register_TPB_Properties();
   Register_Fiber_Properties();
   Register_Fiber_Cladding_Properties();
@@ -96,7 +103,7 @@ void MGLGNDOpticalMaterialProperties::ConstructionOpticalProperties()
   Register_Silicon_Properties();
   Register_Teflon_Properties();
   Register_Silica_Properties();
-  Register_VM2000();
+  //Register_VM2000();
   Register_StainlessSteel();
 
   MGLog(routine) <<"Constructed LGND Optical Material Properties"<<endlog;
@@ -120,6 +127,15 @@ void MGLGNDOpticalMaterialProperties::RegisterArgonOpticalProperties()
 	  G4double tau_l = 1590.0*ns;
 	  /*G4double yield_ratio = 0.23; // For gammas and electrons*/
 
+
+	  // New value based on the triplet lifetime from Mark Heisel
+	  // Redefine the values to res-scale according to Mark's calculation
+	  // TODO - what is the correct yield value?
+    // G4double LAr_LY_scale = fDetectorDB->GetLArInstArgonLYScale();
+	  // photon_yield = 28120. * LAr_LY_scale;
+  
+	  tau_s = 5.95*ns;
+	  tau_l = 922*ns;
 
 	  /*
     ** TODO - 
@@ -149,7 +165,10 @@ void MGLGNDOpticalMaterialProperties::RegisterArgonOpticalProperties()
 	  G4double LAr_ABSL[(NUMENTRIES)];
 
 	  G4double LAr_ABSL_xuv = 60*cm;
+	  //G4double LAr_ABSL_xuv = 110*cm;
 	  G4double LAr_ABSL_vis = 1000*m;
+	  //TODO
+    //LAr_ABSL_xuv *= LAr_att_scale;
 
 	  MGLog(debugging)  << "Rayleigh scattering lenght [m]:" << endlog;
 	  for (ji = 0; ji < NUMENTRIES; ji++){
@@ -169,7 +188,8 @@ void MGLGNDOpticalMaterialProperties::RegisterArgonOpticalProperties()
         else {
 	    	  LAr_ABSL[ji] = LAr_ABSL_vis;
 	      }
-    }
+
+	  }
     MGLog(debugging) << "XUV attenuation length: " << LAr_ABSL_xuv/cm << " cm" << endlog;
     MGLog(debugging) << "VIS attenuation length: " << LAr_ABSL_vis/m << " m" << endlog;
 
@@ -178,8 +198,7 @@ void MGLGNDOpticalMaterialProperties::RegisterArgonOpticalProperties()
 	  G4double dee = ((PPSCHighE - PPSCLowE) / ((G4double)(num-1)));
 	  G4double LAr_SCIN[num];
 	  G4double LAr_SCPP[num];
-	  for (ji = 0; ji < num; ji++)
-	    {
+	  for (ji = 0; ji < num; ji++){
 	      ee=PPSCLowE+ ((G4double)ji) * dee;
 	      LAr_SCPP[ji]=ee;
 	      LAr_SCIN[ji]=ArScintillationSpectrum((LambdaE/ee)/nanometer);
@@ -189,7 +208,7 @@ void MGLGNDOpticalMaterialProperties::RegisterArgonOpticalProperties()
 	      MGLog(routine) << " WL1: " << (LambdaE/ee)/nanometer << " WL: " << (LambdaE/LAr_PPCK[ji])/nm<< " En: " << LAr_PPCK[ji]/eV << " ;n: " <<
 		  LAr_RIND[ji] << " ; Rayleigh  " << LAr_RAYL[ji]/m << " m; Scint " << LAr_SCIN[ji] << endlog;
 	       */
-	    }
+	  }
 
 	  G4MaterialPropertiesTable* myMPT1 = new G4MaterialPropertiesTable();
 
@@ -258,39 +277,6 @@ void MGLGNDOpticalMaterialProperties::RegisterArgonOpticalProperties()
 
 	  fArgonLiquid->GetIonisation()->SetBirksConstant(5.1748e-4*cm/MeV);
 
-    //What is the difference between gaseous argon and liquid argon?
-    //density,triplet,IndexOfRefraction,Rayleigh,abslength...what else?
-    G4MaterialPropertiesTable* myMPT2 = new G4MaterialPropertiesTable();
-    for (ji = 0; ji < NUMENTRIES; ji++){
-      e = PPCKOVLowE + ((G4double)ji) * de;
-      //according to 
-      //https://refractiveindex.info/?shelf=main&book=Ar&page=Bideau-Mehu
-      //Argon gas does not really change index of refraction much 1.0004 @ 140 nm and 1.00028 @ 500 nm
-      LAr_RIND[ji] = 1.00034;
-      //This is just a guess, scale by the ratio of the densities
-      LAr_RAYL[ji] = 781.95*LAr_RAYL[ji];
-      if (((LambdaE / e)/nm) < 200.0) {
-          LAr_ABSL[ji] =781.95*LAr_ABSL_xuv;
-      } 
-      else {
-          LAr_ABSL[ji] = 781.95*LAr_ABSL_vis;
-      }
-      //G4cout<<"Ray "<<LAr_RAYL[ji]/cm<<", Atten "<<LAr_ABSL[ji]/cm<<", wavelength "<< (LambdaE / e)/nm<<G4endl;
-    }
-    myMPT2->AddProperty("RINDEX",        LAr_PPCK, LAr_RIND, NUMENTRIES);
-    myMPT2->AddProperty("RAYLEIGH",      LAr_PPCK, LAr_RAYL, NUMENTRIES);
-    myMPT2->AddProperty("ABSLENGTH",     LAr_PPCK, LAr_ABSL, NUMENTRIES);
-    myMPT2->AddConstProperty("FASTTIMECONSTANT", tau_s);
-    myMPT2->AddConstProperty("SLOWTIMECONSTANT",2880*ns);
-    //What is the photon yeild for GAr? assuming same as LAr
-    myMPT2->AddConstProperty("SCINTILLATIONYIELD",photon_yield);
-    fArgonGas = G4Material::GetMaterial("Argon");
-    fArgonGas->SetMaterialPropertiesTable(myMPT2);
-
-
-
-
-
 }
 
 G4double MGLGNDOpticalMaterialProperties::LArRefIndex(const G4double lambda)
@@ -349,243 +335,283 @@ G4double MGLGNDOpticalMaterialProperties::ArScintillationSpectrum(const G4double
   waveL =exp(-0.5*((kk-128.0)/(2.929))*((kk-128.0)/(2.929)));
   return waveL;
 }
-G4double MGLGNDOpticalMaterialProperties::XeDopedArScintillationSpectrum(const G4double kk){
-  G4double waveL;
-  waveL =exp(-0.5*((kk-175.0)/(8.6))*((kk-175.0)/(8.6)));
-  return waveL;
-}
-
-//Assume that all Ar 128 nm is converted to 175 nm (100-1000 ppm)
-//1.10 m attenuation length
-//light yeild is the same
-void MGLGNDOpticalMaterialProperties::RegisterXeDopedArgonOpticalProperties()
-{
-	  static const G4int NUMENTRIES = 65;
-	  const G4int num = 65;
-	  static const G4double temp = 88.5*kelvin;
-	  static const G4double LambdaE = twopi *1.973269602e-16 * m * GeV;
-
-	  /**
-	   * Nominal values for pure argon
-	   */
-	  G4double scint_yield = 23.6*eV;  // Nominal energy to produce a photon (measured)
-	  G4double photon_yield = 1.0*MeV/scint_yield;
-	  G4double tau_s = 6.0*ns;
-	  G4double tau_l = 240.*ns;
-	  /*G4double yield_ratio = 0.23; // For gammas and electrons*/
-
-
-	  // New value based on the triplet lifetime from Mark Heisel
-	  // Redefine the values to res-scale according to Mark's calculation
-	  // TODO - what is the correct yield value?
-    // G4double LAr_LY_scale = fDetectorDB->GetLArInstArgonLYScale();
-	  // photon_yield = 28120. * LAr_LY_scale;
-	  /*
-    ** TODO - 
-    G4double LAr_att_scale = fDetectorDB->GetLArInstArgonAbsLScale();
-    if (LAr_att_scale != 1.0) {
-      MGLog(routine) << "Scaling XUV argon attenuation length by a factor of " << LAr_att_scale << endlog;
-    }
-    */
-
-	  MGLog(routine) << "LAr Optical parameters: " << endlog;
-	  MGLog(routine) << "     Scintillation yield : " << photon_yield << " ph/MeV" << endlog;
-	  MGLog(routine) << "     Singlet lifetime : " << tau_s/ns << " ns" << endlog;
-	  MGLog(routine) << "     Triplet lifetime : " << tau_l/ns << " ns" << endlog;
-
-	  G4int ji;
-	  G4double e;
-	  G4double ee;
-
-	  G4double PPCKOVHighE = LambdaE / (115*nanometer);
-	  G4double PPCKOVLowE = LambdaE / (240*nanometer);
-	  G4double de = ((PPCKOVHighE - PPCKOVLowE) / ((G4double)(NUMENTRIES-1)));
-
-	  // liquid argon (LAr)
-	  G4double LAr_PPCK[(NUMENTRIES)];
-	  G4double LAr_RIND[(NUMENTRIES)];
-	  G4double LAr_RAYL[(NUMENTRIES)];
-	  G4double LAr_ABSL[(NUMENTRIES)];
-
-	  //G4double LAr_ABSL_xuv = 60*cm;
-	  G4double LAr_ABSL_xuv = 110*cm;
-	  G4double LAr_ABSL_vis = 1000*m;
-	  //TODO
-    //LAr_ABSL_xuv *= LAr_att_scale;
-
-	  MGLog(debugging)  << "Rayleigh scattering lenght [m]:" << endlog;
-    for (ji = 0; ji < NUMENTRIES; ji++){
-      e = PPCKOVLowE + ((G4double)ji) * de;
-      LAr_PPCK[ji] = e;
-      LAr_RIND[ji] = LArRefIndex((LambdaE / e));
-      LAr_RAYL[ji] = LArRayLength((LambdaE / e), temp);
-      MGLog(debugging) << (LambdaE/LAr_PPCK[ji])/nm <<", "<< LAr_RAYL[ji] << endlog;
-      /* Uncomment for debugging purposes
-	      MGLog(debugging) << " WL: " << (LambdaE/LAr_PPCK[ji])/nm<< " nm Energy: " << LAr_PPCK[ji]/eV << " eV; Refr: " <<
-		  LAr_RIND[ji] << " ; Rayleigh l. " << LAr_RAYL[ji]/m << " m" << endlog;
-	       */
-
-      if (((LambdaE / e)/nm) < 200.0) {
-        LAr_ABSL[ji] =LAr_ABSL_xuv;
-      } else {
-        LAr_ABSL[ji] = LAr_ABSL_vis;
-      }
-    }
-    MGLog(debugging) << "XUV attenuation length: " << LAr_ABSL_xuv/cm << " cm" << endlog;
-    MGLog(debugging) << "VIS attenuation length: " << LAr_ABSL_vis/m << " m" << endlog;
-
-	  G4double PPSCHighE = LambdaE /(155*nanometer);
-	  G4double PPSCLowE = LambdaE /(190*nanometer);
-	  G4double dee = ((PPSCHighE - PPSCLowE) / ((G4double)(num-1)));
-	  G4double LAr_SCIN[num];
-	  G4double LAr_SCPP[num];
-    for (ji = 0; ji < num; ji++){
-      ee=PPSCLowE+ ((G4double)ji) * dee;
-      LAr_SCPP[ji]=ee;
-      LAr_SCIN[ji]=XeDopedArScintillationSpectrum((LambdaE/ee)/nanometer);
-    }
-
-	  G4MaterialPropertiesTable* myMPT1 = new G4MaterialPropertiesTable();
-
-	  myMPT1->AddProperty("RINDEX",        LAr_PPCK, LAr_RIND, NUMENTRIES);
-	  myMPT1->AddProperty("RAYLEIGH",      LAr_PPCK, LAr_RAYL, NUMENTRIES);
-	  myMPT1->AddProperty("ABSLENGTH",     LAr_PPCK, LAr_ABSL, NUMENTRIES);
-
-	  // Fast and slow components of the scintillation
-	  // They should both be the same
-	  if ( (LAr_SCPP[0] >= PPCKOVLowE) && (LAr_SCPP[(sizeof(LAr_SCPP)/sizeof(G4double) - 1)] <= PPCKOVHighE) ){
-      myMPT1->AddProperty("FASTCOMPONENT",LAr_SCPP,LAr_SCIN,num);
-      myMPT1->AddProperty("SLOWCOMPONENT",LAr_SCPP,LAr_SCIN,num);
-    }
-	  myMPT1->AddConstProperty("SCINTILLATIONYIELD",photon_yield);
-	  myMPT1->AddConstProperty("FASTTIMECONSTANT", tau_s);
-	  myMPT1->AddConstProperty("SLOWTIMECONSTANT",tau_l);
-	  // This is the value for electrons and gammas
-	  // For example, for nuclear recoils it should be 0.75
-	  // nominal value for electrons and gamas: 0.23
-	  // Value used was provided by F. Art
-	  myMPT1->AddConstProperty("YIELDRATIO",0.3);
-
-	  G4double fano = 0.11;// Doke et al, NIM 134 (1976)353
-	  myMPT1->AddConstProperty("RESOLUTIONSCALE",fano);
-    /*
-    fArgonLiquid = G4Material::GetMaterial("Argon-Liq");
-	  fArgonLiquid->SetMaterialPropertiesTable(myMPT1);
-    */
-    fXenonArgonLiquid = G4Material::GetMaterial("Xenon-Doped-Argon-Liq");
-    fXenonArgonLiquid->SetMaterialPropertiesTable(myMPT1);
-    fXenonArgonLiquid->GetIonisation()->SetBirksConstant(5.1748e-4*cm/MeV);
-    /*
-    XenonArgonLiquid->AddElement(G4Element::GetElement("Argon"), 1.-1.e-6);
-    new G4Isotope("Xenon124", 54, 124, 123.9058 * g / mole); //0.09
-    new G4Isotope("Xenon126", 54, 126, 125.904 * g / mole); //0.09
-    new G4Isotope("Xenon128", 54, 128, 127.9035 * g / mole);//1.92
-    new G4Isotope("Xenon129", 54, 129, 128.9047 * g / mole); //26.44
-    new G4Isotope("Xenon130", 54, 130, 129.9035 * g / mole); //4.08
-    new G4Isotope("Xenon131", 54, 131, 130.9050 * g / mole); //21.18
-    new G4Isotope("Xenon132", 54, 132, 131.9041 * g / mole); //26.89
-    new G4Isotope("Xenon134", 54, 134, 133.9053 * g / mole); //10.44
-    new G4Isotope("Xenon136", 54, 136, 135.9072 * g / mole); //8.87
-    G4Element* elXenon = new G4Element("Xenon","Xe",9);
-    elXenon->AddIsotope(G4Isotope::GetIsotope("Xenon124"),0.090);
-    elXenon->AddIsotope(G4Isotope::GetIsotope("Xenon126"),0.090);
-    elXenon->AddIsotope(G4Isotope::GetIsotope("Xenon128"),1.920);
-    elXenon->AddIsotope(G4Isotope::GetIsotope("Xenon129"),26.44);
-    elXenon->AddIsotope(G4Isotope::GetIsotope("Xenon130"),4.080);
-    elXenon->AddIsotope(G4Isotope::GetIsotope("Xenon131"),21.18);
-    elXenon->AddIsotope(G4Isotope::GetIsotope("Xenon132"),26.89);
-    elXenon->AddIsotope(G4Isotope::GetIsotope("Xenon134"),10.44);
-    elXenon->AddIsotope(G4Isotope::GetIsotope("Xenon136"),8.870);
-    XenonArgonLiquid->AddElement(G4Element,1.e-6);
-    */
-    //what's the real value?
-
-}
 
 void MGLGNDOpticalMaterialProperties::Register_TPB_Properties()
 {
-  G4NistManager* nist = G4NistManager::Instance();
-  G4Element* elementH = nist->FindOrBuildElement("H");
-  G4Element* elementC = nist->FindOrBuildElement("C");
-  fTPB= new G4Material("TPB", 1*g/cm3, 2, kStateSolid);
-  fTPB->AddElement(elementH, 22);
-  fTPB->AddElement(elementC, 28);
-  // Now attach the optical properties to it.
-  // Build table with photon energies
+  //taken from MGGerdaLocalMaterialTable.cc in the gerda-optical branch because they do it so much better than me (N. McFadden)
+  //Also, I am guessing most of the comments are from Luigi Pertoldi
+  //Adding TPB emission properties for different materials and generic TPB
+
+  G4NistManager*   nist = G4NistManager::Instance();
+  G4Element* elH = nist->FindOrBuildElement("H");
+  G4Element* elC = nist->FindOrBuildElement("C");
+  G4Element* elF = nist->FindOrBuildElement("F");
   
-   const G4int numTPB = 500;
-   //G4double HighETPB = LambdaE /(350*nanometer);
-   G4double HighETPB = LambdaE /(115*nanometer);
-   G4double LowETPB = LambdaE /(650*nanometer);//(650*nanometer); //598
-   G4double deeTPB = ((HighETPB - LowETPB) / ((G4double)(numTPB-1)));
-   G4double LAr_SCPPTPB[numTPB];
-   for (G4int ji = 0; ji < numTPB; ji++)  LAr_SCPPTPB[ji]=LowETPB+ ((G4double)ji) * deeTPB;
-   
-   G4double WLS_absorption[numTPB];
-   G4double WLS_emission[numTPB];
-   G4double WLS_refraction[numTPB];
+  // TPB
+  G4Material* TPB = new G4Material("TPB", 1.08*g/cm3, 2, kStateSolid);
+              TPB -> AddElement(elH, 22);
+              TPB -> AddElement(elC, 28);
 
-   for (G4int ji=0;ji < numTPB; ji++) {
-     //N. McFadden
-     //arXiv:1210.3793v3 says that TPB is imbedded in cladding thus has same refractive index
-     WLS_refraction[ji] =1.42;
-     // Should the TPB shift the Cherenkov light?
-     // This makes a tail starting at 128 until the visible.
-     if (LAr_SCPPTPB[ji] >= 3.31*eV){// <= 374.57 nm 
-       // For the moment set it to always absorb photons
-       WLS_absorption[ji] = 0.001*nm; //absorbs UV (always)
-     } else {
-       // < 374.57 nm
-       WLS_absorption[ji] = 10.5*m; //otherwise transparent
-       //WLS_absorption[ji] = 1.5*m; //otherwise transparent
-     }
-     WLS_emission[ji] = TPBEmissionSpectrum(LAr_SCPPTPB[ji]);
-     //G4cout<<" \t\t"<< WLS_emission[ji] << " "<< LAr_SCPPTPB[ji]<<G4endl;
-   }
+  // TPB on Nylon
+  G4Material* TPBOnNylon = new G4Material("TPBOnNylon", 1.08*g/cm3, 2, kStateSolid);
+              TPBOnNylon -> AddElement(elH, 22);
+              TPBOnNylon -> AddElement(elC, 28);
 
-   // make new table 
-   G4MaterialPropertiesTable *tpbTable = new G4MaterialPropertiesTable();
-   tpbTable->AddProperty("RINDEX",LAr_SCPPTPB,WLS_refraction,numTPB);
-   tpbTable->AddProperty("WLSABSLENGTH",LAr_SCPPTPB,WLS_absorption,numTPB);
-   tpbTable->AddProperty("WLSCOMPONENT",LAr_SCPPTPB,WLS_emission,numTPB);
-   // From WArP
-   tpbTable->AddConstProperty("WLSTIMECONSTANT", 0.01*ns);
-   G4double WLSyield = 1.2;
-   tpbTable->AddConstProperty("WLSMEANNUMBERPHOTONS",WLSyield);
-   //apperently TPB scintillates?!?!?
-   G4double LightYield    = 10000.; //7000 - 8000 for scintillating fibers, for WLS fiber is less
-   tpbTable->AddConstProperty("SCINTILLATIONYIELD",LightYield / MeV); // limit scint. phot. JJ
-   if(!fTPB) G4cout<<" TPB is bad material and you should feel bad for using it!"<<G4endl;
-   fTPB->SetMaterialPropertiesTable(tpbTable);
-   MGLog(routine) << "Constructed TPB Properties"<<endlog;
-}
-//copied from GEGSLArGeOptical.cc
-void MGLGNDOpticalMaterialProperties::InitializeTPBSpectra()
-{
-  fSuccessfulInitialization = false;
-  char* path = getenv("MGGENERATORDATA");
-  if (!path)
-  {
-    MGLog(warning)<< "MGGENERATORDATA environment variable not set! Assuming local input (./)."
-                  << "You find the files in $MAGE/generators/data. Set MGGENERATORDATA to point there." << endlog;
-    path = (char*) ".";
+  // TPB on VM2000
+  G4Material* TPBOnVM2000 = new G4Material("TPBOnVM2000", 1.08*g/cm3, 2, kStateSolid);
+              TPBOnVM2000 -> AddElement(elH, 22);
+              TPBOnVM2000 -> AddElement(elC, 28);
+
+  // TPB on Tetratex
+  G4Material* TPBOnTetratex = new G4Material("TPBOnTetratex", 1.08*g/cm3, 2, kStateSolid);
+              TPBOnTetratex -> AddElement(elH, 22);
+              TPBOnTetratex -> AddElement(elC, 28);
+  ////////////
+  // VM2000 //
+  ////////////
+
+  //VM2000 will NOT be used in LEGEND because Tetratex is more radio pure, it is added here just to have it...
+  /** Reflectivity taken from https://www.osti.gov/servlets/purl/1184400
+   * "Reflectivity spectra for commonly used reflectors" by M. Janacek
+   *
+   * Seems to be a well-done measurement, done using an integrating sphere and taking
+   * into account the (even little) fluorescence. He uses a 65um thick foil without the
+   * glue on the back. The results he shows are already normalized by the reflectivity
+   * of the reference PTFE sample (-> absolute reflectivity!)
+   *
+   * EDIT: I found this paper: arXiv:1304.6117 in which people measure the reflectivity
+   *       of VM2000 with TPB evaporated on it, and it's a bit different. The measurement
+   *       seems to be done properly as they take into account the effect of TPB's emission
+   *       spectrum. The measurement seems to be pretty independent on the TPB layer thickness
+   *
+   *       The old reflectivity values can be found in 'Reflectivity_VM2000.dat'
+   *  -Luigi Pertoldi
+   */
+
+    //auto VM2000ReflGraph = std::unique_ptr<TGraph>(ReadSpectrumFromFile("Reflectivity_VM2000.dat"));
+  auto VM2000ReflGraph = std::unique_ptr<TGraph>(ReadSpectrumFromFile("Reflectivity_TPBCoatedVM2000.dat"));
+  G4double refl_VM2000[NUMENTRIES_2];
+
+  for (int i = 0; i < NUMENTRIES_2; i++) {
+    auto r = VM2000ReflGraph->Eval(LambdaE/(ph_energies[i])/nm);
+    refl_VM2000[i] = r >= 0 ? r : 0;
   }
-  G4String pathString(path);
-  G4String pathFile = pathString + "/VM2000_em_spec.dat";
-  fTPBspec = new TGraph(pathFile.data());
-  if (fTPBspec->GetN() > 0 ) {
-    fSuccessfulInitialization = true;
-    MGLog(routine) << "TPB re-emission spectrum ( " << fTPBspec->GetN()
-							      << " points) successfully loaded from file." << endlog;
-    /** Uncomment for debugging purposes
-		fVM2000spec->Print();
-     */
-  } else {
-    fSuccessfulInitialization = false;
-    MGLog(warning) << "TPB re-emission spectrum failed to load from [" << pathFile.data() << "]." << endlog;
-    MGLog(warning) << "Cross-check that this is intended... otherwise the output won't be reliable." << endlog;
+
+  G4MaterialPropertiesTable* VM2000OpTable = new G4MaterialPropertiesTable();
+  VM2000OpTable->AddProperty("REFLECTIVITY", ph_energies, refl_VM2000, NUMENTRIES_2);
+  G4Material::GetMaterial("VM2000")->SetMaterialPropertiesTable(VM2000OpTable);
+
+  //////////////
+  // Tetratex //
+  //////////////
+
+  /** Reflectivity taken from https://www.osti.gov/servlets/purl/1184400
+   * "Reflectivity spectra for commonly used reflectors" by M. Janacek
+   *
+   * He measures the reflectivity of 2 and 4 superimposed layers of 160um thick
+   * Tetratex. As our layer in GERDA is 254um thick I'm taking here his results
+   * for the two superimposed foils (= 320um). So, in reality, the reflectivity
+   * of our foil should be (negligibly) smaller.
+   *
+   * In addition to this, the TPB layer has some effect on the reflectivity,
+   * just like VM2000 above.
+   * -Luigi Pertoldi
+   */
+
+  // Tetratex (PTFE)
+  // density from data sheet found in Zurich
+  G4Material* Tetratex = new G4Material("Tetratex", 0.35*g/cm3, 2);
+              Tetratex -> AddElement(elF, 0.76);
+              Tetratex -> AddElement(elC, 0.24);
+
+  auto TetratexReflGraph = std::unique_ptr<TGraph>(ReadSpectrumFromFile("Reflectivity_Tetratex.dat"));
+  G4double refl_Tetratex[NUMENTRIES_2];
+
+  for (int i = 0; i < NUMENTRIES_2; i++) {
+    auto r = TetratexReflGraph->Eval(LambdaE/(ph_energies[i])/nm);
+    refl_Tetratex[i] = r >= 0 ? r : 0;
   }
+
+  G4MaterialPropertiesTable* TetratexOpTable = new G4MaterialPropertiesTable();
+  TetratexOpTable->AddProperty("REFLECTIVITY", ph_energies, refl_Tetratex, NUMENTRIES_2);
+  G4Material::GetMaterial("Tetratex")->SetMaterialPropertiesTable(TetratexOpTable);
+
+  /////////
+  // TPB //
+  /////////
+
+  /** Not actually to be used, please prefer TPBOnSomething materials
+   *
+   * - Emission spectrum taken from arXiv:1104.3259 (128nm excitation wavelength)
+   * - Absorption spectrum: very difficult to find good data. Values in TPBAbsorption.dat
+   *                        correspond to measurements reported in arXiv:1709.05002 for TPB
+   *                        evaporated on utraviolet-transmitting acrylic substrate
+   * - Quantum efficiency: literature value of 1.2 suggested by M. Walter
+   *                       recommendation of DARWIN/ArDM
+   * - Time constant: arbitrary small, same used by WArP people
+   * - Refractive index: // http://www.molbase.com/en/overview_1450-63-1-moldata-77892.html
+   *
+   * -Luigi Pertoldi
+   */
+
+  G4double TPB_QuantumEff   = 1.2;
+  G4double TPB_TimeConstant = 0.01 *ns;
+  G4double TPB_RefrIndex    = 1.635;
+
+  G4double TPB_refraction[NUMENTRIES_2];
+  G4double TPB_absorption[NUMENTRIES_2];
+  G4double TPB_emission  [NUMENTRIES_2];
+
+  // read emission spectrum from file
+  auto TPBEmissionGraph   = std::unique_ptr<TGraph>(ReadSpectrumFromFile("TPBEmission.dat"));
+  // read absorption from file (lengths in nanometers)
+  auto TPBAbsorptionGraph = std::unique_ptr<TGraph>(ReadSpectrumFromFile("TPBAbsorption.dat"));
+  for (int i = 0; i < NUMENTRIES_2; i++) {
+    TPB_refraction[i] = TPB_RefrIndex;
+
+    // use emission spectrum from file
+    auto e = TPBEmissionGraph->Eval(LambdaE/(ph_energies[i])/nm);
+    TPB_emission[i] = e >= 0 ? e : 0;
+
+    // use absorption length from file
+    auto a = TPBAbsorptionGraph->Eval(LambdaE/(ph_energies[i])/nm) *nm;
+    TPB_absorption[i] = a >= 0 ? a : 0;
+  }
+
+  auto TPBTable = new G4MaterialPropertiesTable();
+  TPBTable->AddProperty     ("RINDEX",               ph_energies, TPB_refraction, NUMENTRIES_2);
+  TPBTable->AddProperty     ("WLSABSLENGTH",         ph_energies, TPB_absorption, NUMENTRIES_2);
+  TPBTable->AddProperty     ("WLSCOMPONENT",         ph_energies, TPB_emission,   NUMENTRIES_2);
+  TPBTable->AddConstProperty("WLSTIMECONSTANT",      TPB_TimeConstant);
+  TPBTable->AddConstProperty("WLSMEANNUMBERPHOTONS", TPB_QuantumEff);
+  G4Material::GetMaterial("TPB")->SetMaterialPropertiesTable(TPBTable);
+
+  //////////////////
+  // TPB On Nylon //
+  //////////////////
+
+  /** Emission spectrum
+   *
+   * Taken from GSTR-15-504
+   * The TPB should be embedded in a polystyrene matrix (30% TPB 70% PS) and diluited in
+   * toluene (ratio 1:10), then brushed on nylon. The spectrum in TPBOnNylonEmission.dat
+   * comes from Fig. 2b, brown curve. The spectrum is similar to the one in arXiv:1304.6117
+   * Fig. 14, for TPB in PS matrix on glass, which makes me hope that the spectrum makes sense
+   *
+   * For 30% TPB 70% PS the WLS light yield is reduced by 30% [Alexey]
+   *
+   * See material TPB for the other properties
+   *  -Luigi Pertoldi
+   */
+
+  G4double TPBOnNylon_emission   [NUMENTRIES_2];
+  //Need attenuation length and WLS-attenuation because both physical properties exist
+  G4double TPBOnNylon_absorption [NUMENTRIES_2];
+
+
+  // read emission spectrum from file
+  auto TPBOnNylonSpecGraph = std::unique_ptr<TGraph>(ReadSpectrumFromFile("TPBOnNylonEmission.dat"));
+
+  // lengths are in m in the file
+  auto NylonAbsGraph = std::unique_ptr<TGraph>(ReadSpectrumFromFile("NylonAbsorption.dat"));
+
+  for (int i = 0; i < NUMENTRIES_2; i++) {
+    // use emission from file
+    auto e = TPBOnNylonSpecGraph->Eval(LambdaE/(ph_energies[i])/nm);
+    TPBOnNylon_emission[i] = e >= 0 ? e : 0;
+
+    auto a = NylonAbsGraph->Eval(LambdaE/(ph_energies[i])/nm) *m;
+    TPBOnNylon_absorption[i]= a >= 0 ? a : 0;
+  }
+
+  G4MaterialPropertiesTable *TPBOnNylonTable = new G4MaterialPropertiesTable();
+  TPBOnNylonTable->AddProperty     ("RINDEX",               ph_energies, TPB_refraction,        NUMENTRIES_2);
+  TPBOnNylonTable->AddProperty     ("WLSABSLENGTH",         ph_energies, TPB_absorption,        NUMENTRIES_2);
+  TPBOnNylonTable->AddProperty     ("ABSLENGTH",            ph_energies, TPBOnNylon_absorption, NUMENTRIES_2);
+  TPBOnNylonTable->AddProperty     ("WLSCOMPONENT",         ph_energies, TPBOnNylon_emission,   NUMENTRIES_2);
+  TPBOnNylonTable->AddConstProperty("WLSTIMECONSTANT",      TPB_TimeConstant);
+  TPBOnNylonTable->AddConstProperty("WLSMEANNUMBERPHOTONS", 0.84);
+  //TPBOnNylonTable->AddConstProperty("SCINTILLATIONYIELD",   TPB_ScintYield);
+  G4Material::GetMaterial("TPBOnNylon")->SetMaterialPropertiesTable(TPBOnNylonTable);
+
+  ///////////////////
+  // TPB on VM2000 //
+  ///////////////////
+  
+  //
+  //VM2000 will NOT be used in LEGEND because Tetratex is more radio pure, it is added here just to have it...
+  /** Emission spectrum
+   *
+   * Values taken from arXiv:1304.6117
+   * They measure the emission spectrum of TPB (~160 um thick layer) on VM2000
+   * at an excitation wavelength of 128nm and at 87K, so exactly in our experimental
+   * conditions. The major differences brougth by the LAr temperature are the vibronic
+   * structures that modify the shape of the spectrum.
+   *
+   * The old emission spectrum can be still found in TPBOnVM2000Emission.dat and at
+   * https://www.mpi-hd.mpg.de/gerdawiki/img_auth.php/8/8a/MaGe_optical_properties_table.pdf
+   * as was measured (under which conditions?) by M. Heisel and A. Wegmann in the past
+   *  -Luigi Pertoldi
+   * See material TPB for the other properties
+   */
+
+  G4double TPBOnVM2000_emission  [NUMENTRIES_2];
+
+  auto TPBOnVM2000SpecGraph = std::unique_ptr<TGraph>(ReadSpectrumFromFile("TPBOnVM2000Emission-87K.dat"));
+
+  for (int i = 0; i < NUMENTRIES_2; i++) {
+    // use emission from file
+    auto e = TPBOnVM2000SpecGraph->Eval(LambdaE/(ph_energies[i])/nm);
+    TPBOnVM2000_emission[i] = e >= 0 ? e : 0;
+  }
+
+  G4MaterialPropertiesTable *TPBOnVM2000Table = new G4MaterialPropertiesTable();
+  TPBOnVM2000Table->AddProperty     ("RINDEX",               ph_energies, TPB_refraction,       NUMENTRIES_2);
+  TPBOnVM2000Table->AddProperty     ("WLSABSLENGTH",         ph_energies, TPB_absorption,       NUMENTRIES_2);
+  TPBOnVM2000Table->AddProperty     ("WLSCOMPONENT",         ph_energies, TPBOnVM2000_emission, NUMENTRIES_2);
+  TPBOnVM2000Table->AddConstProperty("WLSTIMECONSTANT",      TPB_TimeConstant);
+  TPBOnVM2000Table->AddConstProperty("WLSMEANNUMBERPHOTONS", TPB_QuantumEff);
+  //TPBOnVM2000Table->AddConstProperty("SCINTILLATIONYIELD",   TPB_ScintYield);
+  G4Material::GetMaterial("TPBOnVM2000")->SetMaterialPropertiesTable(TPBOnVM2000Table);
+
+  /////////////////////
+  // TPB on Tetratex //
+  /////////////////////
+
+  /** Emission spectrum
+   *
+   * Taken from (our) publication: arXiv:1503.05349
+   * Seems that the TPB is dip-coated (0.9 mg/cm2 ~ 8 um thickness) on the Tetratex
+   * so here I'm taking the red curve in Fig. 4 (without the peak), which actually is
+   * measured for 0.17 mg/cm2. In principle the thickness affects the shape of the
+   * emission spectrum, as the efficiency of the reabsorption effect increases with
+   * the thickness of the layer. However, I didn't find other measurements around...
+   *  -Luigi Pertoldi
+   * See material TPB for the other properties
+   */
+
+  G4double TPBOnTetratex_emission[NUMENTRIES_2];
+
+  // read emission spectrum from file
+  auto TetratexSpecGraph = std::unique_ptr<TGraph>(ReadSpectrumFromFile("TPBOnTetratexEmission.dat"));
+
+  for (int i = 0; i < NUMENTRIES_2; i++) {
+    // use emission from file
+    auto e = TetratexSpecGraph->Eval(LambdaE/(ph_energies[i])/nm);
+    TPBOnTetratex_emission[i] = e >= 0 ? e : 0;
+  }
+
+  G4MaterialPropertiesTable *TPBOnTetratexTable = new G4MaterialPropertiesTable();
+  TPBOnTetratexTable->AddProperty     ("RINDEX",               ph_energies, TPB_refraction,         NUMENTRIES_2);
+  TPBOnTetratexTable->AddProperty     ("WLSABSLENGTH",         ph_energies, TPB_absorption,         NUMENTRIES_2);
+  TPBOnTetratexTable->AddProperty     ("WLSCOMPONENT",         ph_energies, TPBOnTetratex_emission, NUMENTRIES_2);
+  TPBOnTetratexTable->AddConstProperty("WLSTIMECONSTANT",      TPB_TimeConstant);
+  TPBOnTetratexTable->AddConstProperty("WLSMEANNUMBERPHOTONS", TPB_QuantumEff);
+  //TPBOnTetratexTable->AddConstProperty("SCINTILLATIONYIELD",   TPB_ScintYield);
+  G4Material::GetMaterial("TPBOnTetratex")->SetMaterialPropertiesTable(TPBOnTetratexTable);
+
 }
+
 
 //copied from GEGSLArGeOptical.cc
 G4double MGLGNDOpticalMaterialProperties::TPBEmissionSpectrum(G4double energy)
@@ -631,120 +657,82 @@ void MGLGNDOpticalMaterialProperties::Register_Fiber_Properties()
 
   density = 1.050*g/cm3;
 
-  // -- Rough approximation of BCF-91A
+  // -- Rough approximation of BCF-91A             
   fFiber_material = nistMan->ConstructNewMaterial("PolystyreneFiber", elements, natoms, density);
+  
+  // Fibers Polystyrene //
+  ////////////////////////
 
-  elements.clear();
-  natoms.clear();
+  /** Absorption spectrum
+   *
+   * The data sheet from Saint Gobain at
+   * https://www.crystals.saint-gobain.com/sites/imdf.crystals.com/files/documents/fiber-brochure.pdf
+   * reports the absorption spectrum for BCF-91A. Knowing that the fibers are 1mm thick one can
+   * extract the absorption length: starting from the trivial relation:
+   *
+   * 1 - P(E) = exp(-x/l(E))
+   *
+   * where P(E) is the probability (thus proportional to the absorption spectrum) for a photon
+   * travelling a distance x to be absorbed in the material given the attenuation length l(E), one
+   * can extract l(E) from P(E).  By integrating over the thickness of the material L one obtains:
+   *
+   * (1 - P(E)) * L = l(E) * (1 - exp(-L/l(E)))
+   *
+   * but the problem now is that l(E) cannot be extracted analytically (inhomogeneus expression).
+   * I wrote a Mathematica script that solves it numerically, the result is saved in
+   * FiberAbsorption.dat. Remeber that the units are arbitrary because the original absorption
+   * spectrum has arbitrary units.
+   *
+   * Jozsef measured an absorption length of 0.7 mm at 400 nm, the spectrum has been rescaled by
+   * that. Reference in Raphael Kneissl's bachelor thesis
+   *
+   * Emission spectrum: from the Saint-Gobain data sheets
+   * WLS time constant: from the Saint-Gobain data sheets
+   * -Luigi Pertoldi
+   */
 
-  G4int npoints_abs = fFibersAbsorptionSpec->GetN();
-  static const  G4int npoints = 250;
-  G4double *FiberAbsEnergies = new G4double[npoints];
-  G4double *FiberWLSAbsorption = new G4double[npoints];
-  G4double FiberTimeConstant = 7.2*ns;
+  // read absorption spectrum from file
+  auto FibersAbsorptionGr = std::unique_ptr<TGraph>(ReadSpectrumFromFile("FibersAbsorption.dat"));
+  // read emission spectrum from file
+  auto FibersEmissionGr = std::unique_ptr<TGraph>(ReadSpectrumFromFile("FibersEmission.dat"));
+
+  G4double* FiberWLSAbsorption = new G4double[NUMENTRIES_2];
+  G4double* FiberWLSEmission   = new G4double[NUMENTRIES_2];
+  G4double* FiberRIndex        = new G4double[NUMENTRIES_2];
+  G4double* FiberAbsorption    = new G4double[NUMENTRIES_2];
+
   // stuff that we have no variable information and therefore use a constant value
-  const G4int npoints_fixed = 2;
-  G4double FiberFixEnergies[npoints_fixed] = {LambdaE/(650.0*nanometer),LambdaE/(115.0*nanometer)};
-  G4double FiberRIndex[npoints_fixed] = {1.6,1.6};
-  G4double FiberAbsorption[npoints_fixed] = {3.8*m,3.8*m};
-  G4int idx = 0;
-  // The WLS absorption is a distance.
-  // Jozsef measured the value to be 0.7 mm at 400 nm.
-  // Use this to scale the spectrum.
-  // Have to do a backtrack of the value from the estimate at 400 nm.
-  G4double wls_abs_scale = 0.7*mm*fFibersAbsorptionSpec->Eval(400);
 
-  MGLog(debugging) << " Fiber WLS absorption spectrum (distance scale : " << wls_abs_scale << " ) :" << endlog;
+  // compute scale factor for absorption lengths
+  G4double scaleAbs = 0.7*mm / (FibersAbsorptionGr->Eval(400)*m);
 
-  for (int i = 0; i < npoints_abs; ++i) {
-    idx = npoints_abs-i-1;
-    FiberAbsEnergies[i] = LambdaE/(fFibersAbsorptionSpec->GetX()[idx]*nanometer);
+  MGLog(debugging) << "Making PolystyreneFiber optical properties" << endlog;
+  MGLog(debugging) << "energy[eV]\twavelength[nm]\tWLS-absl[mm]\tWLS-emi" << endlog;
 
-    //assuming the minimum as 0.02*cm at 423 nm
-    // value taken from http://www-zeuthen.desy.de/lcdet/Feb_05_WS/talks/rd_lcdet_sim.pdf
-    // based on measurements for MINOS
-    // TODO: Should be verified with Jozsef
-    FiberWLSAbsorption[i] = wls_abs_scale/fFibersAbsorptionSpec->GetY()[idx];
-    MGLog(debugging) << "WL : " << fFibersAbsorptionSpec->GetX()[idx]
-        << " nm  En : " << FiberAbsEnergies[i]/MeV << " MeV Abs : " << FiberWLSAbsorption[i]/cm << " cm " << endlog;
+  for (int i = 0; i < NUMENTRIES_2; ++i) {
+    FiberRIndex[i] = 1.6;
+    FiberAbsorption[i] = 3.8*m;
+    // use absorption from file
+    auto a = FibersAbsorptionGr->Eval(LambdaE/(ph_energies[i])/nm) *m;
+    FiberWLSAbsorption[i] = a >= 0 ? a : 0;
+    FiberWLSAbsorption[i] *= scaleAbs;
+    
+    // use emission from file
+    auto e = FibersEmissionGr->Eval(LambdaE/(ph_energies[i])/nm);
+    FiberWLSEmission[i] = e >= 0 ? e : 0;
+    MGLog(debugging) << ph_energies[i]/eV << "\t" << LambdaE/(ph_energies[i])/nm << "\t\t"
+      << FiberWLSAbsorption[i] << "\t\t" << FiberWLSEmission[i] << "\t" << endlog;
   }
 
-  G4int npoints_em = fFibersEmissionSpec->GetN();
-  G4double *FiberEmEnergies = new G4double[npoints_em];
-  G4double *FiberWLSEmission = new G4double[npoints_em];
+  G4MaterialPropertiesTable* fiberTable = new G4MaterialPropertiesTable();
+  fiberTable->AddProperty     ("RINDEX",          ph_energies, FiberRIndex,        NUMENTRIES_2);
+  fiberTable->AddProperty     ("ABSLENGTH",       ph_energies, FiberAbsorption,    NUMENTRIES_2);
+  fiberTable->AddProperty     ("WLSABSLENGTH",    ph_energies, FiberWLSAbsorption, NUMENTRIES_2);
+  fiberTable->AddProperty     ("WLSCOMPONENT",    ph_energies, FiberWLSEmission,   NUMENTRIES_2);
+  fiberTable->AddConstProperty("WLSTIMECONSTANT", 12 *ns);
+  //fiberTable->AddConstProperty("WLSMEANNUMBERPHOTONS", ???);
+  G4Material::GetMaterial("PolystyreneFiber")->SetMaterialPropertiesTable(fiberTable);
 
-  MGLog(debugging) << " Fiber WLS emission spectrum :" << endlog;
-  for (int i = 0; i < npoints_em; ++i) {
-    idx = npoints_em-i-1;
-    FiberEmEnergies[i] = LambdaE/(fFibersEmissionSpec->GetX()[idx]*nanometer);
-    FiberWLSEmission[i] = fFibersEmissionSpec->GetY()[idx];
-
-    MGLog(debugging) << "WL : " << fFibersAbsorptionSpec->GetX()[idx]
-        << " nm En : " << FiberEmEnergies[i]/MeV << " MeV Emission : " << FiberWLSEmission[i] << endlog;
-  }
-
-  G4MaterialPropertiesTable *fiberTable = new G4MaterialPropertiesTable();
-
-  fiberTable->AddProperty("RINDEX",FiberFixEnergies,FiberRIndex,npoints_fixed);
-  fiberTable->AddProperty("ABSLENGTH",FiberFixEnergies,FiberAbsorption,npoints_fixed);
-  fiberTable->AddProperty("WLSABSLENGTH",FiberAbsEnergies,FiberWLSAbsorption,npoints_abs);
-  fiberTable->AddProperty("WLSCOMPONENT",FiberEmEnergies,FiberWLSEmission,npoints_em);
-
-  // From WArP
-  fiberTable->AddConstProperty("WLSTIMECONSTANT", FiberTimeConstant);
-
-  fFiber_material->SetMaterialPropertiesTable(fiberTable);
-  MGLog(debugging) << "Constructed Fiber Properties"<<endlog;
-}
-
-//copied from GEGSLArGeOptical.cc
-void MGLGNDOpticalMaterialProperties::InitializeFiberSpectra()
-{
-  fSuccessfulInitialization = false;
-  char* path = getenv("MGGENERATORDATA");
-  if (!path)
-  {
-    MGLog(warning)<< "MGGENERATORDATA environment variable not set!" << endlog;
-    path = (char*) ".";
-  }
-  G4String pathString(path);
-  G4String pathFile = pathString + "/FibersAbsorption.dat";
-  fFibersAbsorptionSpec = new TGraph(pathFile.data(),"%lg,%lg");
-  if (fFibersAbsorptionSpec->GetN() > 0 ) {
-    MGLog(routine) << "Fibers absorption spectrum ( " << fFibersAbsorptionSpec->GetN()
-                    << " points) successfully loaded from file." << endlog;
-    /** Uncomment for debugging purposes
-    fFibersAborptionspec->Print();
-     */
-  }
-  else {
-
-    MGLog(warning) << "Fiber WLS absorption spectrum failed to load from [" << pathFile.data() << "]." << endlog;
-    MGLog(warning) << "Cross-check that this is intended... otherwise the output won't be reliable." << endlog;
-    G4Exception("GEGeometryLArInstHybrid::InitializeFiberSpectra",
-                "MissingInputData",
-                FatalException,
-                "Fiber WLS absorption spectrum not found.");
-  }
-
-  pathFile = pathString + "/FibersEmission.dat";
-  fFibersEmissionSpec = new TGraph(pathFile.data(),"%lg,%lg");
-  if (fFibersEmissionSpec->GetN() > 0 ) {
-    MGLog(routine) << "Fibers emission spectrum ( " << fFibersEmissionSpec->GetN()
-                      << " points) successfully loaded from file." << endlog;
-    /** Uncomment for debugging purposes
-      fFibersEmissionSpec->Print();
-     */
-
-  } else {
-    MGLog(warning) << "Fiber re-emission spectrum failed to load from [" << pathFile.data() << "]." << endlog;
-    MGLog(warning) << "Cross-check that this is intended... otherwise the output won't be reliable." << endlog;
-    G4Exception("GEGeometryLArInstHybrid::InitializeFiberSpectra",
-                "MissingInputData",
-                FatalException,
-                "Fiber WLS re-emission spectrum not found.");
-  }
-  fSuccessfulInitialization = true;
 }
 
 //Copied from GEGeometryLArInstHybrid.cc
@@ -812,318 +800,165 @@ void MGLGNDOpticalMaterialProperties::Register_Fiber_Cladding_Properties()
 //copied from GEGeometryLArInstrumentation.cc
 void MGLGNDOpticalMaterialProperties::Register_Nylon_Properties()
 {
-     // -- Nylon:
 
- fNylon = G4Material::GetMaterial("Nylon", true);
 
- // Now attach the optical properties to it.
- // Build table with photon energies
- const G4int numMSNylon = 500;
 
- G4double PPSCHighEMSNylon = LambdaE /(115*nanometer);
- G4double PPSCLowEMSNylon = LambdaE /(650*nanometer); //598
- G4double deeMSNylon = ((PPSCHighEMSNylon - PPSCLowEMSNylon) / ((G4double)(numMSNylon-1)));
- G4double LAr_SCPPMSNylon[numMSNylon];
- for (G4int ji = 0; ji < numMSNylon; ji++)
- {
-   G4double ee=PPSCLowEMSNylon+ ((G4double)ji) * deeMSNylon;
-   LAr_SCPPMSNylon[ji]=ee;
- }
- G4double MSNylon_absorption[numMSNylon];
-// G4double WLS_emission[numMSNylon];
- G4double MSNylonRefraction[numMSNylon];
- G4MaterialPropertiesTable *nylonTable = new G4MaterialPropertiesTable();
- // The refractive index of the TPB should be roughly the same as acrylic
- // The polystirene has very similar properties
- // Use the same value as the fibers
- for (G4int ji=0;ji < numMSNylon; ji++)
- {
-   MSNylonRefraction[ji] = 1.54; //
-   MSNylon_absorption[ji] = 100*m; //
+  ///////////
+  // Nylon //
+  ///////////
 
- }
- nylonTable->AddProperty("RINDEX",LAr_SCPPMSNylon,MSNylonRefraction,numMSNylon);
- nylonTable->AddProperty("ABSLENGTH",LAr_SCPPMSNylon,MSNylon_absorption,numMSNylon);
- fNylon->SetMaterialPropertiesTable(nylonTable);
- 
- MGLog(debugging) << "Constructed Nylon Optical Properties"<<endlog;
+  /**
+   * Absorption length from arXiv:1704.02291
+   */
+
+  // lengths are in m in the file
+  auto NylonAbsGraph = std::unique_ptr<TGraph>(ReadSpectrumFromFile("NylonAbsorption.dat"));
+
+  G4double Nylon_absorption[NUMENTRIES_2];
+  G4double Nylon_refraction[NUMENTRIES_2];
+
+  for (int i = 0; i < NUMENTRIES_2; i++) {
+    Nylon_refraction[i] = 1.54;
+
+    // use absorption length from file
+    auto a = NylonAbsGraph->Eval(LambdaE/(ph_energies[i])/nm) *m;
+    Nylon_absorption[i] = a >= 0 ? a : 0;
+  }
+
+  auto NylonTable = new G4MaterialPropertiesTable();
+  NylonTable->AddProperty("RINDEX",       ph_energies, Nylon_refraction, NUMENTRIES_2);
+  //GERDA code had this as WLSABSLEGNTH, should be ABSLENGTH
+  NylonTable->AddProperty("ABSLENGTH", ph_energies, Nylon_absorption, NUMENTRIES_2);
+  G4Material::GetMaterial("Nylon")->SetMaterialPropertiesTable(NylonTable);
 }
 
 //stolen from gerdageometry/src/GEGeometryLArInstrumentation.cc for MetalCopper
 //TODO Not sure optical proper electroformed copper but for now assuming the same as metal coppper
 void MGLGNDOpticalMaterialProperties::Register_Copper_Properties()
 {
-     // Attach properties to the other materials
-   // -- copper
-   //
-  char* path = getenv("MGGENERATORDATA");
-  if (!path)
-  {
-    MGLog(warning)<< "MGGENERATORDATA environment variable not set! Assuming local input (./)."
-                  << "You find the files in $MAGE/generators/data. Set MGGENERATORDATA to point there." << endlog;
-    path = (char*) ".";
-  }
-  G4String pathString(path);
 
-  G4MaterialPropertiesTable *cuOptTable = new G4MaterialPropertiesTable();
-  G4String pathFile = pathString + "/Reflectivity_Cu.dat";
-  TGraph *cuRefl = new TGraph(pathFile.data(),"%lg,%lg,%*lg");
+  ////////////
+  // Copper //
+  ////////////
 
-  G4double *ReflectivityCu = new G4double[cuRefl->GetN()];
-  G4double *Wavelength = new G4double[cuRefl->GetN()];
-  G4double *PhotonEnergy = new G4double[cuRefl->GetN()];
+  /* Measurements from Anne Wegmann's thesis:
+   * https://www.mpi-hd.mpg.de/gerda/public/2017/phd2017-anneWegmann.pdf
+  */
 
-  G4double metals_refl_scale = 1.0;
+  auto CuReflGr = std::unique_ptr<TGraph>(ReadSpectrumFromFile("Reflectivity_Cu.dat"));
 
-  for (int ji=0;ji < cuRefl->GetN(); ++ji)
-  {
-    Wavelength[ji] = (cuRefl->GetX())[ji];
-    PhotonEnergy[ji] = LambdaE/(Wavelength[ji]*nm);
-    ReflectivityCu[ji] = (cuRefl->GetY())[ji]*metals_refl_scale;
-    /** Uncomment for debugging purposes
-      MGLog(debugging) << "Lambda "
-      << (LambdaE/PhotonEnergy[ji])/nm
-      << " nm  Energy " << PhotonEnergy[ji]/eV << " eV : Refl[Cu] = "
-      << ReflectivityCu[ji]<<endlog;
-      */
-  }
-  //https://refractiveindex.info/?shelf=main&book=Cu&page=Johnson 
-  pathFile = pathString + "/RIndexReal_Cu.dat";
-  TGraph *cuRIndexReal = new TGraph(pathFile.data(),"%lg,%lg,%*lg");  
-  G4double *RIndexRealCu = new G4double[cuRIndexReal->GetN()];
-  G4double *waveIndexRealCu = new G4double[cuRIndexReal->GetN()];
-  G4double *nrgIndexRealCu = new G4double[cuRIndexReal->GetN()];
-  
-  pathFile = pathString + "/RIndexImag_Cu.dat";
-  TGraph *cuRIndexImag = new TGraph(pathFile.data(),"%lg,%lg,%*lg");
-  G4double *RIndexImagCu = new G4double[cuRIndexImag->GetN()];
-  G4double *waveIndexImagCu = new G4double[cuRIndexImag->GetN()];
-  G4double *nrgIndexImagCu = new G4double[cuRIndexReal->GetN()];
+  const G4int n_points_cu = CuReflGr->GetN();
+  G4double* ReflectivityCu   = new G4double[n_points_cu];
+  G4double* PhotonEnergyCu   = new G4double[n_points_cu];
 
-  G4int NpointsReal =  cuRIndexReal->GetN(); 
-  G4int NpointsImag =  cuRIndexImag->GetN(); 
-  if(NpointsReal != NpointsImag){
-    G4cout<<"RIndexReal_Cu.dat has different number of points than RIndexImag_Cu.dat"<<G4endl;
-    MGLog(fatal)<<endlog;
-  }
-  G4double *RIndexCu = new G4double[NpointsReal];
-  G4double *absLengthCu = new G4double[NpointsReal];
-  for(int i = 0; i < cuRIndexReal->GetN();i++){
-    
-    waveIndexRealCu[i] = (cuRIndexReal->GetX())[i];
-    waveIndexImagCu[i] = (cuRIndexImag->GetX())[i];
-    
-    nrgIndexRealCu[NpointsReal-i-1] = LambdaE/(waveIndexRealCu[i]*nm);
-    nrgIndexImagCu[NpointsImag-i-1] = LambdaE/(waveIndexImagCu[i]*nm);
-    
-    RIndexCu[i] = sqrt( (cuRIndexReal->GetY())[i]*(cuRIndexReal->GetY())[i] +(cuRIndexImag->GetY())[i]*(cuRIndexImag->GetY())[i] );
-    absLengthCu[i] = waveIndexRealCu[i]/(4*pi*(cuRIndexImag->GetY())[i]);//skin depth 
+  // put energies in ascending order
+  for (int i = 0; i < n_points_cu; ++i) {
+    PhotonEnergyCu[i] = LambdaE/(CuReflGr->GetX()[n_points_cu-1-i]*nm);
+    ReflectivityCu[i] = CuReflGr->GetY()[n_points_cu-1-i];
+    MGLog(debugging)<<"Copper reflectivity "<<ReflectivityCu[i]<<" "<<PhotonEnergyCu[i]<<endlog;
   }
 
-//  cuOptTable->AddProperty("REFLECTIVITY",PhotonEnergy,ReflectivityCu,cuRefl->GetN());
-  cuOptTable->AddProperty("RINDEX",   nrgIndexRealCu,RIndexCu,cuRIndexReal->GetN());
-  cuOptTable->AddProperty("ABSLENGTH",nrgIndexRealCu,absLengthCu,cuRIndexReal->GetN());
-//  cuOptTable->DumpTable();
-  fCopperEF = G4Material::GetMaterial("Copper-EF",true);
-  fCopperEF->SetMaterialPropertiesTable(cuOptTable);
-  MGLog(debugging) << "Constructed Copper-EF Optical Properties"<<endlog;
+  auto CuOptTable = new G4MaterialPropertiesTable();
+  CuOptTable->AddProperty("REFLECTIVITY", PhotonEnergyCu, ReflectivityCu, n_points_cu);
+
+  G4Material::GetMaterial("Copper-EF")->SetMaterialPropertiesTable(CuOptTable);
+
 }
 
 void MGLGNDOpticalMaterialProperties::Register_Germanium_Properties()
 {
-   // Attach properties to the other materials
-   // -- germanium
-   //
-  char* path = getenv("MGGENERATORDATA");
-  if (!path)
-  {
-    MGLog(warning)<< "MGGENERATORDATA environment variable not set! Assuming local input (./)."
-                  << "You find the files in $MAGE/generators/data. Set MGGENERATORDATA to point there." << endlog;
-    path = (char*) ".";
+  ///////////////
+  // Germanium //
+  ///////////////
+
+  /*** Optical properties of Germanium
+   * Needs to be attached to all deadlayer logical surfaces.
+   *
+   * Measurements from Anne Wegmann's thesis:
+   * https://www.mpi-hd.mpg.de/gerda/public/2017/phd2017-anneWegmann.pdf
+   * The Ge measured there is our dead-layer Li-doped germanium, at room temperature
+   *
+   * Found a reference for reflectivity to VUV light in Germanium:
+   * http://prola.aps.org/abstract/PR/v160/i3/p602_1
+   * It quotes a reflectivity quite high for UV light (~60-70%), but strongly
+   * dependent on the incident angle
+  */
+
+  auto GeReflGr = std::unique_ptr<TGraph>(ReadSpectrumFromFile("Reflectivity_Ge.dat"));
+
+  const G4int n_points_ge = GeReflGr->GetN();
+  G4double* ReflectivityGe = new G4double[n_points_ge];
+  G4double* PhotonEnergyGe = new G4double[n_points_ge];
+
+  // put energies in ascending order
+  for (int i = 0; i < n_points_ge; ++i) {
+    PhotonEnergyGe[i] = LambdaE/(GeReflGr->GetX()[n_points_ge-1-i]*nm);
+    ReflectivityGe[i] = GeReflGr->GetY()[n_points_ge-1-i];
   }
-  G4String pathString(path);
 
   G4MaterialPropertiesTable *geOptTable = new G4MaterialPropertiesTable();
-  G4String pathFile = pathString + "/Reflectivity_Ge.dat";
-  TGraph *geRefl = new TGraph(pathFile.data(),"%lg,%lg,%*lg");
-
-	 G4double *ReflectivityGe = new G4double[geRefl->GetN()];
-	 G4double *Wavelength = new G4double[geRefl->GetN()];
-	 G4double *PhotonEnergy = new G4double[geRefl->GetN()];
-   G4double metals_refl_scale = 1.0;//fDetectorDB->GetLArInstMetalsReflScale();
-    if (metals_refl_scale != 1.0) {
-      MGLog(routine) << "Scaling reflectivity of metals (Ge, Si, Cu) by a factor of " << metals_refl_scale << endlog;
-    }
-
-	    for (int ji=0;ji < geRefl->GetN(); ++ji)
-	    {
-	    	Wavelength[ji] = (geRefl->GetX())[ji];
-	    	PhotonEnergy[geRefl->GetN() - ji - 1] = LambdaE/(Wavelength[ji]*nm);
-	    	ReflectivityGe[ji] = (geRefl->GetY())[ji]*metals_refl_scale;
-			/* Uncomment for debugging purposes
-	    	MGLog(debugging) << "Lambda "
-					 << (LambdaE/PhotonEnergy[ji])/nm
-					 << " nm  Energy " << PhotonEnergy[ji]/eV << " eV : Refl[Ge] = "
-					 << ReflectivityGe[ji]<<endlog;
-			 */
-	    }
-      //https://refractiveindex.info/?shelf=main&book=Ge&page=Aspnes for 200-650 nm
-      //TODO made a "edge-a-ma-cated" guess for n and r at 115 nm
-      pathFile = pathString + "/RIndexReal_Ge.dat";
-      TGraph *geRIndexReal = new TGraph(pathFile.data(),"%lg,%lg,%*lg");  
-      G4double *RIndexRealGe = new G4double[geRIndexReal->GetN()];
-      G4double *waveIndexRealGe = new G4double[geRIndexReal->GetN()];
-      G4double *nrgIndexRealGe = new G4double[geRIndexReal->GetN()];
-
-      pathFile = pathString + "/RIndexImag_Ge.dat";
-      TGraph *geRIndexImag = new TGraph(pathFile.data(),"%lg,%lg,%*lg");
-      G4double *RIndexImagGe = new G4double[geRIndexImag->GetN()];
-      G4double *waveIndexImagGe = new G4double[geRIndexImag->GetN()];
-      G4double *nrgIndexImagGe = new G4double[geRIndexReal->GetN()];
-
-      G4int NpointsReal =  geRIndexReal->GetN(); 
-      G4int NpointsImag =  geRIndexImag->GetN(); 
-      if(NpointsReal != NpointsImag){
-        G4cout<<"RIndexReal_Ge.dat has different number of points than RIndexImag_Ge.dat"<<G4endl;
-        MGLog(fatal)<<endlog;
-      }
-      G4double *RIndexGe = new G4double[NpointsReal];
-      G4double *absLengthGe = new G4double[NpointsReal];
-      for(int i = 0; i < geRIndexReal->GetN();i++){
-
-        waveIndexRealGe[i] = (geRIndexReal->GetX())[i];
-        waveIndexImagGe[i] = (geRIndexImag->GetX())[i];
-
-        nrgIndexRealGe[NpointsReal-i-1] = LambdaE/(waveIndexRealGe[i]*nm);
-        nrgIndexImagGe[NpointsImag-i-1] = LambdaE/(waveIndexImagGe[i]*nm);
-    
-        RIndexGe[i] = sqrt( (geRIndexReal->GetY())[i]*(geRIndexReal->GetY())[i] +(geRIndexImag->GetY())[i]*(geRIndexImag->GetY())[i] );
-        absLengthGe[i] = waveIndexRealGe[i]/(4*pi*(geRIndexImag->GetY())[i]);//skin depth
-      }
-      //  geOptTable->AddProperty("REFLECTIVITY",PhotonEnergy,ReflectivityGe,geRefl->GetN());
-      geOptTable->AddProperty("RINDEX",   nrgIndexRealGe,RIndexGe,geRIndexReal->GetN());
-      geOptTable->AddProperty("ABSLENGTH",nrgIndexRealGe,absLengthGe,geRIndexReal->GetN());
-
-      //LGND naming scheme
-	    G4Material *germanium = G4Material::GetMaterial("Germanium-Enr");
-	    germanium->SetMaterialPropertiesTable(geOptTable);
-	    germanium = G4Material::GetMaterial("Germanium-Nat");
-	    germanium->SetMaterialPropertiesTable(geOptTable);
+  geOptTable->AddProperty("REFLECTIVITY", PhotonEnergyGe, ReflectivityGe, n_points_ge);
+  
+  //LGND naming scheme
+  G4Material *germanium = G4Material::GetMaterial("Germanium-Enr");
+  germanium->SetMaterialPropertiesTable(geOptTable);
+  germanium = G4Material::GetMaterial("Germanium-Nat");
+  germanium->SetMaterialPropertiesTable(geOptTable);
 }
 
 void MGLGNDOpticalMaterialProperties::Register_Silicon_Properties()
 {
- // Attach properties to the other materials
-   // -- Silicon
-   //
-  char* path = getenv("MGGENERATORDATA");
-  if (!path)
-  {
-    MGLog(warning)<< "MGGENERATORDATA environment variable not set! Assuming local input (./)."
-                  << "You find the files in $MAGE/generators/data. Set MGGENERATORDATA to point there." << endlog;
-    path = (char*) ".";
+  /////////////
+  // Silicon //
+  /////////////
+
+  /* Measurements from Anne Wegmann's thesis:
+   * https://www.mpi-hd.mpg.de/gerda/public/2017/phd2017-anneWegmann.pdf
+   */
+
+  auto SiReflGr = std::unique_ptr<TGraph>(ReadSpectrumFromFile("Reflectivity_Si.dat"));
+
+  const G4int n_points_si = SiReflGr->GetN();
+  G4double* ReflectivitySi   = new G4double[n_points_si];
+  G4double* PhotonEnergySi   = new G4double[n_points_si];
+
+  // put energies in ascending order
+  for (int i = 0; i < n_points_si; ++i) {
+    PhotonEnergySi[i] = LambdaE/(SiReflGr->GetX()[n_points_si-1-i]*nm);
+    ReflectivitySi[i] = SiReflGr->GetY()[n_points_si-1-i];
   }
-  G4String pathString(path);
 
-  G4MaterialPropertiesTable *siOptTable = new G4MaterialPropertiesTable();
-  G4String pathFile = pathString + "/Reflectivity_Si.dat";
-	 TGraph *siRefl = new TGraph(pathFile.data(),"%lg,%lg,%*lg");
+  auto siOptTable = new G4MaterialPropertiesTable();
+  siOptTable->AddProperty("REFLECTIVITY", PhotonEnergySi, ReflectivitySi, n_points_si);
 
-	 G4double *ReflectivitySi = new G4double[siRefl->GetN()];
-	 G4double *Wavelength = new G4double[siRefl->GetN()];
-	 G4double *PhotonEnergy = new G4double[siRefl->GetN()];;
-	 for (int ji=0;ji < siRefl->GetN(); ++ji)
-   {
-     Wavelength[ji] = (siRefl->GetX())[ji];
-     PhotonEnergy[siRefl->GetN()- ji - 1] = LambdaE/(Wavelength[ji]*nm);
-     ReflectivitySi[ji] = (siRefl->GetY())[ji];
-     /**  Uncomment for debugging purposes
-       MGLog(debugging) << "Lambda "
-       << (LambdaE/PhotonEnergy[ji])/nm
-       << " nm  Energy " << PhotonEnergy[ji]/eV << " eV : Refl[Si] = "
-       << ReflectivitySi[ji]<<endlog;
-       */
-   }
-   //https://refractiveindex.info/?shelf=main&book=Si&page=Pierce for 100-200 nm
-   //https://refractiveindex.info/?shelf=main&book=Si&page=Aspnes 200-650 nm
-   pathFile = pathString + "/RIndexReal_Si.dat";
-   TGraph *siRIndexReal = new TGraph(pathFile.data(),"%lg,%lg,%*lg");  
-   G4double *RIndexRealSi = new G4double[siRIndexReal->GetN()];
-   G4double *waveIndexRealSi = new G4double[siRIndexReal->GetN()];
-   G4double *nrgIndexRealSi = new G4double[siRIndexReal->GetN()];
-  
-   pathFile = pathString + "/RIndexImag_Si.dat";
-   TGraph *siRIndexImag = new TGraph(pathFile.data(),"%lg,%lg,%*lg");
-   G4double *RIndexImagSi = new G4double[siRIndexImag->GetN()];
-   G4double *waveIndexImagSi = new G4double[siRIndexImag->GetN()];
-   G4double *nrgIndexImagSi = new G4double[siRIndexReal->GetN()];
-
-   G4int NpointsReal =  siRIndexReal->GetN(); 
-   G4int NpointsImag =  siRIndexImag->GetN(); 
-   if(NpointsReal != NpointsImag){
-     G4cout<<"RIndexReal_Si.dat has different number of points than RIndexImag_Si.dat"<<G4endl;
-     MGLog(fatal)<<endlog;
-   }
-   G4double *RIndexSi = new G4double[NpointsReal];
-   G4double *absLengthSi = new G4double[NpointsReal];
-   for(int i = 0; i < siRIndexReal->GetN();i++){
-    
-     waveIndexRealSi[i] = (siRIndexReal->GetX())[i];
-     waveIndexImagSi[i] = (siRIndexImag->GetX())[i];
-
-     nrgIndexRealSi[NpointsReal-i-1] = LambdaE/(waveIndexRealSi[i]*nm);
-     nrgIndexImagSi[NpointsImag-i-1] = LambdaE/(waveIndexImagSi[i]*nm);
-
-     RIndexSi[i] = sqrt( (siRIndexReal->GetY())[i]*(siRIndexReal->GetY())[i] +(siRIndexImag->GetY())[i]*(siRIndexImag->GetY())[i] );
-     absLengthSi[i] = waveIndexRealSi[i]/(4*pi*(siRIndexImag->GetY())[i]);//skin depth
-   }
-
-	 //siOptTable->AddProperty("REFLECTIVITY",PhotonEnergy,ReflectivitySi,siRefl->GetN());
-   
-   siOptTable->AddProperty("RINDEX",nrgIndexRealSi,RIndexSi,NpointsReal);
-   siOptTable->AddProperty("ABSLENGTH",nrgIndexRealSi,absLengthSi,NpointsReal);
-
-	 G4Material *silicon = G4Material::GetMaterial("Silicon");
-	 silicon->SetMaterialPropertiesTable(siOptTable);
 }
 
 void MGLGNDOpticalMaterialProperties::Register_Teflon_Properties()
 {
-// Attach properties to the other materials
-   // --Teflon 
-   //
-  char* path = getenv("MGGENERATORDATA");
-  if (!path)
-  {
-    MGLog(warning)<< "MGGENERATORDATA environment variable not set! Assuming local input (./)."
-                  << "You find the files in $MAGE/generators/data. Set MGGENERATORDATA to point there." << endlog;
-    path = (char*) ".";
+
+    /////////////
+  // Teflon //
+  /////////////
+
+  /* Measurements from Anne Wegmann's thesis:
+   * https://www.mpi-hd.mpg.de/gerda/public/2017/phd2017-anneWegmann.pdf
+   */
+
+  auto TeflonReflGr = std::unique_ptr<TGraph>(ReadSpectrumFromFile("Reflectivity_Teflon.dat"));
+
+  const G4int n_points_tef = TeflonReflGr->GetN();
+  G4double* ReflectivityTeflon   = new G4double[n_points_tef];
+  G4double* PhotonEnergyTeflon   = new G4double[n_points_tef];
+  // put energies in ascending order
+  for (int i = 0; i < n_points_tef; ++i) {
+    PhotonEnergyTeflon[i] = LambdaE/(TeflonReflGr->GetX()[n_points_tef-1-i]*nm);
+    ReflectivityTeflon[i] = TeflonReflGr->GetY()[n_points_tef-1-i];
   }
-  G4String pathString(path);
 
-  G4MaterialPropertiesTable *tefOptTable = new G4MaterialPropertiesTable();
-  G4String pathFile = pathString + "/Reflectivity_Teflon.dat";
-   TGraph *tefRefl = new TGraph(pathFile.data(),"%lg,%lg,%*lg");
+  auto TeflonOptTable = new G4MaterialPropertiesTable();
+  TeflonOptTable->AddProperty("REFLECTIVITY", PhotonEnergyTeflon, ReflectivityTeflon, n_points_tef);
 
-   G4double *ReflectivityTef = new G4double[tefRefl->GetN()];
-   G4double *Wavelength = new G4double[tefRefl->GetN()];
-   G4double *PhotonEnergy = new G4double[tefRefl->GetN()];;
-   for (int ji=0;ji < tefRefl->GetN(); ++ji)
-      {
-        Wavelength[ji] = (tefRefl->GetX())[ji];
-        PhotonEnergy[ji] = LambdaE/(Wavelength[ji]*nm);
-        ReflectivityTef[ji] = (tefRefl->GetY())[ji];
-      }
-   //J. Micro/Nanolith. MEMS MOEMS 7(3), 033010 (Jul-Sep 2008)
-   const G4int nIndex = 10;
-   G4double IndexRefraction[nIndex] = {1.38,1.42,1.34,1.31,1.30,1.29,1.28,1.28,1.28,1.27};
-   G4double IndexWavelength[nIndex] = {100,147,153,173,210,261,336,428,591,826};
-   G4double IndexEnergy[nIndex];
-   for(int i = 0; i<nIndex;i++) IndexEnergy[nIndex - i - 1] = LambdaE/(IndexWavelength[i]*nm);
-   tefOptTable->AddProperty("REFLECTIVITY",PhotonEnergy,ReflectivityTef,tefRefl->GetN());
-   tefOptTable->AddProperty("RINDEX",IndexEnergy,IndexRefraction,nIndex);
-   G4Material *teflon = G4Material::GetMaterial("Teflon");
-   teflon->SetMaterialPropertiesTable(tefOptTable);
+  G4Material::GetMaterial("Teflon")->SetMaterialPropertiesTable(TeflonOptTable);
 }
 
 void MGLGNDOpticalMaterialProperties::Register_Silica_Properties()
@@ -1205,45 +1040,66 @@ void MGLGNDOpticalMaterialProperties::Register_StainlessSteel()
   G4String pathFile = pathString + "/RIndexReal_SS.dat";
 
   TGraph *ssRIndexReal = new TGraph(pathFile.data(),"%lg,%lg,%*lg");  
-  G4double *RIndexRealSS = new G4double[ssRIndexReal->GetN()];
-  G4double *waveIndexRealSS = new G4double[ssRIndexReal->GetN()];
-  G4double *nrgIndexRealSS = new G4double[ssRIndexReal->GetN()];
+  G4double *RIndexRealSi = new G4double[ssRIndexReal->GetN()];
+  G4double *waveIndexRealSi = new G4double[ssRIndexReal->GetN()];
+  G4double *nrgIndexRealSi = new G4double[ssRIndexReal->GetN()];
 
   pathFile = pathString + "/RIndexImag_SS.dat";
   TGraph *ssRIndexImag = new TGraph(pathFile.data(),"%lg,%lg,%*lg");
-  G4double *RIndexImagSS = new G4double[ssRIndexImag->GetN()];
-  G4double *waveIndexImagSS = new G4double[ssRIndexImag->GetN()];
-  G4double *nrgIndexImagSS = new G4double[ssRIndexReal->GetN()];
+  G4double *RIndexImagSi = new G4double[ssRIndexImag->GetN()];
+  G4double *waveIndexImagSi = new G4double[ssRIndexImag->GetN()];
+  G4double *nrgIndexImagSi = new G4double[ssRIndexReal->GetN()];
 
   G4int NpointsReal =  ssRIndexReal->GetN(); 
   G4int NpointsImag =  ssRIndexImag->GetN(); 
   if(NpointsReal != NpointsImag){
-    G4cout<<"RIndexReal_SS.dat has different number of points than RIndexImag_SS.dat"<<G4endl;
+    G4cout<<"RIndexReal_Si.dat has different number of points than RIndexImag_Si.dat"<<G4endl;
     MGLog(fatal)<<endlog;
   }
-  if( NpointsImag == 0 || NpointsReal == 0){
-    G4cout<<"RIndexReal_SS.dat or RIndexImag_SS has zero points"<<G4endl;
-    G4cout<<pathFile<<G4endl;
-    MGLog(fatal)<<endlog;
-  }
-  G4double *RIndexSS = new G4double[NpointsReal];
-  G4double *absLengthSS = new G4double[NpointsReal];
+  G4double *RIndexSi = new G4double[NpointsReal];
+  G4double *absLengthSi = new G4double[NpointsReal];
   for(int i = 0; i < ssRIndexReal->GetN();i++){
 
-    waveIndexRealSS[i] = (ssRIndexReal->GetX())[i];
-    waveIndexImagSS[i] = (ssRIndexImag->GetX())[i];
+    waveIndexRealSi[i] = (ssRIndexReal->GetX())[i];
+    waveIndexImagSi[i] = (ssRIndexImag->GetX())[i];
 
-    nrgIndexRealSS[NpointsReal-i-1] = LambdaE/(waveIndexRealSS[i]*nm);
-    nrgIndexImagSS[NpointsImag-i-1] = LambdaE/(waveIndexImagSS[i]*nm);
+    nrgIndexRealSi[NpointsReal-i-1] = LambdaE/(waveIndexRealSi[i]*nm);
+    nrgIndexImagSi[NpointsImag-i-1] = LambdaE/(waveIndexImagSi[i]*nm);
 
-    RIndexSS[i] = sqrt( (ssRIndexReal->GetY())[i]*(ssRIndexReal->GetY())[i] +(ssRIndexImag->GetY())[i]*(ssRIndexImag->GetY())[i] );
-    absLengthSS[i] = waveIndexRealSS[i]/(4*pi*(ssRIndexImag->GetY())[i]);//skin depth 
+    RIndexSi[i] = sqrt( (ssRIndexReal->GetY())[i]*(ssRIndexReal->GetY())[i] +(ssRIndexImag->GetY())[i]*(ssRIndexImag->GetY())[i] );
+    absLengthSi[i] = waveIndexRealSi[i]/(4*pi*(ssRIndexImag->GetY())[i]);//skin depth ~100 nm
   }
 
 
-  ssOptTable->AddProperty("RINDEX",nrgIndexRealSS,RIndexSS,NpointsReal);
-  ssOptTable->AddProperty("ABSLENGTH",nrgIndexRealSS,absLengthSS,NpointsReal);
+  ssOptTable->AddProperty("RINDEX",nrgIndexRealSi,RIndexSi,NpointsReal);
+  ssOptTable->AddProperty("ABSLENGTH",nrgIndexRealSi,absLengthSi,NpointsReal);
 
   G4Material *ssteel = G4Material::GetMaterial("Steel");
   ssteel->SetMaterialPropertiesTable(ssOptTable);
+}
+
+TGraph* MGLGNDOpticalMaterialProperties::ReadSpectrumFromFile(G4String filename) {
+
+  MGLog(debugging) << "Looking for " << filename << " file" << endlog;
+  G4String pathFile;
+  if (!getenv("MGGENERATORDATA")) {
+    MGLog(warning) << "MGGENERATORDATA environment variable not set! Setting it to '.'" << endlog;
+    pathFile = ".";
+  }
+  else pathFile = G4String(getenv("MGGENERATORDATA"));
+  pathFile += "/" + filename;
+  if(!std::ifstream(pathFile).is_open()) {
+    MGLog(fatal) << "Could not find " << pathFile << ". pleas set the MGGENERATORDATA variable." << endlog;
+  }
+
+  auto _g = new TGraph(pathFile.data());
+
+  if (!_g->IsZombie() and _g->GetN() > 0 ) {
+    MGLog(trace) << "Spectrum (" << _g->GetN()
+                   << " points) successfully loaded from " << filename << endlog;
+  } else {
+    MGLog(fatal) << "could not read data from from " << pathFile.data() << endlog;
+  }
+
+  return _g;
 }

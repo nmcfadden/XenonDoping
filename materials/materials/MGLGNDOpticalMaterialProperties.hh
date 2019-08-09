@@ -20,14 +20,10 @@ class MGLGNDOpticalMaterialProperties{
            G4double temp);
     G4double ArScintillationSpectrum(const G4double kk);
     inline G4Material* Get_ArgonLiquid(){return fArgonLiquid;}
-
-    G4double XeDopedArScintillationSpectrum(const G4double kk); 
-    void RegisterXeDopedArgonOpticalProperties();
     
     void Register_TPB_Properties();
     void InitializeTPBSpectra();
     G4double TPBEmissionSpectrum(G4double energy);
-    inline G4Material* Get_TPB(){return fTPB;}
     
     void Register_Fiber_Properties();
     void InitializeFiberSpectra();
@@ -50,12 +46,13 @@ class MGLGNDOpticalMaterialProperties{
     void Register_VM2000();
     void Register_StainlessSteel();
 
+    TGraph* ReadSpectrumFromFile(G4String filename);
+
   private:
     static const G4double LambdaE;
     G4Material *fArgonLiquid;
-    G4Material *fArgonGas;
-    G4Material *fXenonArgonLiquid;
-    G4Material *fTPB;
+    G4Material *fTPBFiber;
+    G4Material *fTPBNylon;
     G4Material *fFiber_material;
     G4Material *fFiber_claddingInner_material;
     G4Material *fFiber_claddingOuter_material;
@@ -65,6 +62,13 @@ class MGLGNDOpticalMaterialProperties{
     TGraph *fFibersAbsorptionSpec;
     TGraph *fFibersEmissionSpec;
     bool fSuccessfulInitialization;
+
+    // define useful stuff
+    static const G4int NUMENTRIES;// = 69;
+    static const G4int NUMENTRIES_1;// = 5;
+    static const G4int NUMENTRIES_2;// = 500;
+    static const G4int NUMENTRIES_3;// = 29;
+    G4double* ph_energies;//[NUMENTRIES_2];
 
 };
 #endif

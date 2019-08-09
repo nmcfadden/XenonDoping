@@ -243,16 +243,21 @@ void BACON_Baseline::ConstructDetector()
 
   //Place TPB disks
   G4double wlsThickness = 1*um;
+  G4double wlsRadius = 2*inch;
 
-  G4Tubs* wlsSolid = new G4Tubs("wlsSolid",0,pmtRadius,wlsThickness/2.,0,2*pi);
+  G4Tubs* wlsSolid = new G4Tubs("wlsSolid",0,wlsRadius,wlsThickness/2.,0,2*pi);
   G4LogicalVolume* wlsLogical = new G4LogicalVolume(wlsSolid,G4Material::GetMaterial("TPB"),"wlsLogical");
   G4VisAttributes* wlsVisAtt = new G4VisAttributes(G4Colour(0.0, 1., 0.0));
   wlsVisAtt->SetForceSolid(true);
   wlsLogical->SetVisAttributes(wlsVisAtt);
 
-//  G4VPhysicalVolume* wlsPhysical0 = new G4PVPlacement(0,G4ThreeVector(0, 0,-(fCryoHeight/2.)+pmtHeight+pmtHeight/2+wlsThickness/2),wlsLogical,"physicalWLS_0",theDetectorLogical,false,0);
-  G4VPhysicalVolume* wlsPhysical0 = new G4PVPlacement(0,G4ThreeVector(0, (1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing),wlsLogical,"physicalWLS_0",theDetectorLogical,false,0);
-  G4VPhysicalVolume* wlsPhysical1 = new G4PVPlacement(0,G4ThreeVector(0,-(1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing),wlsLogical,"physicalWLS_1",theDetectorLogical,false,0);
+  G4VPhysicalVolume* wlsPhysical0 = new G4PVPlacement(0,G4ThreeVector(0, (1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing),
+      wlsLogical,"physicalWLS_0",theDetectorLogical,false,0);
+  G4VPhysicalVolume* wlsPhysical1 = new G4PVPlacement(0,G4ThreeVector(0,-(1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing),
+      wlsLogical,"physicalWLS_1",theDetectorLogical,false,0);
+
+  G4cout<<"PMT_0 surface is at ("<<0<<","<< (1./2.)*fCryoID/2<<","<<-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing+wlsThickness/2.<<")"<<G4endl;
+  G4cout<<"PMT_1 surface is at ("<<0<<","<<-(1./2.)*fCryoID/2<<","<<-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing+wlsThickness/2.<<")"<<G4endl;
 
   //LEAD Housing for Co-60 source
   //
@@ -289,22 +294,31 @@ void BACON_Baseline::ConstructDetector()
 					  LambdaE/(340*nanometer), LambdaE /(360*nanometer), LambdaE /(380*nanometer), LambdaE /(400*nanometer), LambdaE /(450*nanometer),
 					  LambdaE/(500*nanometer), LambdaE /(550*nanometer), LambdaE /(580*nanometer), LambdaE /(600*nanometer), LambdaE /(630*nanometer),
 					  LambdaE/(660*nanometer), LambdaE /(700*nanometer), LambdaE /(730*nanometer), LambdaE /(750*nanometer)};  
-  G4double PMTGlassReflectivity[num_entries] = {0.0,0.0,0.0,0.0,0.0,
+  G4double PMTGlassReflectivity[num_entries];
+  /*
+          = {0.0,0.0,0.0,0.0,0.0,
 						0.0,0.0,0.0,0.0,0.0,
 						0.0,0.0,0.0,0.0,0.0,
 						0.0,0.0,0.0,0.0};
+  */
   ///*
   G4double PMTGlassEfficiency[num_entries] = {0.0000,0.0034,0.0322,0.0741,0.1297,
 					      0.1450,0.1673,0.1965,0.2348,0.2473,
 					      0.2467,0.2399,0.2368,0.2264,0.1847,
 					      0.1309,0.0692,0.0371,0.0231,0.0104,
-					      0.0036,0.0006,0.0001,0.0000}; 
+					      0.0036,0.0006,0.0001,0.0000};
+  //array should be sorted from low energy to high
+  for(int ij = 0; ij < num_entries; ij++){
+    PMTGlassEnergy[ij] = PMTGlassEnergy[(num_entries - 1)-ij];
+    //PMTGlassEfficiency[ij] = PMTGlassEfficiency[(num_entries - 1)-ij];
+    PMTGlassEfficiency[ij] = 1;//PMTGlassEfficiency[(num_entries - 1)-ij];
+    PMTGlassReflectivity[ij] = 0;
+  }
   //*/
-  //G4double PMTGlassEfficiency[num_entries] = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
   G4MaterialPropertiesTable* PMTGlassOptTable = new G4MaterialPropertiesTable();
   PMTGlassOptTable->AddProperty("REFLECTIVITY",PMTGlassEnergy,PMTGlassReflectivity,num_entries);
   PMTGlassOptTable->AddProperty("EFFICIENCY",PMTGlassEnergy,PMTGlassEfficiency,num_entries);
-  G4OpticalSurface* PMTGlassOptSurface = new G4OpticalSurface("LArInstrPMTGlassSurface",glisur,polished,dielectric_metal);
+  G4OpticalSurface* PMTGlassOptSurface = new G4OpticalSurface("LArInstrPMTGlassSurface",glisur,ground,dielectric_metal);
   PMTGlassOptSurface->SetMaterialPropertiesTable(PMTGlassOptTable);
 
   G4MaterialPropertiesTable* PMTHousingOptTable = new G4MaterialPropertiesTable();
@@ -321,6 +335,7 @@ void BACON_Baseline::ConstructDetector()
   SSOptSurface->SetFinish(ground);
   SSOptSurface->SetPolish(0.5);
 
+  //Boundary between tpb and pmtWindow
   new G4LogicalBorderSurface("WLS_PMT_0",wlsPhysical0,pmtPhysical0,PMTGlassOptSurface);
   new G4LogicalBorderSurface("WLS_PMT_1",wlsPhysical1,pmtPhysical1,PMTGlassOptSurface);
  
