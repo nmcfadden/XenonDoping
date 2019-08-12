@@ -571,7 +571,8 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
   //---having a unique trackID
   //---having no Parent (poor primary)
   //---current step number is 1
-  if(fPastTrackPrimaryID != track->GetTrackID() && track->GetParentID() == 0 && track->GetCurrentStepNumber() == 1){
+  //if(fPastTrackPrimaryID != track->GetTrackID() && track->GetParentID() == 0 && track->GetCurrentStepNumber() == 1){
+  if(track->GetParentID() == 0 && track->GetCurrentStepNumber() == 1){
     int pid = GetMaGeParticleID(track->GetDefinition());
     int trackID = track->GetTrackID();
     G4String physVolName = preStepPoint->GetPhysicalVolume()->GetName();

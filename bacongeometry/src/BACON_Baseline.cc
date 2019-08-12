@@ -242,7 +242,7 @@ void BACON_Baseline::ConstructDetector()
   G4VPhysicalVolume* pmtHousingPhysical1 = new G4PVPlacement(0,G4ThreeVector(0,-(1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtPlacing+pmtSpacing),pmtHousingLogical,"physicalHousingPMT_1",theDetectorLogical,false,0);
 
   //Place TPB disks
-  G4double wlsThickness = 1*um;
+  G4double wlsThickness = 0.25*inch;//1*um;
   G4double wlsRadius = 2*inch;
 
   G4Tubs* wlsSolid = new G4Tubs("wlsSolid",0,wlsRadius,wlsThickness/2.,0,2*pi);
@@ -256,7 +256,8 @@ void BACON_Baseline::ConstructDetector()
   G4VPhysicalVolume* wlsPhysical1 = new G4PVPlacement(0,G4ThreeVector(0,-(1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing),
       wlsLogical,"physicalWLS_1",theDetectorLogical,false,0);
 
-  G4cout<<"PMT_0 surface is at ("<<0<<","<< (1./2.)*fCryoID/2<<","<<-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing+wlsThickness/2.<<")"<<G4endl;
+  G4cout<<"WLS_0 Surface is at ("<<0<<","<< (1./2.)*fCryoID/2<<","<<-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing+wlsThickness/2.<<")"<<G4endl;
+  G4cout<<"WLS_0 Center is at ("<<0<<","<< (1./2.)*fCryoID/2<<","<<-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing<<")"<<G4endl;
   G4cout<<"PMT_1 surface is at ("<<0<<","<<-(1./2.)*fCryoID/2<<","<<-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing+wlsThickness/2.<<")"<<G4endl;
 
   //LEAD Housing for Co-60 source
@@ -268,7 +269,7 @@ void BACON_Baseline::ConstructDetector()
   pmtPhysical0->CheckOverlaps(1000, 0, true);
   pmtPhysical1->CheckOverlaps(1000, 0, true);
 
-  pmtHousingPhysical0->CheckOverlaps(1000,0,true);
+  //pmtHousingPhysical0->CheckOverlaps(1000,0,true);
   pmtHousingPhysical1->CheckOverlaps(1000,0,true);
   
   wlsPhysical0->CheckOverlaps(1000, 0, true);
@@ -287,13 +288,13 @@ void BACON_Baseline::ConstructDetector()
 
 
   //PMT glass:QE taken from PMT_r11065 data sheet
-  const G4int num_entries = 24;
+  const G4int num_entries = 22;
   G4double PMTGlassEnergy[num_entries] = {
             LambdaE/(100*nanometer), LambdaE /(160.8*nanometer), LambdaE /(170*nanometer), LambdaE /(182.3*nanometer), LambdaE /(200*nanometer), 
 					  LambdaE/(230*nanometer), LambdaE /(250*nanometer), LambdaE /(270*nanometer), LambdaE /(300*nanometer), LambdaE /(320*nanometer),
 					  LambdaE/(340*nanometer), LambdaE /(360*nanometer), LambdaE /(380*nanometer), LambdaE /(400*nanometer), LambdaE /(450*nanometer),
 					  LambdaE/(500*nanometer), LambdaE /(550*nanometer), LambdaE /(580*nanometer), LambdaE /(600*nanometer), LambdaE /(630*nanometer),
-					  LambdaE/(660*nanometer), LambdaE /(700*nanometer), LambdaE /(730*nanometer), LambdaE /(750*nanometer)};  
+					  LambdaE/(660*nanometer), LambdaE /(680*nanometer)};  
   G4double PMTGlassReflectivity[num_entries];
   /*
           = {0.0,0.0,0.0,0.0,0.0,
@@ -302,16 +303,19 @@ void BACON_Baseline::ConstructDetector()
 						0.0,0.0,0.0,0.0};
   */
   ///*
-  G4double PMTGlassEfficiency[num_entries] = {0.0000,0.0034,0.0322,0.0741,0.1297,
-					      0.1450,0.1673,0.1965,0.2348,0.2473,
-					      0.2467,0.2399,0.2368,0.2264,0.1847,
-					      0.1309,0.0692,0.0371,0.0231,0.0104,
-					      0.0036,0.0006,0.0001,0.0000};
+  //arXiv:1108.5584v2 [physics.ins-det] 26 Sep 2011
+  //Demonstration and Comparison of Operation of
+  //Photomultiplier Tubes at Liquid Argon Temperature...R. Acciarria et. al.
+  G4double PMTGlassEfficiency[num_entries] = {0.0000,0.0034,0.0322,0.0741,0.1836,
+					      0.1910,0.2189,0.2429,0.3135,0.3413,
+					      0.3543,0.3599,0.3673,0.3673,0.308,
+					      0.2172,0.1097,0.0708,0.0523,0.0301,
+					      0.0153,9.7172e-3};
   //array should be sorted from low energy to high
   for(int ij = 0; ij < num_entries; ij++){
     PMTGlassEnergy[ij] = PMTGlassEnergy[(num_entries - 1)-ij];
-    //PMTGlassEfficiency[ij] = PMTGlassEfficiency[(num_entries - 1)-ij];
-    PMTGlassEfficiency[ij] = 1;//PMTGlassEfficiency[(num_entries - 1)-ij];
+    PMTGlassEfficiency[ij] = PMTGlassEfficiency[(num_entries - 1)-ij];
+    //PMTGlassEfficiency[ij] = 1;//PMTGlassEfficiency[(num_entries - 1)-ij];
     PMTGlassReflectivity[ij] = 0;
   }
   //*/
@@ -342,8 +346,8 @@ void BACON_Baseline::ConstructDetector()
   new G4LogicalBorderSurface("Housing_PMT_0",pmtHousingPhysical0,pmtPhysical0,PMTHousingOptSurface);
   new G4LogicalBorderSurface("Housing_PMT_1",pmtHousingPhysical1,pmtPhysical1,PMTHousingOptSurface);
 
-  new G4LogicalBorderSurface("Argon_PMT_0",theDetectorPhysical,pmtPhysical0,PMTHousingOptSurface);
-  new G4LogicalBorderSurface("Argon_PMT_1",theDetectorPhysical,pmtPhysical1,PMTHousingOptSurface);
+  new G4LogicalBorderSurface("Argon_PMT_0",theDetectorPhysical,pmtHousingPhysical0,PMTHousingOptSurface);
+  new G4LogicalBorderSurface("Argon_PMT_1",theDetectorPhysical,pmtHousingPhysical1,PMTHousingOptSurface);
 
   new G4LogicalBorderSurface("Argon_TPB_0",theDetectorPhysical,wlsPhysical0,WLSoptSurf);
   new G4LogicalBorderSurface("TPB_Argon_0",wlsPhysical0,theDetectorPhysical,WLSoptSurf);

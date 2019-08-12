@@ -460,6 +460,7 @@ void MGLGNDOpticalMaterialProperties::Register_TPB_Properties()
 
   G4double TPB_refraction[NUMENTRIES_2];
   G4double TPB_absorption[NUMENTRIES_2];
+  G4double TPB_WLSabsorption[NUMENTRIES_2];
   G4double TPB_emission  [NUMENTRIES_2];
 
   // read emission spectrum from file
@@ -476,14 +477,26 @@ void MGLGNDOpticalMaterialProperties::Register_TPB_Properties()
     // use absorption length from file
     auto a = TPBAbsorptionGraph->Eval(LambdaE/(ph_energies[i])/nm) *nm;
     TPB_absorption[i] = a >= 0 ? a : 0;
+    
+    //Note that Absorption for WLS should not over lay the emission spectrum of the TPB
+    //else WLS photons can be reemmitted by the WLS
+    if(LambdaE/(ph_energies[i])/nm < 350){
+      TPB_WLSabsorption[i] = 100*nm;
+      G4cout<<LambdaE/(ph_energies[i])/nm<<" "<<TPB_WLSabsorption[i]<<"less than 350 nm"<<G4endl;
+    }
+    else{
+      TPB_WLSabsorption[i] = 100*m;
+      G4cout<<LambdaE/(ph_energies[i])/nm<<" "<<TPB_WLSabsorption[i]<<"more than 350 nm"<<G4endl;
+    }
   }
 
   auto TPBTable = new G4MaterialPropertiesTable();
   TPBTable->AddProperty     ("RINDEX",               ph_energies, TPB_refraction, NUMENTRIES_2);
-  TPBTable->AddProperty     ("WLSABSLENGTH",         ph_energies, TPB_absorption, NUMENTRIES_2);
+  TPBTable->AddProperty     ("WLSABSLENGTH",         ph_energies, TPB_WLSabsorption, NUMENTRIES_2);
   TPBTable->AddProperty     ("WLSCOMPONENT",         ph_energies, TPB_emission,   NUMENTRIES_2);
   TPBTable->AddConstProperty("WLSTIMECONSTANT",      TPB_TimeConstant);
   TPBTable->AddConstProperty("WLSMEANNUMBERPHOTONS", TPB_QuantumEff);
+  //TPBTable->AddProperty     ("ABSLENGTH"           , ph_energies, TPB_WLSabsorption, NUMENTRIES_2);
   G4Material::GetMaterial("TPB")->SetMaterialPropertiesTable(TPBTable);
 
   //////////////////
