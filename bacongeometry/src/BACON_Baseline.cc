@@ -194,6 +194,16 @@ void BACON_Baseline::ConstructDetector()
   Glass->AddElement(elC,91.533*perCent);
   Glass->AddElement(elH,8.467*perCent);
 
+  const G4int nGlass = 2;
+  G4double waveGlass[nGlass] = {LambdaE/(650*nm),LambdaE/(115)*nm};
+  G4double indexGlass[nGlass] = {1.458,1.458};
+  G4double absGlass[nGlass] = {1*m,1*m};
+  auto glassOpticalTable = new G4MaterialPropertiesTable();
+  glassOpticalTable->AddProperty("RINDEX",waveGlass ,indexGlass ,nGlass);
+  glassOpticalTable->AddProperty("ABSLENGTH",waveGlass,absGlass ,nGlass);
+
+  Glass->SetMaterialPropertiesTable(glassOpticalTable);
+
   //Glass tube for a simple PMT
   //surface between tpb and PMT will have QE LogicalBorder
 
@@ -222,7 +232,6 @@ void BACON_Baseline::ConstructDetector()
   G4VPhysicalVolume* pmtPhysical0 = new G4PVPlacement(0,G4ThreeVector(0, (1./2.)*fCryoID/2,-(fCryoHeight/2.)+0.5*pmtHeight+pmtPlacing-pmtThickness/2.+pmtSpacing),pmtLogical,"physicalPMT_0",theDetectorLogical,false,0);
   G4VPhysicalVolume* pmtPhysical1 = new G4PVPlacement(0,G4ThreeVector(0,-(1./2.)*fCryoID/2,-(fCryoHeight/2.)+0.5*pmtHeight+pmtPlacing-pmtThickness/2.+pmtSpacing),pmtLogical,"physicalPMT_1",theDetectorLogical,false,0);
   
-  //G4VPhysicalVolume* pmtPhysical0 = new G4PVPlacement(0,G4ThreeVector(0, 0,-(fCryoHeight/2.)+1.5*pmtHeight-pmtThickness/2.),pmtLogical,"physicalPMT_0",theDetectorLogical,false,0);
 
   //pmt housing to block photons from being "detected" from the side
 
@@ -243,7 +252,7 @@ void BACON_Baseline::ConstructDetector()
 
   //Place TPB disks
   G4double wlsThickness = 0.25*inch;//1*um;
-  G4double wlsRadius = 2*inch;
+  G4double wlsRadius = pmtRadius;//2*inch;
 
   G4Tubs* wlsSolid = new G4Tubs("wlsSolid",0,wlsRadius,wlsThickness/2.,0,2*pi);
   G4LogicalVolume* wlsLogical = new G4LogicalVolume(wlsSolid,G4Material::GetMaterial("TPB"),"wlsLogical");
@@ -260,16 +269,11 @@ void BACON_Baseline::ConstructDetector()
   G4cout<<"WLS_0 Center is at ("<<0<<","<< (1./2.)*fCryoID/2<<","<<-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing<<")"<<G4endl;
   G4cout<<"PMT_1 surface is at ("<<0<<","<<-(1./2.)*fCryoID/2<<","<<-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing+wlsThickness/2.<<")"<<G4endl;
 
-  //LEAD Housing for Co-60 source
-  //
-  //
-
-  
 
   pmtPhysical0->CheckOverlaps(1000, 0, true);
   pmtPhysical1->CheckOverlaps(1000, 0, true);
 
-  //pmtHousingPhysical0->CheckOverlaps(1000,0,true);
+  pmtHousingPhysical0->CheckOverlaps(1000,0,true);
   pmtHousingPhysical1->CheckOverlaps(1000,0,true);
   
   wlsPhysical0->CheckOverlaps(1000, 0, true);
@@ -331,12 +335,14 @@ void BACON_Baseline::ConstructDetector()
   PMTHousingOptTable->AddProperty("EFFICIENCY",PMTGlassEnergy,PMTGlassReflectivity,num_entries);
   G4OpticalSurface* PMTHousingOptSurface = new G4OpticalSurface("PMTHousingSurface",glisur,ground,dielectric_metal,0.5);
   PMTHousingOptSurface->SetMaterialPropertiesTable(PMTHousingOptTable);
-  
-  G4OpticalSurface* WLSoptSurf = new G4OpticalSurface("WLS_rough_surf",glisur,ground,dielectric_dielectric,0.5);
+ 
+  //For groundfrontpainted, reflection will be pure lambertian
+  G4OpticalSurface* WLSoptSurf = new G4OpticalSurface("WLS_rough_surf",unified,ground,dielectric_dielectric,0.5);
+  //G4OpticalSurface* WLSoptSurf = new G4OpticalSurface("WLS_rough_surf",unified,groundfrontpainted,dielectric_dielectric,0.5);
 
   G4OpticalSurface* SSOptSurface = new G4OpticalSurface("SS surface");
   SSOptSurface->SetType(dielectric_metal);
-  SSOptSurface->SetFinish(ground);
+  SSOptSurface->SetFinish(groundfrontpainted);
   SSOptSurface->SetPolish(0.5);
 
   //Boundary between tpb and pmtWindow

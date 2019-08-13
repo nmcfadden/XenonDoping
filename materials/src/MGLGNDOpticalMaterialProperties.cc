@@ -482,11 +482,9 @@ void MGLGNDOpticalMaterialProperties::Register_TPB_Properties()
     //else WLS photons can be reemmitted by the WLS
     if(LambdaE/(ph_energies[i])/nm < 350){
       TPB_WLSabsorption[i] = 100*nm;
-      G4cout<<LambdaE/(ph_energies[i])/nm<<" "<<TPB_WLSabsorption[i]<<"less than 350 nm"<<G4endl;
     }
     else{
       TPB_WLSabsorption[i] = 100*m;
-      G4cout<<LambdaE/(ph_energies[i])/nm<<" "<<TPB_WLSabsorption[i]<<"more than 350 nm"<<G4endl;
     }
   }
 

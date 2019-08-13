@@ -726,6 +726,7 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
       return;
     }
   }
+
   fWriteFlag = true;
   fMCEventSteps->AddStep( 
     recordPreStep, 
@@ -756,8 +757,9 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
   h2DMapRZUnscaled->Fill(r,fPrimZ);
   h2DMapXYUnscaled->Fill(fPrimX,fPrimY);
   h2DMapYZUnscaled->Fill(fPrimY,fPrimZ);
-  if(r > 100*cm)
+  if(r > 100*cm){
     step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
+  }
   if( (sensVolID > 0) && (eDep > 0) ){
     fMCEventHeader->AddEnergyToDetectorID( sensVolID, eDep);
     fMCEventHeader->AddEnergyToTotalEnergy( eDep );
