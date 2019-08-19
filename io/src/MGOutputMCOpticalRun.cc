@@ -757,12 +757,15 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
     iStep,
     trackWeight
   );
-  //Fill histograms is hit is found in SiPM
-  G4double r = sqrt(fPrimX*fPrimX+fPrimY*fPrimY);
-  hMapUnscaled->Fill(fPrimX,fPrimY,fPrimZ);
-  h2DMapRZUnscaled->Fill(r,fPrimZ);
-  h2DMapXYUnscaled->Fill(fPrimX,fPrimY);
-  h2DMapYZUnscaled->Fill(fPrimY,fPrimZ);
+
+  if(creatorName == "OpWLS" && eDep > 0){
+    //Fill histograms is hit is found in SiPM
+    G4double r = sqrt(fPrimX*fPrimX+fPrimY*fPrimY);
+    hMapUnscaled->Fill(fPrimX,fPrimY,fPrimZ);
+    h2DMapRZUnscaled->Fill(r,fPrimZ);
+    h2DMapXYUnscaled->Fill(fPrimX,fPrimY);
+    h2DMapYZUnscaled->Fill(fPrimY,fPrimZ);
+  }
 
   if( (sensVolID > 0) && (eDep > 0) ){
     fMCEventHeader->AddEnergyToDetectorID( sensVolID, eDep);
