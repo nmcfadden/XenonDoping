@@ -562,6 +562,12 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
   G4StepPoint* postStepPoint = step->GetPostStepPoint();
   G4StepPoint* preStepPoint = step->GetPreStepPoint();
 
+  //Large R cut
+  if(sqrt(  (preStepPoint->GetPosition().x()*preStepPoint->GetPosition().x())+
+            (preStepPoint->GetPosition().y()+preStepPoint->GetPosition().y())+
+            (preStepPoint->GetPosition().z()+preStepPoint->GetPosition().z()) ) > 100.*cm){
+    step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
+  }
   G4VPhysicalVolume* physicalVolume =postStepPoint->GetPhysicalVolume();
 
   int sensVolID = fSensitiveIDOfPhysicalVol[physicalVolume];
@@ -708,7 +714,7 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
        (fKillNeutrons && pid == 2112)||
        (iStep >= fNSteps-1 )) {
       step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
-      G4cout<<"Killing track for max Nstep...iStep "<<iStep<<" fNSteps "<<fNSteps<<", last volume step was in is "<<physVolName<<G4endl;
+      MGLog(debugging)<<"Killing track for max Nstep...iStep "<<iStep<<" fNSteps "<<fNSteps<<", last volume step was in is "<<physVolName<<endlog;
     }
     else if(fStopNuclei && pid > 100000000) step->GetTrack()->SetKineticEnergy(0.0);
   } 
@@ -757,9 +763,7 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
   h2DMapRZUnscaled->Fill(r,fPrimZ);
   h2DMapXYUnscaled->Fill(fPrimX,fPrimY);
   h2DMapYZUnscaled->Fill(fPrimY,fPrimZ);
-  if(r > 100*cm){
-    step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
-  }
+
   if( (sensVolID > 0) && (eDep > 0) ){
     fMCEventHeader->AddEnergyToDetectorID( sensVolID, eDep);
     fMCEventHeader->AddEnergyToTotalEnergy( eDep );

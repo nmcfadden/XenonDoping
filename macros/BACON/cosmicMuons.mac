@@ -1,0 +1,48 @@
+# Management 
+/MG/manager/mglog routine #debugging
+
+/MG/manager/seedWithUUID
+
+# Process List
+/MG/processes/realm DarkMatter
+/MG/processes/lowenergy true
+#/MG/processes/optical true
+#/MG/processes/opticalOnly true
+
+# Configure Detector
+/MG/geometry/detector BACON
+
+# Initialize Geant4 and geometry
+/run/initialize
+
+/MG/eventaction/rootschema MCOpticalRun
+/MG/eventaction/reportingfrequency 1
+/MG/eventaction/rootfilename vis.root
+
+#/MG/io/MCOpticalRun/SetSensitiveIDLabelScheme askGeom
+/MG/io/MCOpticalRun/SetSensitiveIDLabelScheme manual
+/MG/io/MCOpticalRun/setRunID 001
+/MG/io/MCOpticalRun/AddSensitiveVolnameID physicalPMT_0 200
+/MG/io/MCOpticalRun/AddSensitiveVolnameID physicalPMT_1 201
+/MG/io/MCOpticalRun/AddSensitiveVolnameID Detector 100
+/MG/io/MCOpticalRun/AddSensitiveVolnameID argonGasPhysical 101
+/MG/io/MCOpticalRun/AddSensitiveVolnameID CryoCan 300
+/MG/io/MCOpticalRun/AddSensitiveVolnameID Cryostat 301
+/MG/io/MCOpticalRun/AddSensitiveVolnameID CryoWell 302
+/MG/io/MCOpticalRun/AddSensitiveVolnameID ScintPanel1 400
+/MG/io/MCOpticalRun/AddSensitiveVolnameID ScintPanel1 401
+/MG/io/MCOpticalRun/useTimeWindow true
+/MG/io/MCOpticalRun/setTimeWindow 86400 second
+/MG/io/MCOpticalRun/setNSteps 5000
+#/MG/io/MCOpticalRun/KillAll 
+/MG/io/MCOpticalRun/setWriteAllSteps
+/MG/generator/select BACoNSurfaceMuons
+
+#/MG/generator/select SPS
+#/gps/pos/type Point
+#/gps/pos/centre 580 0 0 mm
+#/gps/direction -1 0. 0.
+#/gps/particle gamma
+#/gps/ene/mono 1 MeV
+
+/run/beamOn 100

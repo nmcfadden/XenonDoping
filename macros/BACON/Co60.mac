@@ -6,8 +6,8 @@
 # Process List
 /MG/processes/realm DarkMatter
 /MG/processes/lowenergy true
-#/MG/processes/optical true
-/MG/processes/opticalOnly true
+/MG/processes/optical true
+#/MG/processes/opticalOnly true
 
 # Configure Detector
 /MG/geometry/detector BACON
@@ -17,7 +17,7 @@
 
 /MG/eventaction/rootschema MCOpticalRun
 /MG/eventaction/reportingfrequency 10
-/MG/eventaction/rootfilename pmtVUV.root
+/MG/eventaction/rootfilename outputCo60.root
 
 #/MG/io/MCOpticalRun/SetSensitiveIDLabelScheme askGeom
 /MG/io/MCOpticalRun/SetSensitiveIDLabelScheme manual
@@ -33,21 +33,13 @@
 #/MG/io/MCOpticalRun/setWriteAllStepsInEventsThatDepositEnergy
 #/MG/io/MCOpticalRun/setWriteAllSensitiveSteps
 
-
-
-/MG/generator/select SPS
-/gps/pos/type Point
-/gps/pos/centre 0 120.65 -95.25 mm
-/gps/direction 0. 0. -1.
-/gps/particle opticalphoton
-/gps/ene/type Gauss
-/gps/ene/mono 9.6862 eV
-/gps/ene/sigma .2 eV
-/gps/polarization 1 0 0
+/MG/generator/select RDMiso
+/gun/energy 0 eV
+/grdm/ion 60 27 0
+/MG/generator/position 300. 0. 0. mm
 
 #/MG/generator/confine volume
 #/MG/generator/volume cryostat
-#/MG/generator/select RDMiso
 #/gun/energy 0 eV
 #/grdm/ion 224 88 0
 #/grdm/nucleusLimits 208 224 81 88
@@ -55,8 +47,8 @@
 #/MG/generator/select LGNDLiquidArgon
 #/MG/generator/LGNDLiquidArgon/SetParticle beta
 #/MG/generator/LGNDLiquidArgon/SetEnergy 1 MeV
-/tracking/verbose 2
-/run/beamOn 100
+#/tracking/verbose 2
+/run/beamOn 1000000
 #/MG/generator/select SPS
 #/gps/particle opticalphoton
 #/gps/ene/type Gauss

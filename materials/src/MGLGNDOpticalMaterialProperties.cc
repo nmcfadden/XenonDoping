@@ -105,6 +105,7 @@ void MGLGNDOpticalMaterialProperties::ConstructionOpticalProperties()
   Register_Silica_Properties();
   //Register_VM2000();
   Register_StainlessSteel();
+  Register_Acrylic();
 
   MGLog(routine) <<"Constructed LGND Optical Material Properties"<<endlog;
 }
@@ -1087,6 +1088,41 @@ void MGLGNDOpticalMaterialProperties::Register_StainlessSteel()
 
   G4Material *ssteel = G4Material::GetMaterial("Steel");
   ssteel->SetMaterialPropertiesTable(ssOptTable);
+}
+void MGLGNDOpticalMaterialProperties::Register_Acrylic()
+{
+  G4NistManager*   nist = G4NistManager::Instance();
+  G4Element* elH = nist->FindOrBuildElement("H");
+  G4Element* elC = nist->FindOrBuildElement("C");
+  G4Element* elO = nist->FindOrBuildElement("O");
+
+  G4Material* Acrylic;
+  if(G4Material::GetMaterial("Acrylic") != NULL){
+    Acrylic = G4Material::GetMaterial("Acrylic");
+  }
+  else{
+    Acrylic  = new G4Material("Acrylic",1.18*g/cm3,3,kStateSolid);
+    Acrylic->AddElement(elH,8);
+    Acrylic->AddElement(elC,5);
+    Acrylic->AddElement(elO,2);
+  }
+  //Data is in wavelength (nm) and absorption length (mm)
+  //Taken from https://wiki.bnl.gov/dayabay/upload/Acrylic_Transmittance_Sep14.pdf
+  auto acrylicAbsorptionGraph = std::unique_ptr<TGraph>(ReadSpectrumFromFile("AcrylicAbsorption.dat"));
+  G4double acrylic_absorption[NUMENTRIES_2];
+  G4double acrylic_index[NUMENTRIES_2];
+  for (int i = 0; i < NUMENTRIES_2; i++) {
+    auto r = acrylicAbsorptionGraph->Eval(LambdaE/(ph_energies[i])/nm)*mm;
+    if(LambdaE/(ph_energies[i])/nm < 200) r = 0;
+    acrylic_absorption[i] = r >= 0 ? r : 0;
+    acrylic_index[i] = 1.490;
+  }
+  
+  auto acrylicTable = new G4MaterialPropertiesTable();
+  acrylicTable->AddProperty("RINDEX"   , ph_energies, acrylic_index, NUMENTRIES_2);
+  acrylicTable->AddProperty("ABSLENGTH", ph_energies, acrylic_absorption, NUMENTRIES_2);
+  G4Material::GetMaterial("Acrylic")->SetMaterialPropertiesTable(acrylicTable);
+  
 }
 
 TGraph* MGLGNDOpticalMaterialProperties::ReadSpectrumFromFile(G4String filename) {

@@ -143,7 +143,7 @@ void BACON_Baseline::ConstructDetector()
 
   //Scintillator Patels
   //
-  G4Box* scintPanel = new G4Box("scintPanel",8.0/2*inch,32.0/2*inch,2.0/2*inch); //x,y,z
+  G4Box* scintPanel = new G4Box("scintPanel",8.5/2*inch,18.0/2*inch,0.9/2*cm); //x,y,z
   G4VisAttributes* scintVis = new G4VisAttributes(G4Colour(1,0,0));
   G4LogicalVolume* scintLogical = new G4LogicalVolume(scintPanel,G4Material::GetMaterial("PolystyreneFiber"),"LogicalPanel");
   scintLogical->SetVisAttributes(scintVis);
@@ -249,10 +249,23 @@ void BACON_Baseline::ConstructDetector()
 
   G4VPhysicalVolume* pmtHousingPhysical0 = new G4PVPlacement(0,G4ThreeVector(0, (1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtPlacing+pmtSpacing),pmtHousingLogical,"physicalHousingPMT_0",theDetectorLogical,false,0);
   G4VPhysicalVolume* pmtHousingPhysical1 = new G4PVPlacement(0,G4ThreeVector(0,-(1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtPlacing+pmtSpacing),pmtHousingLogical,"physicalHousingPMT_1",theDetectorLogical,false,0);
-
+  
+  
   //Place TPB disks
-  G4double wlsThickness = 0.25*inch;//1*um;
+  G4double wlsThickness = 2.0*um;//1*um;
   G4double wlsRadius = pmtRadius;//2*inch;
+  G4double acrylicThickness = 1/8.*inch;
+
+  //place acrylic disk
+  G4Tubs* acrylicSolid = new G4Tubs("acrylicSolid",0,wlsRadius,acrylicThickness/2.,0,2*pi);
+  G4LogicalVolume* acrylicLogical = new G4LogicalVolume(acrylicSolid,G4Material::GetMaterial("Acrylic"),"acrylicLogical");
+  G4VisAttributes* acrylicVisAtt = new G4VisAttributes(G4Colour(1.0, 1., 0.0));
+  acrylicLogical->SetVisAttributes(acrylicVisAtt);
+  G4VPhysicalVolume* acrylicPhysical0 = new G4PVPlacement(0,G4ThreeVector(0, (1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+acrylicThickness/2+pmtSpacing),
+      acrylicLogical,"physicalAcrylic_0",theDetectorLogical,false,0);
+  G4VPhysicalVolume* acrylicPhysical1 = new G4PVPlacement(0,G4ThreeVector(0, -(1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+acrylicThickness/2+pmtSpacing),
+      acrylicLogical,"physicalAcrylic_1",theDetectorLogical,false,0);
+
 
   G4Tubs* wlsSolid = new G4Tubs("wlsSolid",0,wlsRadius,wlsThickness/2.,0,2*pi);
   G4LogicalVolume* wlsLogical = new G4LogicalVolume(wlsSolid,G4Material::GetMaterial("TPB"),"wlsLogical");
@@ -260,14 +273,16 @@ void BACON_Baseline::ConstructDetector()
   wlsVisAtt->SetForceSolid(true);
   wlsLogical->SetVisAttributes(wlsVisAtt);
 
-  G4VPhysicalVolume* wlsPhysical0 = new G4PVPlacement(0,G4ThreeVector(0, (1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing),
-      wlsLogical,"physicalWLS_0",theDetectorLogical,false,0);
-  G4VPhysicalVolume* wlsPhysical1 = new G4PVPlacement(0,G4ThreeVector(0,-(1./2.)*fCryoID/2,-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing),
-      wlsLogical,"physicalWLS_1",theDetectorLogical,false,0);
+  G4VPhysicalVolume* wlsPhysical0 = new G4PVPlacement(0,G4ThreeVector(0, (1./2.)*fCryoID/2,
+        -(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+acrylicThickness+wlsThickness/2+pmtSpacing),wlsLogical,"physicalWLS_0",theDetectorLogical,false,0);
+  G4VPhysicalVolume* wlsPhysical1 = new G4PVPlacement(0,G4ThreeVector(0,-(1./2.)*fCryoID/2,
+        -(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+acrylicThickness+wlsThickness/2+pmtSpacing),wlsLogical,"physicalWLS_1",theDetectorLogical,false,0);
+
+
 
   G4cout<<"WLS_0 Surface is at ("<<0<<","<< (1./2.)*fCryoID/2<<","<<-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing+wlsThickness/2.<<")"<<G4endl;
-  G4cout<<"WLS_0 Center is at ("<<0<<","<< (1./2.)*fCryoID/2<<","<<-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing<<")"<<G4endl;
-  G4cout<<"PMT_1 surface is at ("<<0<<","<<-(1./2.)*fCryoID/2<<","<<-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing+wlsThickness/2.<<")"<<G4endl;
+  G4cout<<"WLS_0 Center is at (" <<0<<","<< (1./2.)*fCryoID/2<<","<<-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing<<")"<<G4endl;
+  G4cout<<"PMT_1 surface is at ("<<0<<","<<-(1./2.)*fCryoID/2<<","<<-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing-wlsThickness/2.<<")"<<G4endl;
 
 
   pmtPhysical0->CheckOverlaps(1000, 0, true);
@@ -278,6 +293,9 @@ void BACON_Baseline::ConstructDetector()
   
   wlsPhysical0->CheckOverlaps(1000, 0, true);
   wlsPhysical1->CheckOverlaps(1000, 0, true);
+
+  acrylicPhysical0->CheckOverlaps(1000, 0, true);
+  acrylicPhysical1->CheckOverlaps(1000, 0, true);
   //
   airSpacePhys->CheckOverlaps(1000,0,true);
 
@@ -336,8 +354,7 @@ void BACON_Baseline::ConstructDetector()
   G4OpticalSurface* PMTHousingOptSurface = new G4OpticalSurface("PMTHousingSurface",glisur,ground,dielectric_metal,0.5);
   PMTHousingOptSurface->SetMaterialPropertiesTable(PMTHousingOptTable);
  
-  //For groundfrontpainted, reflection will be pure lambertian
-  G4OpticalSurface* WLSoptSurf = new G4OpticalSurface("WLS_rough_surf",unified,ground,dielectric_dielectric,0.5);
+  G4OpticalSurface* WLSoptSurf = new G4OpticalSurface("WLS_rough_surf",glisur,ground,dielectric_dielectric,0.1);
   //G4OpticalSurface* WLSoptSurf = new G4OpticalSurface("WLS_rough_surf",unified,groundfrontpainted,dielectric_dielectric,0.5);
 
   G4OpticalSurface* SSOptSurface = new G4OpticalSurface("SS surface");
@@ -346,14 +363,26 @@ void BACON_Baseline::ConstructDetector()
   SSOptSurface->SetPolish(0.5);
 
   //Boundary between tpb and pmtWindow
-  new G4LogicalBorderSurface("WLS_PMT_0",wlsPhysical0,pmtPhysical0,PMTGlassOptSurface);
-  new G4LogicalBorderSurface("WLS_PMT_1",wlsPhysical1,pmtPhysical1,PMTGlassOptSurface);
- 
+  new G4LogicalBorderSurface("Acrylic_PMT_0",acrylicPhysical0,pmtPhysical0,PMTGlassOptSurface);
+  new G4LogicalBorderSurface("Acrylic_PMT_1",acrylicPhysical1,pmtPhysical1,PMTGlassOptSurface);
+
+  new G4LogicalBorderSurface("WLS_Acrylic_0",wlsPhysical0,acrylicPhysical0,WLSoptSurf);
+  new G4LogicalBorderSurface("Acrylic_WLS_0",acrylicPhysical0,wlsPhysical0,WLSoptSurf);
+
+  new G4LogicalBorderSurface("Acrylic_WLS_1",acrylicPhysical1,wlsPhysical1,WLSoptSurf);
+  new G4LogicalBorderSurface("WLS_Acrylic_1",wlsPhysical1,acrylicPhysical1,WLSoptSurf);
+
+  new G4LogicalBorderSurface("Argon_acrylic_0",theDetectorPhysical,acrylicPhysical0,WLSoptSurf);
+  new G4LogicalBorderSurface("acrylic_Argon_0",acrylicPhysical0,theDetectorPhysical,WLSoptSurf);
+  
+  new G4LogicalBorderSurface("Argon_acrylic_1",theDetectorPhysical,acrylicPhysical1,WLSoptSurf);
+  new G4LogicalBorderSurface("acrylic_Argon_1",acrylicPhysical1,theDetectorPhysical,WLSoptSurf);
+
   new G4LogicalBorderSurface("Housing_PMT_0",pmtHousingPhysical0,pmtPhysical0,PMTHousingOptSurface);
   new G4LogicalBorderSurface("Housing_PMT_1",pmtHousingPhysical1,pmtPhysical1,PMTHousingOptSurface);
 
-  new G4LogicalBorderSurface("Argon_PMT_0",theDetectorPhysical,pmtHousingPhysical0,PMTHousingOptSurface);
-  new G4LogicalBorderSurface("Argon_PMT_1",theDetectorPhysical,pmtHousingPhysical1,PMTHousingOptSurface);
+  new G4LogicalBorderSurface("Argon_Housing_0",theDetectorPhysical,pmtHousingPhysical0,PMTHousingOptSurface);
+  new G4LogicalBorderSurface("Argon_Housing_1",theDetectorPhysical,pmtHousingPhysical1,PMTHousingOptSurface);
 
   new G4LogicalBorderSurface("Argon_TPB_0",theDetectorPhysical,wlsPhysical0,WLSoptSurf);
   new G4LogicalBorderSurface("TPB_Argon_0",wlsPhysical0,theDetectorPhysical,WLSoptSurf);
