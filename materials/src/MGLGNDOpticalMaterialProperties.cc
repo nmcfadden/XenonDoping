@@ -278,6 +278,34 @@ void MGLGNDOpticalMaterialProperties::RegisterArgonOpticalProperties()
 
 	  fArgonLiquid->GetIonisation()->SetBirksConstant(5.1748e-4*cm/MeV);
 
+    //What is the difference between gaseous argon and liquid argon?
+    //density,triplet,IndexOfRefraction...what else?
+    //density,triplet,IndexOfRefraction,Rayleigh,abslength...what else?
+    G4MaterialPropertiesTable* myMPT2 = new G4MaterialPropertiesTable();
+    for (ji = 0; ji < NUMENTRIES; ji++){
+      e = PPCKOVLowE + ((G4double)ji) * de;
+      //according to 
+      //https://refractiveindex.info/?shelf=main&book=Ar&page=Bideau-Mehu
+      //Argon gas does not really change index of refraction much 1.0004 @ 140 nm and 1.00028 @ 500 nm
+      LAr_RIND[ji] = 1.00034;
+      //This is just a guess, scale by the ratio of the densities
+      LAr_RAYL[ji] = 781.95*LAr_RAYL[ji];
+      if (((LambdaE / e)/nm) < 200.0) {
+        LAr_ABSL[ji] = 781.95*LAr_ABSL_xuv;
+      }
+      else {
+        LAr_ABSL[ji] = 781.95*LAr_ABSL_vis;
+      }
+      G4cout<<"Ray "<<LAr_RAYL[ji]/cm<<", Atten "<<LAr_ABSL[ji]/cm<<", wavelength "<< (LambdaE / e)/nm<<G4endl;
+    }
+    myMPT2->AddProperty("RINDEX",        LAr_PPCK, LAr_RIND, NUMENTRIES);
+    myMPT2->AddProperty("RAYLEIGH",      LAr_PPCK, LAr_RAYL, NUMENTRIES);
+    myMPT2->AddProperty("ABSLENGTH",     LAr_PPCK, LAr_ABSL, NUMENTRIES);
+    myMPT2->AddConstProperty("FASTTIMECONSTANT", tau_s);
+    myMPT2->AddConstProperty("SLOWTIMECONSTANT",2880*ns);
+    //What is the photon yeild for GAr? assuming same as LAr
+    myMPT2->AddConstProperty("SCINTILLATIONYIELD",photon_yield);
+    G4Material::GetMaterial("Argon")->SetMaterialPropertiesTable(myMPT2);
 }
 
 G4double MGLGNDOpticalMaterialProperties::LArRefIndex(const G4double lambda)
