@@ -20,6 +20,9 @@ class MGLGNDOpticalMaterialProperties{
            G4double temp);
     G4double ArScintillationSpectrum(const G4double kk);
     inline G4Material* Get_ArgonLiquid(){return fArgonLiquid;}
+
+    void RegisterXeDopedArgonOpticalProperties();
+    G4double XeDopedArScintillationSpectrum(const G4double kk);
     
     void Register_TPB_Properties();
     void InitializeTPBSpectra();
@@ -52,6 +55,7 @@ class MGLGNDOpticalMaterialProperties{
   private:
     static const G4double LambdaE;
     G4Material *fArgonLiquid;
+    G4Material *fXenonArgonLiquid;
     G4Material *fTPBFiber;
     G4Material *fTPBNylon;
     G4Material *fFiber_material;

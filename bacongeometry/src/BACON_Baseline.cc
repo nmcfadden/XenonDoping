@@ -20,6 +20,7 @@
 #include "geometry/MGGeometryGlobals.hh"
 #include "io/MGLogger.hh"
 #include "bacongeometry/BACON_Baseline.hh"
+#include "bacongeometry/BACON_BaselineMessenger.hh"
 
 using namespace CLHEP;
 
@@ -27,8 +28,11 @@ const G4double BACON_Baseline::LambdaE = twopi *1.973269602e-16 * m * GeV;
 const G4double BACON_Baseline::inch = 2.54*cm;
 
 BACON_Baseline::BACON_Baseline(G4String version):
-  MGGeometryDetector(version)
+  MGGeometryDetector(version),
+  fMessenger(0)
 {
+  fLiquid = "Argon-Liq";
+  fMessenger = new BACON_BaselineMessenger(this);
   fCryoOD = 20*inch;
   fCryoThickness = 0.5*inch;
   fCryoID = fCryoOD-2*fCryoThickness;
@@ -54,12 +58,15 @@ void BACON_Baseline::ConstructDetector()
   G4double delta = 0.000001*m;
   */
 
-  G4Material *argon = G4Material::GetMaterial("Argon-Liq");
+  //G4Material *argon = G4Material::GetMaterial("Argon-Liq");
   //G4Material *xenonDopedArgon = G4Material::GetMaterial("Xenon-Doped-Argon-Liq");
   G4Box* exptBox = new G4Box("exptBox", 100.*m, 100.*m, 100.*m);
   G4VisAttributes* ArVisAtt = new G4VisAttributes(G4Colour(1.0,0.0,1.0,0.5)); // magenta, 50% opaque
   ArVisAtt->SetForceWireframe( true );
-  theDetectorLogical = new G4LogicalVolume(exptBox, argon, "theDetectorLogical");
+  
+  //theDetectorLogical = new G4LogicalVolume(exptBox, argon, "theDetectorLogical");
+  theDetectorLogical = new G4LogicalVolume(exptBox, G4Material::GetMaterial(fLiquid), "theDetectorLogical");
+  G4cout<<"Liquid inside cryostat is "<<fLiquid<<G4endl;
   //theDetectorLogical = new G4LogicalVolume(exptBox, xenonDopedArgon, "theDetectorLogical");
   theDetectorLogical->SetVisAttributes(ArVisAtt);
 
@@ -390,8 +397,8 @@ void BACON_Baseline::ConstructDetector()
   new G4LogicalBorderSurface("Argon_TPB_1",theDetectorPhysical,wlsPhysical1,WLSoptSurf);
   new G4LogicalBorderSurface("TPB_Argon_1",wlsPhysical1,theDetectorPhysical,WLSoptSurf);
 
-  //new G4LogicalBorderSurface("Argon_GAr",theDetectorPhysical,argonGasPhysical,GArLArOptSurf);
-  //new G4LogicalBorderSurface("GAr_Argon",argonGasPhysical,theDetectorPhysical,GArLArOptSurf);
+  new G4LogicalBorderSurface("Argon_GAr",theDetectorPhysical,argonGasPhysical,GArLArOptSurf);
+  new G4LogicalBorderSurface("GAr_Argon",argonGasPhysical,theDetectorPhysical,GArLArOptSurf);
 
   new G4LogicalBorderSurface("Cryo_Argon",cryostatPhysical,theDetectorPhysical,SSOptSurface);
   new G4LogicalBorderSurface("Argon_Cryo",theDetectorPhysical,cryostatPhysical,SSOptSurface);

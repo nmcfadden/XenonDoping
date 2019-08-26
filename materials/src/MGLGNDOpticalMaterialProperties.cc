@@ -94,6 +94,7 @@ void MGLGNDOpticalMaterialProperties::ConstructionOpticalProperties()
     ph_energies[i] = LambdaE/(650*nm) + i*((LambdaE/(115*nm) - (LambdaE/(650*nm)))/(NUMENTRIES_2-1));
   }
   RegisterArgonOpticalProperties();
+  RegisterXeDopedArgonOpticalProperties();
   Register_TPB_Properties();
   Register_Fiber_Properties();
   Register_Fiber_Cladding_Properties();
@@ -306,6 +307,159 @@ void MGLGNDOpticalMaterialProperties::RegisterArgonOpticalProperties()
     //What is the photon yeild for GAr? assuming same as LAr
     myMPT2->AddConstProperty("SCINTILLATIONYIELD",photon_yield);
     G4Material::GetMaterial("Argon")->SetMaterialPropertiesTable(myMPT2);
+}
+
+//Assume that all Ar 128 nm is converted to 175 nm (100-1000 ppm)
+//long attenuation length
+//light yeild is the same
+void MGLGNDOpticalMaterialProperties::RegisterXeDopedArgonOpticalProperties()
+{
+    static const G4int NUMENTRIES = 65;
+    const G4int num = 65;
+    static const G4double temp = 88.5*kelvin;
+    static const G4double LambdaE = twopi *1.973269602e-16 * m * GeV;
+
+    /**
+     * Nominal values for pure argon
+     */
+    G4double scint_yield = 23.6*eV;  // Nominal energy to produce a photon (measured)
+    G4double photon_yield = 1.0*MeV/scint_yield;
+    G4double tau_s = 6.0*ns;
+    G4double tau_l = 240.*ns;
+    /*G4double yield_ratio = 0.23; // For gammas and electrons*/
+
+
+    // New value based on the triplet lifetime from Mark Heisel
+    // Redefine the values to res-scale according to Mark's calculation
+    // TODO - what is the correct yield value?
+    // G4double LAr_LY_scale = fDetectorDB->GetLArInstArgonLYScale();
+    // photon_yield = 28120. * LAr_LY_scale;
+    /*
+    ** TODO - 
+    G4double LAr_att_scale = fDetectorDB->GetLArInstArgonAbsLScale();
+    if (LAr_att_scale != 1.0) {
+      MGLog(routine) << "Scaling XUV argon attenuation length by a factor of " << LAr_att_scale << endlog;
+    }
+    */
+
+    MGLog(routine) << "LAr Optical parameters: " << endlog;
+    MGLog(routine) << "     Scintillation yield : " << photon_yield << " ph/MeV" << endlog;
+    MGLog(routine) << "     Singlet lifetime : " << tau_s/ns << " ns" << endlog;
+    MGLog(routine) << "     Triplet lifetime : " << tau_l/ns << " ns" << endlog;
+
+    G4int ji;
+    G4double e;
+    G4double ee;
+
+    G4double PPCKOVHighE = LambdaE / (115*nanometer);
+    G4double PPCKOVLowE = LambdaE / (240*nanometer);
+    G4double de = ((PPCKOVHighE - PPCKOVLowE) / ((G4double)(NUMENTRIES-1)));
+
+    // liquid argon (LAr)
+    G4double LAr_PPCK[(NUMENTRIES)];
+    G4double LAr_RIND[(NUMENTRIES)];
+    G4double LAr_RAYL[(NUMENTRIES)];
+    G4double LAr_ABSL[(NUMENTRIES)];
+
+    //Transparent at 175 nm
+    G4double LAr_ABSL_xuv = 1000*m;
+    G4double LAr_ABSL_vis = 1000*m;
+    //TODO
+    //LAr_ABSL_xuv *= LAr_att_scale;
+
+    MGLog(debugging)  << "Rayleigh scattering lenght [m]:" << endlog;
+    for (ji = 0; ji < NUMENTRIES; ji++){
+      e = PPCKOVLowE + ((G4double)ji) * de;
+      LAr_PPCK[ji] = e;
+      LAr_RIND[ji] = LArRefIndex((LambdaE / e));
+      LAr_RAYL[ji] = LArRayLength((LambdaE / e), temp);
+      MGLog(debugging) << (LambdaE/LAr_PPCK[ji])/nm <<", "<< LAr_RAYL[ji] << endlog;
+      /* Uncomment for debugging purposes
+        MGLog(debugging) << " WL: " << (LambdaE/LAr_PPCK[ji])/nm<< " nm Energy: " << LAr_PPCK[ji]/eV << " eV; Refr: " <<
+      LAr_RIND[ji] << " ; Rayleigh l. " << LAr_RAYL[ji]/m << " m" << endlog;
+         */
+
+      if (((LambdaE / e)/nm) < 200.0) {
+        LAr_ABSL[ji] =LAr_ABSL_xuv;
+      } else {
+        LAr_ABSL[ji] = LAr_ABSL_vis;
+      }
+    }
+    MGLog(debugging) << "XUV attenuation length: " << LAr_ABSL_xuv/cm << " cm" << endlog;
+    MGLog(debugging) << "VIS attenuation length: " << LAr_ABSL_vis/m << " m" << endlog;
+
+    G4double PPSCHighE = LambdaE /(155*nanometer);
+    G4double PPSCLowE = LambdaE /(190*nanometer);
+    G4double dee = ((PPSCHighE - PPSCLowE) / ((G4double)(num-1)));
+    G4double LAr_SCIN[num];
+    G4double LAr_SCPP[num];
+    for (ji = 0; ji < num; ji++){
+      ee=PPSCLowE+ ((G4double)ji) * dee;
+      LAr_SCPP[ji]=ee;
+      LAr_SCIN[ji]=XeDopedArScintillationSpectrum((LambdaE/ee)/nanometer);
+    }
+
+    G4MaterialPropertiesTable* myMPT1 = new G4MaterialPropertiesTable();
+
+    myMPT1->AddProperty("RINDEX",        LAr_PPCK, LAr_RIND, NUMENTRIES);
+    myMPT1->AddProperty("RAYLEIGH",      LAr_PPCK, LAr_RAYL, NUMENTRIES);
+    myMPT1->AddProperty("ABSLENGTH",     LAr_PPCK, LAr_ABSL, NUMENTRIES);
+
+    // Fast and slow components of the scintillation
+    // They should both be the same
+    if ( (LAr_SCPP[0] >= PPCKOVLowE) && (LAr_SCPP[(sizeof(LAr_SCPP)/sizeof(G4double) - 1)] <= PPCKOVHighE) ){
+      myMPT1->AddProperty("FASTCOMPONENT",LAr_SCPP,LAr_SCIN,num);
+      myMPT1->AddProperty("SLOWCOMPONENT",LAr_SCPP,LAr_SCIN,num);
+    }
+    myMPT1->AddConstProperty("SCINTILLATIONYIELD",photon_yield);
+    myMPT1->AddConstProperty("FASTTIMECONSTANT", tau_s);
+    myMPT1->AddConstProperty("SLOWTIMECONSTANT",tau_l);
+    // This is the value for electrons and gammas
+    // For example, for nuclear recoils it should be 0.75
+    // nominal value for electrons and gamas: 0.23
+    // Value used was provided by F. Art
+    myMPT1->AddConstProperty("YIELDRATIO",0.3);
+
+    G4double fano = 0.11;// Doke et al, NIM 134 (1976)353
+    myMPT1->AddConstProperty("RESOLUTIONSCALE",fano);
+    /*
+    fArgonLiquid = G4Material::GetMaterial("Argon-Liq");
+    fArgonLiquid->SetMaterialPropertiesTable(myMPT1);
+    */
+    fXenonArgonLiquid = G4Material::GetMaterial("Xenon-Doped-Argon-Liq");
+    fXenonArgonLiquid->SetMaterialPropertiesTable(myMPT1);
+    fXenonArgonLiquid->GetIonisation()->SetBirksConstant(5.1748e-4*cm/MeV);
+    /*
+    XenonArgonLiquid->AddElement(G4Element::GetElement("Argon"), 1.-1.e-6);
+    new G4Isotope("Xenon124", 54, 124, 123.9058 * g / mole); //0.09
+    new G4Isotope("Xenon126", 54, 126, 125.904 * g / mole); //0.09
+    new G4Isotope("Xenon128", 54, 128, 127.9035 * g / mole);//1.92
+    new G4Isotope("Xenon129", 54, 129, 128.9047 * g / mole); //26.44
+    new G4Isotope("Xenon130", 54, 130, 129.9035 * g / mole); //4.08
+    new G4Isotope("Xenon131", 54, 131, 130.9050 * g / mole); //21.18
+    new G4Isotope("Xenon132", 54, 132, 131.9041 * g / mole); //26.89
+    new G4Isotope("Xenon134", 54, 134, 133.9053 * g / mole); //10.44
+    new G4Isotope("Xenon136", 54, 136, 135.9072 * g / mole); //8.87
+    G4Element* elXenon = new G4Element("Xenon","Xe",9);
+    elXenon->AddIsotope(G4Isotope::GetIsotope("Xenon124"),0.090);
+    elXenon->AddIsotope(G4Isotope::GetIsotope("Xenon126"),0.090);
+    elXenon->AddIsotope(G4Isotope::GetIsotope("Xenon128"),1.920);
+    elXenon->AddIsotope(G4Isotope::GetIsotope("Xenon129"),26.44);
+    elXenon->AddIsotope(G4Isotope::GetIsotope("Xenon130"),4.080);
+    elXenon->AddIsotope(G4Isotope::GetIsotope("Xenon131"),21.18);
+    elXenon->AddIsotope(G4Isotope::GetIsotope("Xenon132"),26.89);
+    elXenon->AddIsotope(G4Isotope::GetIsotope("Xenon134"),10.44);
+    elXenon->AddIsotope(G4Isotope::GetIsotope("Xenon136"),8.870);
+    XenonArgonLiquid->AddElement(G4Element,1.e-6);
+    */
+    //what's the real value?
+
+}
+
+G4double MGLGNDOpticalMaterialProperties::XeDopedArScintillationSpectrum(const G4double kk){
+  G4double waveL;
+  waveL =exp(-0.5*((kk-175.0)/(8.6))*((kk-175.0)/(8.6)));
+  return waveL;
 }
 
 G4double MGLGNDOpticalMaterialProperties::LArRefIndex(const G4double lambda)
