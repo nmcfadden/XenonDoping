@@ -162,7 +162,6 @@ void MGOutputMCOpticalRun::BeginOfEventAction(const G4Event *event)
   fMCEventPrimaries->SetEventID( eventID );
 
   MGLog(debugging) << "Start of event " << eventID << endl; 
-  //Fill MCEventPrimaries in RootSteppingAction because it was not giving the correct answers here
 }
 
 //---------------------------------------------------------------------------//
@@ -565,7 +564,7 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
   //Large R cut
   if(sqrt(  (preStepPoint->GetPosition().x()*preStepPoint->GetPosition().x())+
             (preStepPoint->GetPosition().y()+preStepPoint->GetPosition().y())+
-            (preStepPoint->GetPosition().z()+preStepPoint->GetPosition().z()) ) > 100.*cm){
+            (preStepPoint->GetPosition().z()+preStepPoint->GetPosition().z()) ) > 1000.*cm){
     step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
   }
   G4VPhysicalVolume* physicalVolume =postStepPoint->GetPhysicalVolume();
