@@ -564,7 +564,7 @@ void MGOutputMCOpticalRun::RootSteppingAction(const G4Step* step)
   //Large R cut
   if(sqrt(  (preStepPoint->GetPosition().x()*preStepPoint->GetPosition().x())+
             (preStepPoint->GetPosition().y()+preStepPoint->GetPosition().y())+
-            (preStepPoint->GetPosition().z()+preStepPoint->GetPosition().z()) ) > 1000.*cm){
+            (preStepPoint->GetPosition().z()+preStepPoint->GetPosition().z()) ) > 100.*cm){
     step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
   }
   G4VPhysicalVolume* physicalVolume =postStepPoint->GetPhysicalVolume();
