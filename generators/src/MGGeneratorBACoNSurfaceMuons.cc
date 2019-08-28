@@ -129,12 +129,25 @@ void MGGeneratorBACoNSurfaceMuons::EnergyDecider()
 
 void MGGeneratorBACoNSurfaceMuons::PositionDecider()
 {
+  /*
   //Positions are generated uniformly over circular area 
   G4double r     = fRadiusMax*sqrt(G4UniformRand());
   G4double phi   = twopi * G4UniformRand();
   fCurrentPosition.setX(r*cos(phi));
   fCurrentPosition.setY(r*sin(phi));
   fCurrentPosition.setZ(fZ);
+  */
+  //Generate over top Scint panel plus some small extra volume
+  G4double extra = 2*inch;
+  G4double xMin = 8.5/2*inch + extra;
+  G4double yMin = 18.0/2*inch + extra;  
+
+  G4double x = 2*xMin*G4UniformRand() - xMin;
+  G4double y = 2*yMin*G4UniformRand() - yMin;
+  fCurrentPosition.setX(x);
+  fCurrentPosition.setY(y);
+  fCurrentPosition.setZ(fZ);
+  
 }
 
 G4bool MGGeneratorBACoNSurfaceMuons::IsInArgon(G4ThreeVector rpos)
