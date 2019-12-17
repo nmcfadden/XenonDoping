@@ -148,9 +148,10 @@ void BACON_Baseline::ConstructDetector()
   G4PVPlacement* airSpacePhys = new G4PVPlacement(0, G4ThreeVector(0,0,canShift), airLog, "airSpace", theDetectorLogical, false, 0);
 
 
-  //Scintillator Patels
-  //
-  G4Box* scintPanel = new G4Box("scintPanel",8.5/2*inch,18.0/2*inch,0.9/2*cm); //x,y,z
+  //Scintillator Panels
+  //large panels
+  //G4Box* scintPanel = new G4Box("scintPanel",8.5/2*inch,18.0/2*inch,0.9/2*cm); //x,y,z
+  G4Box* scintPanel = new G4Box("scintPanel",8.5/2*inch,17.0/2*inch,0.35/2*cm); //x,y,z
   G4VisAttributes* scintVis = new G4VisAttributes(G4Colour(1,0,0));
   G4LogicalVolume* scintLogical = new G4LogicalVolume(scintPanel,G4Material::GetMaterial("PolystyreneFiber"),"LogicalPanel");
   scintLogical->SetVisAttributes(scintVis);
@@ -287,9 +288,9 @@ void BACON_Baseline::ConstructDetector()
 
 
 
-  G4cout<<"WLS_0 Surface is at ("<<0<<","<< (1./2.)*fCryoID/2<<","<<-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing+wlsThickness/2.<<")"<<G4endl;
-  G4cout<<"WLS_0 Center is at (" <<0<<","<< (1./2.)*fCryoID/2<<","<<-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing<<")"<<G4endl;
-  G4cout<<"PMT_1 surface is at ("<<0<<","<<-(1./2.)*fCryoID/2<<","<<-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+wlsThickness/2+pmtSpacing-wlsThickness/2.<<")"<<G4endl;
+  G4cout<<"WLS_0 Surface is at ("<<0<<","<< (1./2.)*fCryoID/2<<","<<-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+acrylicThickness+wlsThickness/2+pmtSpacing+wlsThickness/2.<<")"<<G4endl;
+  G4cout<<"WLS_0 Center is at (" <<0<<","<< (1./2.)*fCryoID/2<<","<<-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+acrylicThickness+wlsThickness/2+pmtSpacing<<")"<<G4endl;
+  G4cout<<"PMT_1 surface is at ("<<0<<","<<-(1./2.)*fCryoID/2<<","<<-(fCryoHeight/2.)+pmtHeight/2+pmtPlacing+acrylicThickness+wlsThickness/2+pmtSpacing-wlsThickness/2.<<")"<<G4endl;
 
 
   pmtPhysical0->CheckOverlaps(1000, 0, true);

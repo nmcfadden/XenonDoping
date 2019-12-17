@@ -1219,8 +1219,7 @@ void MGLGNDOpticalMaterialProperties::Register_VM2000()
 void MGLGNDOpticalMaterialProperties::Register_StainlessSteel()
 {
     // Attach properties to the other materials
-   // -- germanium
-   //
+   // -- steel   //
   char* path = getenv("MGGENERATORDATA");
   if (!path)
   {
@@ -1262,6 +1261,7 @@ void MGLGNDOpticalMaterialProperties::Register_StainlessSteel()
 
     RIndexSi[i] = sqrt( (ssRIndexReal->GetY())[i]*(ssRIndexReal->GetY())[i] +(ssRIndexImag->GetY())[i]*(ssRIndexImag->GetY())[i] );
     absLengthSi[i] = waveIndexRealSi[i]/(4*pi*(ssRIndexImag->GetY())[i]);//skin depth ~100 nm
+    G4cout<<"SS index "<<RIndexSi[i]<<" absorption length "<<absLengthSi[i]<<G4endl;
   }
 
 

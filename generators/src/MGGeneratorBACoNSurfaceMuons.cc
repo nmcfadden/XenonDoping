@@ -93,6 +93,7 @@ MGGeneratorBACoNSurfaceMuons::MGGeneratorBACoNSurfaceMuons()
   //panels are 2" thick, 
   //thus muon show is generated 0.1" above plain defined by panels
   fZ = 32.41/2*inch + 8*inch;
+  //fRadiusMax = 22.750/2*inch;
   fRadiusMax = 22.750/2*inch;
   //geometry initialization
   fE0 = 4.0 *GeV; //GeV
