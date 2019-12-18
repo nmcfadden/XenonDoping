@@ -97,7 +97,10 @@ MGGeneratorBACoNSurfaceMuons::MGGeneratorBACoNSurfaceMuons()
   fRadiusMax = 22.750/2*inch;
   //geometry initialization
   fE0 = 4.0 *GeV; //GeV
-  fECut = 0.05 *GeV;// GeV
+  //orginal cut
+  //fECut = 0.05 *GeV;// GeV
+  //Maybe the cut is to high?!
+  fECut = 0.001 *GeV;// GeV
 
 }
 
