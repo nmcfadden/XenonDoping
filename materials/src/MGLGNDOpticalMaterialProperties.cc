@@ -168,7 +168,7 @@ void MGLGNDOpticalMaterialProperties::RegisterArgonOpticalProperties()
 
 	  G4double LAr_ABSL_xuv = 60*cm;
 	  //G4double LAr_ABSL_xuv = 110*cm;
-	  G4double LAr_ABSL_vis = 1000*m;
+	  G4double LAr_ABSL_vis = 100*m;
 	  //TODO
     //LAr_ABSL_xuv *= LAr_att_scale;
 
@@ -362,8 +362,8 @@ void MGLGNDOpticalMaterialProperties::RegisterXeDopedArgonOpticalProperties()
     G4double LAr_ABSL[(NUMENTRIES)];
 
     //Transparent at 175 nm
-    G4double LAr_ABSL_xuv = 1000*m;
-    G4double LAr_ABSL_vis = 1000*m;
+    G4double LAr_ABSL_xuv = 1*m;
+    G4double LAr_ABSL_vis = 100*m;
     //TODO
     //LAr_ABSL_xuv *= LAr_att_scale;
 
